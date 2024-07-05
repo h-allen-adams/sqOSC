@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "578A8662-F790-47B0-BA41-248569899EB9",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:sqOSC.xcodeproj",
+      "identifier" : "9F2648532C37805000C5D357",
+      "name" : "sqOSC"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:sqOSC.xcodeproj",
+        "identifier" : "9F2648662C37805100C5D357",
+        "name" : "sqOSCTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -5,28 +5,21 @@
 //  Created by H Allen Adams on 7/4/24.
 //
 
-import SwiftUI
+import OSCKit
 import SwiftData
+import SwiftUI
 
 @main
 struct sqOSCApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    private var oscHandler: SqOscHandler
 
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    init() {
+        self.oscHandler = SqOscHandler { _, _ in }
+    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(handler: self.oscHandler)
         }
-        .modelContainer(sharedModelContainer)
     }
 }

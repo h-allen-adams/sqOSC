@@ -9,23 +9,23 @@
 /* Begin PBXBuildFile section */
 		9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648572C37805000C5D357 /* sqOSCApp.swift */; };
 		9F26485A2C37805000C5D357 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648592C37805000C5D357 /* ContentView.swift */; };
-		9F26485C2C37805000C5D357 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26485B2C37805000C5D357 /* Item.swift */; };
 		9F26485E2C37805000C5D357 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F26485D2C37805000C5D357 /* Assets.xcassets */; };
 		9F2648612C37805000C5D357 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F2648602C37805000C5D357 /* Preview Assets.xcassets */; };
-		9F26486C2C37805100C5D357 /* sqOSCTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26486B2C37805100C5D357 /* sqOSCTests.swift */; };
-		9F2648762C37805100C5D357 /* sqOSCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648752C37805100C5D357 /* sqOSCUITests.swift */; };
-		9F2648782C37805100C5D357 /* sqOSCUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648772C37805100C5D357 /* sqOSCUITestsLaunchTests.swift */; };
+		9F2648862C3782C200C5D357 /* OSCKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F2648852C3782C200C5D357 /* OSCKit */; };
+		9F2648882C3782C200C5D357 /* OSCKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9F2648872C3782C200C5D357 /* OSCKitCore */; };
+		9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648892C378B6800C5D357 /* SqOscHandler.swift */; };
+		9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C952C381B400093DC24 /* SqMixerMessages.swift */; };
+		9F383C982C381BD50093DC24 /* SqMixerMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */; };
+		9F383C9E2C381D4B0093DC24 /* Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C9D2C381D4B0093DC24 /* Values.swift */; };
+		9F383CA02C3821410093DC24 /* SqMixerEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C9F2C3821410093DC24 /* SqMixerEnums.swift */; };
+		9F383CA32C382D8C0093DC24 /* MessagePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA22C382D8C0093DC24 /* MessagePublisher.swift */; };
+		9F383CA52C382F220093DC24 /* SqMixerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA42C382F220093DC24 /* SqMixerConfig.swift */; };
+		9F383CA72C3831110093DC24 /* SqMixerEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */; };
+		9F383CA92C3832920093DC24 /* SqMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		9F2648682C37805100C5D357 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9F26484C2C37805000C5D357 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9F2648532C37805000C5D357;
-			remoteInfo = sqOSC;
-		};
-		9F2648722C37805100C5D357 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9F26484C2C37805000C5D357 /* Project object */;
 			proxyType = 1;
@@ -38,15 +38,20 @@
 		9F2648542C37805000C5D357 /* sqOSC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sqOSC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F2648572C37805000C5D357 /* sqOSCApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sqOSCApp.swift; sourceTree = "<group>"; };
 		9F2648592C37805000C5D357 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		9F26485B2C37805000C5D357 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		9F26485D2C37805000C5D357 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F2648602C37805000C5D357 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9F2648622C37805000C5D357 /* sqOSC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sqOSC.entitlements; sourceTree = "<group>"; };
 		9F2648672C37805100C5D357 /* sqOSCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sqOSCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F26486B2C37805100C5D357 /* sqOSCTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sqOSCTests.swift; sourceTree = "<group>"; };
-		9F2648712C37805100C5D357 /* sqOSCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sqOSCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9F2648752C37805100C5D357 /* sqOSCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sqOSCUITests.swift; sourceTree = "<group>"; };
-		9F2648772C37805100C5D357 /* sqOSCUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sqOSCUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		9F2648892C378B6800C5D357 /* SqOscHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqOscHandler.swift; sourceTree = "<group>"; };
+		9F383C952C381B400093DC24 /* SqMixerMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerMessages.swift; sourceTree = "<group>"; };
+		9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerMessagesTests.swift; sourceTree = "<group>"; };
+		9F383C9D2C381D4B0093DC24 /* Values.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Values.swift; sourceTree = "<group>"; };
+		9F383C9F2C3821410093DC24 /* SqMixerEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEnums.swift; sourceTree = "<group>"; };
+		9F383CA12C38256C0093DC24 /* sqOSC.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.xctestplan; sourceTree = "<group>"; };
+		9F383CA22C382D8C0093DC24 /* MessagePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePublisher.swift; sourceTree = "<group>"; };
+		9F383CA42C382F220093DC24 /* SqMixerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerConfig.swift; sourceTree = "<group>"; };
+		9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpoints.swift; sourceTree = "<group>"; };
+		9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpointsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,17 +59,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F2648882C3782C200C5D357 /* OSCKitCore in Frameworks */,
+				9F2648862C3782C200C5D357 /* OSCKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9F2648642C37805100C5D357 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9F26486E2C37805100C5D357 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -77,9 +77,9 @@
 		9F26484B2C37805000C5D357 = {
 			isa = PBXGroup;
 			children = (
+				9F383CA12C38256C0093DC24 /* sqOSC.xctestplan */,
 				9F2648562C37805000C5D357 /* sqOSC */,
 				9F26486A2C37805100C5D357 /* sqOSCTests */,
-				9F2648742C37805100C5D357 /* sqOSCUITests */,
 				9F2648552C37805000C5D357 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -89,7 +89,6 @@
 			children = (
 				9F2648542C37805000C5D357 /* sqOSC.app */,
 				9F2648672C37805100C5D357 /* sqOSCTests.xctest */,
-				9F2648712C37805100C5D357 /* sqOSCUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,12 +96,18 @@
 		9F2648562C37805000C5D357 /* sqOSC */ = {
 			isa = PBXGroup;
 			children = (
-				9F2648572C37805000C5D357 /* sqOSCApp.swift */,
-				9F2648592C37805000C5D357 /* ContentView.swift */,
-				9F26485B2C37805000C5D357 /* Item.swift */,
 				9F26485D2C37805000C5D357 /* Assets.xcassets */,
-				9F2648622C37805000C5D357 /* sqOSC.entitlements */,
+				9F2648592C37805000C5D357 /* ContentView.swift */,
+				9F383CA22C382D8C0093DC24 /* MessagePublisher.swift */,
 				9F26485F2C37805000C5D357 /* Preview Content */,
+				9F383CA42C382F220093DC24 /* SqMixerConfig.swift */,
+				9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */,
+				9F383C9F2C3821410093DC24 /* SqMixerEnums.swift */,
+				9F383C952C381B400093DC24 /* SqMixerMessages.swift */,
+				9F2648622C37805000C5D357 /* sqOSC.entitlements */,
+				9F2648572C37805000C5D357 /* sqOSCApp.swift */,
+				9F2648892C378B6800C5D357 /* SqOscHandler.swift */,
+				9F383C9D2C381D4B0093DC24 /* Values.swift */,
 			);
 			path = sqOSC;
 			sourceTree = "<group>";
@@ -118,18 +123,10 @@
 		9F26486A2C37805100C5D357 /* sqOSCTests */ = {
 			isa = PBXGroup;
 			children = (
-				9F26486B2C37805100C5D357 /* sqOSCTests.swift */,
+				9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */,
+				9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */,
 			);
 			path = sqOSCTests;
-			sourceTree = "<group>";
-		};
-		9F2648742C37805100C5D357 /* sqOSCUITests */ = {
-			isa = PBXGroup;
-			children = (
-				9F2648752C37805100C5D357 /* sqOSCUITests.swift */,
-				9F2648772C37805100C5D357 /* sqOSCUITestsLaunchTests.swift */,
-			);
-			path = sqOSCUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +145,10 @@
 			dependencies = (
 			);
 			name = sqOSC;
+			packageProductDependencies = (
+				9F2648852C3782C200C5D357 /* OSCKit */,
+				9F2648872C3782C200C5D357 /* OSCKitCore */,
+			);
 			productName = sqOSC;
 			productReference = 9F2648542C37805000C5D357 /* sqOSC.app */;
 			productType = "com.apple.product-type.application";
@@ -170,24 +171,6 @@
 			productReference = 9F2648672C37805100C5D357 /* sqOSCTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		9F2648702C37805100C5D357 /* sqOSCUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9F2648812C37805100C5D357 /* Build configuration list for PBXNativeTarget "sqOSCUITests" */;
-			buildPhases = (
-				9F26486D2C37805100C5D357 /* Sources */,
-				9F26486E2C37805100C5D357 /* Frameworks */,
-				9F26486F2C37805100C5D357 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9F2648732C37805100C5D357 /* PBXTargetDependency */,
-			);
-			name = sqOSCUITests;
-			productName = sqOSCUITests;
-			productReference = 9F2648712C37805100C5D357 /* sqOSCUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -205,10 +188,6 @@
 						CreatedOnToolsVersion = 15.4;
 						TestTargetID = 9F2648532C37805000C5D357;
 					};
-					9F2648702C37805100C5D357 = {
-						CreatedOnToolsVersion = 15.4;
-						TestTargetID = 9F2648532C37805000C5D357;
-					};
 				};
 			};
 			buildConfigurationList = 9F26484F2C37805000C5D357 /* Build configuration list for PBXProject "sqOSC" */;
@@ -220,13 +199,15 @@
 				Base,
 			);
 			mainGroup = 9F26484B2C37805000C5D357;
+			packageReferences = (
+				9F2648842C3782C200C5D357 /* XCRemoteSwiftPackageReference "OSCKit" */,
+			);
 			productRefGroup = 9F2648552C37805000C5D357 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				9F2648532C37805000C5D357 /* sqOSC */,
 				9F2648662C37805100C5D357 /* sqOSCTests */,
-				9F2648702C37805100C5D357 /* sqOSCUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -248,13 +229,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		9F26486F2C37805100C5D357 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -263,8 +237,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F26485A2C37805000C5D357 /* ContentView.swift in Sources */,
-				9F26485C2C37805000C5D357 /* Item.swift in Sources */,
+				9F383C9E2C381D4B0093DC24 /* Values.swift in Sources */,
+				9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */,
+				9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */,
 				9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */,
+				9F383CA52C382F220093DC24 /* SqMixerConfig.swift in Sources */,
+				9F383CA32C382D8C0093DC24 /* MessagePublisher.swift in Sources */,
+				9F383CA72C3831110093DC24 /* SqMixerEndpoints.swift in Sources */,
+				9F383CA02C3821410093DC24 /* SqMixerEnums.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,16 +252,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F26486C2C37805100C5D357 /* sqOSCTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9F26486D2C37805100C5D357 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9F2648782C37805100C5D357 /* sqOSCUITestsLaunchTests.swift in Sources */,
-				9F2648762C37805100C5D357 /* sqOSCUITests.swift in Sources */,
+				9F383CA92C3832920093DC24 /* SqMixerEndpointsTest.swift in Sources */,
+				9F383C982C381BD50093DC24 /* SqMixerMessagesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,11 +264,6 @@
 			isa = PBXTargetDependency;
 			target = 9F2648532C37805000C5D357 /* sqOSC */;
 			targetProxy = 9F2648682C37805100C5D357 /* PBXContainerItemProxy */;
-		};
-		9F2648732C37805100C5D357 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9F2648532C37805000C5D357 /* sqOSC */;
-			targetProxy = 9F2648722C37805100C5D357 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -425,6 +392,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = sqOSC/sqOSC.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -453,6 +421,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = sqOSC/sqOSC.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -513,40 +482,6 @@
 			};
 			name = Release;
 		};
-		9F2648822C37805100C5D357 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FUVWVMBT6B;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSCUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = sqOSC;
-			};
-			name = Debug;
-		};
-		9F2648832C37805100C5D357 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FUVWVMBT6B;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSCUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = sqOSC;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -577,16 +512,31 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9F2648812C37805100C5D357 /* Build configuration list for PBXNativeTarget "sqOSCUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9F2648822C37805100C5D357 /* Debug */,
-				9F2648832C37805100C5D357 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9F2648842C3782C200C5D357 /* XCRemoteSwiftPackageReference "OSCKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/OSCKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9F2648852C3782C200C5D357 /* OSCKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9F2648842C3782C200C5D357 /* XCRemoteSwiftPackageReference "OSCKit" */;
+			productName = OSCKit;
+		};
+		9F2648872C3782C200C5D357 /* OSCKitCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9F2648842C3782C200C5D357 /* XCRemoteSwiftPackageReference "OSCKit" */;
+			productName = OSCKitCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9F26484C2C37805000C5D357 /* Project object */;
 }
