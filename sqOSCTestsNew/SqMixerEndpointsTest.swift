@@ -5,7 +5,7 @@
 //  Created by H Allen Adams on 7/5/24.
 //
 
-import OSCKit
+import OSCKitCore
 @testable import sqOSC
 import XCTest
 

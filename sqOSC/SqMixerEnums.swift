@@ -22,6 +22,7 @@ enum SqChannelType: String {
     case matrix
     case dca
     case muteGroup
+    case none
 
     func isOutputLevel() -> Bool {
         switch self {

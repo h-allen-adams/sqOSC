@@ -19,7 +19,7 @@ class SqMixerEndpoints {
         self.mixerConfig = mixerConfig
     }
 
-    func register(addressSpace: OSCAddressSpace, dictionary: EndpointDictionary, publisher: @escaping MessagePublisher) {
+    func register(addressSpace: OSCAddressSpace?, dictionary: EndpointDictionary, publisher: @escaping MessagePublisher) {
         self.addressSpace = addressSpace
         self.dictionary = dictionary
         self.publisher = publisher
@@ -38,36 +38,20 @@ class SqMixerEndpoints {
     }
 
     private func registerAudioChannels(_ channelType: SqChannelType, _ numChannels: Int) {
-        var dictionaryPath = "/sq/\(channelType)"
-        if numChannels > 1 {
-            dictionaryPath = "\(dictionaryPath)/{\(channelType)}"
-        }
-        var baseDictionary = EndpointDictEntry(path: dictionaryPath)
-        let muteDictionary = baseDictionary.addChild(childName: "mute")
-        var levelDictionary: EndpointDictEntry?
-        var sendDictionary: EndpointDictEntry?
-        if channelType.isOutputLevel() {
-            levelDictionary = baseDictionary.addChild(childName: "level")
-        }
-        if channelType.hasSends() {
-            sendDictionary = baseDictionary.addChild(childName: "sendLevel")
-        }
-        dictionary!.entries.append(baseDictionary)
-
         for c in 1 ... numChannels {
-            let channelPathValues = [channelType.rawValue: "\(c)"]
-            registerMute(channelType, c, muteDictionary.resolvePath(pathValues: channelPathValues))
+            let channelPathValues = ["chNum": "\(c)"]
+            registerMute(channelType, c, dictionary!.resolvePath(entryType: EndpointDictEntryType.mute, pathType: channelType, pathValues: channelPathValues)!)
             if channelType.isOutputLevel() {
-                registerOutputLevel(channelType, c, levelDictionary!.resolvePath(pathValues: channelPathValues))
+                registerOutputLevel(channelType, c, dictionary!.resolvePath(entryType: EndpointDictEntryType.level, pathType: channelType, pathValues: channelPathValues)!)
             }
             if channelType.hasSends() {
-                registerSendLevel(channelType, c, sendDictionary!.resolvePath(pathValues: channelPathValues))
+                registerSendLevel(channelType, c, dictionary!.resolvePath(entryType: EndpointDictEntryType.sendLevel, pathType: channelType, pathValues: channelPathValues)!)
             }
         }
     }
 
     private func registerOutputLevel(_ channelType: SqChannelType, _ channelNum: Int, _ channelLevelPath: String) {
-        addressSpace!.register(localAddress: channelLevelPath) { values in
+        addressSpace?.register(localAddress: channelLevelPath) { values in
             guard let dbLevel = try? values.masked(Int.self) else { return }
             if let midiMessage = self.mixerMessages.outputLevelMessage(midiChannel: self.mixerConfig.midiChannel,
                                                                        outputType: channelType,
@@ -80,7 +64,7 @@ class SqMixerEndpoints {
     }
 
     private func registerMute(_ channelType: SqChannelType, _ channelNum: Int, _ channelMutePath: String) {
-        addressSpace!.register(localAddress: channelMutePath) { values in
+        addressSpace?.register(localAddress: channelMutePath) { values in
             guard let action = try? SqMuteAction(rawValue: values.masked(String.self)) else { return }
             if let midiMessage = self.mixerMessages.muteMessage(midiChannel: self.mixerConfig.midiChannel, type: channelType, channel: channelNum, action: action) {
                 self.publisher!("\(channelMutePath) \(values)", midiMessage)
@@ -89,10 +73,8 @@ class SqMixerEndpoints {
     }
 
     private func registerSceneRecall() {
-        let dictionaryPath = "/sq/scene/recall"
-        let baseDictionary = EndpointDictEntry(path: dictionaryPath)
-        dictionary!.entries.append(baseDictionary)
-        addressSpace!.register(localAddress: dictionaryPath) { values in
+        let dictionaryPath = dictionary!.resolvePath(entryType: EndpointDictEntryType.scene)!
+        addressSpace?.register(localAddress: dictionaryPath) { values in
             guard let scene = try? values.masked(Int.self) else { return }
             if let midiMessage = self.mixerMessages.sceneRecallMessage(midiChannel: self.mixerConfig.midiChannel, scene: scene) {
                 self.publisher!("\(dictionaryPath) \(values)", midiMessage)
@@ -101,7 +83,7 @@ class SqMixerEndpoints {
     }
 
     private func registerSendLevel(_ channelType: SqChannelType, _ channelNum: Int, _ channelLevelPath: String) {
-        addressSpace!.register(localAddress: channelLevelPath) { values in
+        addressSpace?.register(localAddress: channelLevelPath) { values in
             guard let (destTypeStr, destChannel, dbLevel) = try? values.masked(String.self, Int.self, Int.self) else { return }
             guard let destType = SqChannelType(rawValue: destTypeStr) else { return }
             if let midiMessage = self.mixerMessages.sendLevelMessage(midiChannel: self.mixerConfig.midiChannel,
@@ -117,12 +99,9 @@ class SqMixerEndpoints {
     }
 
     private func registerSoftKeys() {
-        let dictionaryPath = "/sq/softKey/{softKey}/trigger"
-        let baseDictionary = EndpointDictEntry(path: dictionaryPath)
-        dictionary!.entries.append(baseDictionary)
         for button in 1 ... mixerConfig.numSoftKeys {
-            let address = baseDictionary.resolvePath(pathValues: ["softKey": "\(button)"])
-            addressSpace!.register(localAddress: address) { values in
+            let address = dictionary!.resolvePath(entryType: EndpointDictEntryType.keys, pathValues: ["keyNum": "\(button)"])!
+            addressSpace?.register(localAddress: address) { values in
                 guard let action = try? SqButtonState(rawValue: values.masked(String.self)) else { return }
                 if let midiMessage = self.mixerMessages.softKeyMessage(midiChannel: self.mixerConfig.midiChannel, button: button, state: action) {
                     self.publisher!("\(address) \(values)", midiMessage)

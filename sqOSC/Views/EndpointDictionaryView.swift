@@ -8,24 +8,15 @@
 import SwiftUI
 
 struct EndpointDictionaryView: View {
-    @ObservedObject var dictionary: EndpointDictionary
+    let dictionary: EndpointDictionary
 
     var body: some View {
-        List($dictionary.entries, children: \.children) {
-            Text($0.wrappedValue.path).font(.subheadline)
+        List(dictionary.values()) { entry in
+            EndpointDictionaryEntryView(entry: entry)
         }
     }
 }
 
 #Preview {
-    EndpointDictionaryView(dictionary: EndpointDictionary(entries: EndpointDictEntry.stubs))
-}
-
-extension EndpointDictEntry {
-    static var stubs: [EndpointDictEntry] {
-        [
-            EndpointDictEntry(path: "/sq/input", children: [EndpointDictEntry(path: "/sq/input/{n}/mute")]),
-            EndpointDictEntry(path: "/sq/main")
-        ]
-    }
+    EndpointDictionaryView(dictionary: EndpointDictionary())
 }

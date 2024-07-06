@@ -1,27 +1,23 @@
 {
   "configurations" : [
     {
-      "id" : "578A8662-F790-47B0-BA41-248569899EB9",
-      "name" : "Test Scheme Action",
+      "id" : "D659EB08-05D2-4341-96F6-04BCAF964BF1",
+      "name" : "Configuration 1",
       "options" : {
 
       }
     }
   ],
   "defaultOptions" : {
-    "targetForVariableExpansion" : {
-      "containerPath" : "container:sqOSC.xcodeproj",
-      "identifier" : "9F2648532C37805000C5D357",
-      "name" : "sqOSC"
-    }
+    "mainThreadCheckerEnabled" : false,
+    "uiTestingScreenshotsLifetime" : "keepNever"
   },
   "testTargets" : [
     {
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:sqOSC.xcodeproj",
-        "identifier" : "9F2648662C37805100C5D357",
-        "name" : "sqOSCTests"
+        "identifier" : "9F7F6A442C38F7F6004AE8B9",
+        "name" : "sqOSCTestsNew"
       }
     }
   ],
