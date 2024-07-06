@@ -11,17 +11,21 @@ import SwiftUI
 
 @main
 struct sqOSCApp: App {
+    private var activityLog = ActivityLog()
     private var oscServer = OSCServer(port: 9903)
+    private var apiEndpoints = SqMixerEndpoints(mixerConfig: SqMixerConfig())
     private var oscHandler: SqOscHandler
 
     init() {
-        self.oscHandler = SqOscHandler { _, _ in }
+        self.oscHandler = SqOscHandler(activityLog: activityLog, endpoints: apiEndpoints) { _, _ in }
         setupOSCServer()
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView(handler: self.oscHandler)
+            ContentView()
+                .environmentObject(apiEndpoints.dictionary)
+                .environmentObject(activityLog)
         }
     }
 

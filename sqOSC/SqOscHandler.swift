@@ -9,18 +9,17 @@ import Foundation
 import OSCKit
 
 class SqOscHandler: ObservableObject {
-    @Published var logText = ""
-    @Published var dictionary = EndpointDictionary()
-
+    private let activityLog: ActivityLog
     private let addressSpace = OSCAddressSpace()
     private let messagePublisher: MessagePublisher
     private let endpoints: SqMixerEndpoints
 
-    init(messagePublisher: @escaping MessagePublisher) {
+    init(activityLog: ActivityLog, endpoints: SqMixerEndpoints, messagePublisher: @escaping MessagePublisher) {
+        self.activityLog = activityLog
         self.messagePublisher = messagePublisher
-        self.endpoints = SqMixerEndpoints(mixerConfig: SqMixerConfig())
+        self.endpoints = endpoints
         logMessage(label: "SETUP", message: "INITIALIZING")
-        endpoints.register(addressSpace: addressSpace, dictionary: dictionary) { label, message in
+        endpoints.register(addressSpace: addressSpace) { label, message in
             self.publishMessage(label: label, message: message)
         }
     }
@@ -37,7 +36,7 @@ class SqOscHandler: ObservableObject {
     }
 
     func logMessage(label: String, message: String) {
-        logText.append("\(label) -> \(message)\n")
+        activityLog.logMessage(logText: "\(label) -> \(message)\n")
     }
 
     func publishMessage(label: String, message: String) {

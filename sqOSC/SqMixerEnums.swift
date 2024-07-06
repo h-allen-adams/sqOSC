@@ -7,12 +7,41 @@
 
 import Foundation
 
-enum SqButtonState: String {
-    case PRESS
-    case RELEASE
+enum EndpointOperationType: Int, CaseIterable {
+    case recall = 0
+    case trigger
+    case mute
+    case level
+    case sendLevel
+
+    func endpoints() -> [EndpointType] {
+        switch self {
+        case .level: [EndpointType.aux,
+                      EndpointType.dca,
+                      EndpointType.fxSend,
+                      EndpointType.main,
+                      EndpointType.matrix]
+        case .mute: [EndpointType.aux,
+                     EndpointType.dca,
+                     EndpointType.fxReturn,
+                     EndpointType.fxSend,
+                     EndpointType.group,
+                     EndpointType.input,
+                     EndpointType.main,
+                     EndpointType.matrix,
+                     EndpointType.muteGroup]
+        case .recall: [EndpointType.scene]
+        case .sendLevel: [EndpointType.aux,
+                          EndpointType.fxReturn,
+                          EndpointType.group,
+                          EndpointType.input,
+                          EndpointType.main]
+        case .trigger: [EndpointType.keys]
+        }
+    }
 }
 
-enum SqChannelType: String {
+enum EndpointType: String, CaseIterable {
     case input
     case group
     case fxReturn
@@ -22,7 +51,8 @@ enum SqChannelType: String {
     case matrix
     case dca
     case muteGroup
-    case none
+    case scene
+    case keys
 
     func isOutputLevel() -> Bool {
         switch self {
@@ -41,6 +71,27 @@ enum SqChannelType: String {
             return false
         }
     }
+
+    func basePath() -> String {
+        switch self {
+        case .aux: "/sq/aux/{chNum}"
+        case .dca: "/sq/dca/{chNum}"
+        case .fxReturn: "/sq/fxReturn/{chNum}"
+        case .fxSend: "/sq/fxSend/{chNum}"
+        case .group: "/sq/group/{chNum}"
+        case .input: "/sq/input/{chNum}"
+        case .keys: "/sq/softKey/{keyNum}"
+        case .main: "/sq/main"
+        case .matrix: "/sq/matrix/{chNum}"
+        case .muteGroup: "/sq/muteGroup/{chNum}"
+        case .scene: "/sq/scene"
+        }
+    }
+}
+
+enum SqButtonState: String {
+    case PRESS
+    case RELEASE
 }
 
 enum SqMuteAction: String {

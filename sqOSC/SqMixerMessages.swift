@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftRadix
 
 class SqMixerMessages {
     // Linear adjustements are based on 16384 possible values, approx 119 values per dB
@@ -24,13 +25,13 @@ class SqMixerMessages {
 
     // BN 63 MB BN 62 LB BN 06 VC BN 26 VF
     private let outputParameters = [
-        SqChannelType.main: Values.toParameterNumber("4F", "00"),
-        SqChannelType.aux: Values.toParameterNumber("4F", "01"),
-        SqChannelType.fxSend: Values.toParameterNumber("4F", "0D"),
-        SqChannelType.matrix: Values.toParameterNumber("4F", "11"),
-        SqChannelType.dca: Values.toParameterNumber("4F", "20")
+        EndpointType.main: Values.toParameterNumber("4F", "00"),
+        EndpointType.aux: Values.toParameterNumber("4F", "01"),
+        EndpointType.fxSend: Values.toParameterNumber("4F", "0D"),
+        EndpointType.matrix: Values.toParameterNumber("4F", "11"),
+        EndpointType.dca: Values.toParameterNumber("4F", "20")
     ]
-    func outputLevelMessage(midiChannel: Int, outputType: SqChannelType, outputChannel: Int, dbLevel: Int) -> String? {
+    func outputLevelMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, dbLevel: Int) -> String? {
         let bn = channelByte(midiChannel)
         if let pn = outputParameters[outputType] {
             let (msb, lsb) = Values.toMsbLsb(pn + outputChannel - 1)
@@ -41,36 +42,36 @@ class SqMixerMessages {
     }
 
     private let sendNumCols = [
-        SqChannelType.main: 1,
-        SqChannelType.aux: 12,
-        SqChannelType.fxSend: 4,
-        SqChannelType.matrix: 3
+        EndpointType.main: 1,
+        EndpointType.aux: 12,
+        EndpointType.fxSend: 4,
+        EndpointType.matrix: 3
     ]
     private let sendParams = [
-        SqChannelType.input: [
-            SqChannelType.main: Values.toParameterNumber("40", "00"),
-            SqChannelType.aux: Values.toParameterNumber("40", "44"),
-            SqChannelType.fxSend: Values.toParameterNumber("4C", "14")
+        EndpointType.input: [
+            EndpointType.main: Values.toParameterNumber("40", "00"),
+            EndpointType.aux: Values.toParameterNumber("40", "44"),
+            EndpointType.fxSend: Values.toParameterNumber("4C", "14")
         ],
-        SqChannelType.group: [
-            SqChannelType.main: Values.toParameterNumber("40", "30"),
-            SqChannelType.aux: Values.toParameterNumber("45", "04"),
-            SqChannelType.fxSend: Values.toParameterNumber("4D", "54"),
-            SqChannelType.matrix: Values.toParameterNumber("4E", "4B")
+        EndpointType.group: [
+            EndpointType.main: Values.toParameterNumber("40", "30"),
+            EndpointType.aux: Values.toParameterNumber("45", "04"),
+            EndpointType.fxSend: Values.toParameterNumber("4D", "54"),
+            EndpointType.matrix: Values.toParameterNumber("4E", "4B")
         ],
-        SqChannelType.fxReturn: [
-            SqChannelType.main: Values.toParameterNumber("40", "3C"),
-            SqChannelType.aux: Values.toParameterNumber("46", "14"),
-            SqChannelType.fxSend: Values.toParameterNumber("4E", "04")
+        EndpointType.fxReturn: [
+            EndpointType.main: Values.toParameterNumber("40", "3C"),
+            EndpointType.aux: Values.toParameterNumber("46", "14"),
+            EndpointType.fxSend: Values.toParameterNumber("4E", "04")
         ],
-        SqChannelType.main: [
-            SqChannelType.matrix: Values.toParameterNumber("4E", "24")
+        EndpointType.main: [
+            EndpointType.matrix: Values.toParameterNumber("4E", "24")
         ],
-        SqChannelType.aux: [
-            SqChannelType.matrix: Values.toParameterNumber("4E", "27")
+        EndpointType.aux: [
+            EndpointType.matrix: Values.toParameterNumber("4E", "27")
         ]
     ]
-    func sendLevelMessage(midiChannel: Int, sourceType: SqChannelType, sourceChannel: Int, destType: SqChannelType, destChannel: Int, dbLevel: Int) -> String? {
+    func sendLevelMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, dbLevel: Int) -> String? {
         guard let numCols = sendNumCols[destType] else { return nil }
         guard let sourceParams = sendParams[sourceType] else { return nil }
         guard let pn = sourceParams[destType] else { return nil }
@@ -86,17 +87,17 @@ class SqMixerMessages {
     // other values are literal hex values
     // see https://www.allen-heath.com/media/SQ-MIDI-Protocol-Issue1.pdf
     private let muteParameters = [
-        SqChannelType.input: Values.toParameterNumber("00", "00"),
-        SqChannelType.group: Values.toParameterNumber("00", "30"),
-        SqChannelType.fxReturn: Values.toParameterNumber("00", "3C"),
-        SqChannelType.main: Values.toParameterNumber("00", "44"),
-        SqChannelType.aux: Values.toParameterNumber("00", "45"),
-        SqChannelType.fxSend: Values.toParameterNumber("00", "51"),
-        SqChannelType.matrix: Values.toParameterNumber("00", "55"),
-        SqChannelType.dca: Values.toParameterNumber("02", "00"),
-        SqChannelType.muteGroup: Values.toParameterNumber("04", "00")
+        EndpointType.input: Values.toParameterNumber("00", "00"),
+        EndpointType.group: Values.toParameterNumber("00", "30"),
+        EndpointType.fxReturn: Values.toParameterNumber("00", "3C"),
+        EndpointType.main: Values.toParameterNumber("00", "44"),
+        EndpointType.aux: Values.toParameterNumber("00", "45"),
+        EndpointType.fxSend: Values.toParameterNumber("00", "51"),
+        EndpointType.matrix: Values.toParameterNumber("00", "55"),
+        EndpointType.dca: Values.toParameterNumber("02", "00"),
+        EndpointType.muteGroup: Values.toParameterNumber("04", "00")
     ]
-    func muteMessage(midiChannel: Int, type: SqChannelType, channel: Int, action: SqMuteAction) -> String? {
+    func muteMessage(midiChannel: Int, type: EndpointType, channel: Int, action: SqMuteAction) -> String? {
         let bn = channelByte(midiChannel)
         if let pn = muteParameters[type] {
             let (msb, lsb) = Values.toMsbLsb(pn + channel - 1)

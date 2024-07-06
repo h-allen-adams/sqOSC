@@ -22,5 +22,5 @@ struct EndpointDictionaryEntryView: View {
 }
 
 #Preview {
-    EndpointDictionaryEntryView(entry: EndpointDictionary().entries[EndpointDictEntryType.mute]!)
+    EndpointDictionaryEntryView(entry: EndpointDictionary().entries[EndpointOperationType.mute]!)
 }

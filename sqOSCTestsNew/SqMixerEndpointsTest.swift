@@ -19,10 +19,9 @@ final class SqMixerEndpointsTest: XCTestCase {
     override func setUpWithError() throws {
         mixerEndpoints = SqMixerEndpoints(mixerConfig: mixerConfig)
         addressSpace = OSCAddressSpace()
-        dictionary = EndpointDictionary()
         message = "UNSET"
 
-        mixerEndpoints?.register(addressSpace: addressSpace!, dictionary: dictionary!) { _, message in
+        mixerEndpoints?.register(addressSpace: addressSpace!) { _, message in
             self.message = message
         }
     }

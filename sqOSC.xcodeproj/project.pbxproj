@@ -24,6 +24,9 @@
 		9F383CAF2C386C380093DC24 /* EndpointDictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */; };
 		9F7F6A4E2C38F7FF004AE8B9 /* SqMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */; };
 		9F7F6A4F2C38F7FF004AE8B9 /* SqMixerMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */; };
+		9F7F6A5F2C398BB1004AE8B9 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7F6A5E2C398BB1004AE8B9 /* SwiftRadix */; };
+		9F7F6A612C398BCE004AE8B9 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7F6A602C398BCE004AE8B9 /* MIDIKit */; };
+		9F7F6A632C399237004AE8B9 /* ActivityLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7F6A622C399237004AE8B9 /* ActivityLog.swift */; };
 		9FC5BFAB2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC5BFAA2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +61,7 @@
 		9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionaryView.swift; sourceTree = "<group>"; };
 		9F7F6A452C38F7F6004AE8B9 /* sqOSCTestsNew.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sqOSCTestsNew.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F7F6A532C38FCB4004AE8B9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		9F7F6A622C399237004AE8B9 /* ActivityLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLog.swift; sourceTree = "<group>"; };
 		9FC5BFAA2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionaryEntryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,6 +72,8 @@
 			files = (
 				9F2648882C3782C200C5D357 /* OSCKitCore in Frameworks */,
 				9F2648862C3782C200C5D357 /* OSCKit in Frameworks */,
+				9F7F6A612C398BCE004AE8B9 /* MIDIKit in Frameworks */,
+				9F7F6A5F2C398BB1004AE8B9 /* SwiftRadix in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +123,7 @@
 				9F2648892C378B6800C5D357 /* SqOscHandler.swift */,
 				9F383C9D2C381D4B0093DC24 /* Values.swift */,
 				9F383CB02C386C410093DC24 /* Views */,
+				9F7F6A622C399237004AE8B9 /* ActivityLog.swift */,
 			);
 			path = sqOSC;
 			sourceTree = "<group>";
@@ -175,6 +182,8 @@
 			packageProductDependencies = (
 				9F2648852C3782C200C5D357 /* OSCKit */,
 				9F2648872C3782C200C5D357 /* OSCKitCore */,
+				9F7F6A5E2C398BB1004AE8B9 /* SwiftRadix */,
+				9F7F6A602C398BCE004AE8B9 /* MIDIKit */,
 			);
 			productName = sqOSC;
 			productReference = 9F2648542C37805000C5D357 /* sqOSC.app */;
@@ -230,6 +239,9 @@
 			mainGroup = 9F26484B2C37805000C5D357;
 			packageReferences = (
 				9F2648842C3782C200C5D357 /* XCRemoteSwiftPackageReference "OSCKit" */,
+				9F7F6A572C38FF2A004AE8B9 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */,
+				9F7F6A5C2C398AD0004AE8B9 /* XCRemoteSwiftPackageReference "MIDIKit" */,
+				9F7F6A5D2C398BB1004AE8B9 /* XCRemoteSwiftPackageReference "SwiftRadix" */,
 			);
 			productRefGroup = 9F2648552C37805000C5D357 /* Products */;
 			projectDirPath = "";
@@ -275,6 +287,7 @@
 				9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */,
 				9F383CA52C382F220093DC24 /* SqMixerConfig.swift in Sources */,
 				9F383CA32C382D8C0093DC24 /* MessagePublisher.swift in Sources */,
+				9F7F6A632C399237004AE8B9 /* ActivityLog.swift in Sources */,
 				9F383CA72C3831110093DC24 /* SqMixerEndpoints.swift in Sources */,
 				9F383CA02C3821410093DC24 /* SqMixerEnums.swift in Sources */,
 			);
@@ -551,6 +564,30 @@
 				minimumVersion = 0.5.1;
 			};
 		};
+		9F7F6A572C38FF2A004AE8B9 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/robbiehanson/CocoaAsyncSocket";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.6.5;
+			};
+		};
+		9F7F6A5C2C398AD0004AE8B9 /* XCRemoteSwiftPackageReference "MIDIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/MIDIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.6;
+			};
+		};
+		9F7F6A5D2C398BB1004AE8B9 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/orchetect/SwiftRadix";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -563,6 +600,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9F2648842C3782C200C5D357 /* XCRemoteSwiftPackageReference "OSCKit" */;
 			productName = OSCKitCore;
+		};
+		9F7F6A5E2C398BB1004AE8B9 /* SwiftRadix */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9F7F6A5D2C398BB1004AE8B9 /* XCRemoteSwiftPackageReference "SwiftRadix" */;
+			productName = SwiftRadix;
+		};
+		9F7F6A602C398BCE004AE8B9 /* MIDIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9F7F6A5C2C398AD0004AE8B9 /* XCRemoteSwiftPackageReference "MIDIKit" */;
+			productName = MIDIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

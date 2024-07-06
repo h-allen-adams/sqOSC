@@ -19,14 +19,11 @@ class Values {
     }
 
     static func hexToDec(_ hex: String) -> Int {
-        return Int(hex, radix: 16)!
+        guard let toConvert = hex.hex else { return 0 }
+        return toConvert.value
     }
 
     static func decToHex(_ dec: Int, minLength: Int = 2) -> String {
-        var hex = String(dec, radix: 16).uppercased()
-        while hex.count < minLength {
-            hex = "0\(hex)"
-        }
-        return hex
+        return dec.hex.stringValue(padTo: minLength)
     }
 }

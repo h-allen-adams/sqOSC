@@ -7,56 +7,30 @@
 
 import Foundation
 
-class EndpointDictionary {
-    var entries: [EndpointDictEntryType: EndpointDictEntry]
+class EndpointDictionary: ObservableObject {
+    var entries: [EndpointOperationType: EndpointDictEntry]
 
     init() {
         entries = [
-            EndpointDictEntryType.scene:
+            EndpointOperationType.recall:
                 EndpointDictEntry(title: "Scene Recall",
-                                  paths: [
-                                      SqChannelType.none: "/sq/scene/recall",
-                                  ]),
-            EndpointDictEntryType.keys:
+                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.recall)),
+            EndpointOperationType.trigger:
                 EndpointDictEntry(title: "SoftKey Control",
-                                  paths: [
-                                      SqChannelType.none: "/sq/softKey/{keyNum}/trigger",
-                                  ]),
-            EndpointDictEntryType.mute:
+                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.trigger)),
+            EndpointOperationType.mute:
                 EndpointDictEntry(title: "Mute Channels",
-                                  paths: [
-                                      SqChannelType.muteGroup: "/sq/muteGroup/{chNum}/mute",
-                                      SqChannelType.dca: "/sq/dca/{chNum}/mute",
-                                      SqChannelType.main: "/sq/main/mute",
-                                      SqChannelType.aux: "/sq/aux/{chNum}/mute",
-                                      SqChannelType.matrix: "/sq/matrix/{chNum}/mute",
-                                      SqChannelType.input: "/sq/input/{chNum}/mute",
-                                      SqChannelType.fxSend: "/sq/fxSend/{chNum}/mute",
-                                      SqChannelType.fxReturn: "/sq/fxReturn/{chNum}/mute",
-                                      SqChannelType.group: "/sq/group/{chNum}/mute",
-                                  ]),
-            EndpointDictEntryType.level:
+                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.mute)),
+            EndpointOperationType.level:
                 EndpointDictEntry(title: "Output Levels",
-                                  paths: [
-                                      SqChannelType.dca: "/sq/dca/{chNum}/level",
-                                      SqChannelType.main: "/sq/main/level",
-                                      SqChannelType.aux: "/sq/aux/{chNum}/level",
-                                      SqChannelType.matrix: "/sq/matrix/{chNum}/level",
-                                      SqChannelType.fxSend: "/sq/fxSend/{chNum}/level",
-                                  ]),
-            EndpointDictEntryType.sendLevel:
+                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.level)),
+            EndpointOperationType.sendLevel:
                 EndpointDictEntry(title: "Send Levels",
-                                  paths: [
-                                      SqChannelType.main: "/sq/main/sendLevel",
-                                      SqChannelType.aux: "/sq/aux/{chNum}/sendLevel",
-                                      SqChannelType.input: "/sq/input/{chNum}/sendLevel",
-                                      SqChannelType.fxReturn: "/sq/fxReturn/{chNum}/sendLevel",
-                                      SqChannelType.group: "/sq/fxReturn/{chNum}/sendLevel",
-                                  ]),
+                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.sendLevel)),
         ]
     }
 
-    func resolvePath(entryType: EndpointDictEntryType, pathType: SqChannelType = SqChannelType.none, pathValues: [String: String] = [:]) -> String? {
+    func resolvePath(entryType: EndpointOperationType, pathType: EndpointType, pathValues: [String: String] = [:]) -> String? {
         return entries[entryType]?.resolvePath(pathType: pathType, pathValues: pathValues)
     }
 
@@ -68,14 +42,20 @@ class EndpointDictionary {
         }
         return result
     }
+
+    static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
+        return operation.endpoints().reduce(into: [:]) {
+            $0[$1] = "\($1.basePath())/\(operation)"
+        }
+    }
 }
 
 struct EndpointDictEntry: Hashable, Identifiable {
     let id = UUID()
     let title: String
-    let paths: [SqChannelType: String]
+    let paths: [EndpointType: String]
 
-    func resolvePath(pathType: SqChannelType, pathValues: [String: String]) -> String? {
+    func resolvePath(pathType: EndpointType, pathValues: [String: String]) -> String? {
         guard let path = paths[pathType] else { return nil }
         var resolvedPath = path
         for (key, value) in pathValues {
@@ -98,12 +78,4 @@ struct EndpointDictEntry: Hashable, Identifiable {
         let id = UUID()
         let path: String
     }
-}
-
-enum EndpointDictEntryType: Int {
-    case scene = 0
-    case keys
-    case mute
-    case level
-    case sendLevel
 }
