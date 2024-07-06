@@ -9,6 +9,7 @@ import Foundation
 
 struct SqMixerConfig {
     var midiChannel = 1
+    var numSoftKeys = 16
     var numInput = 48
     var numGroup = 12
     var numMain = 1

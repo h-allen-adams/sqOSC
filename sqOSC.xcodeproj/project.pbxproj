@@ -22,6 +22,8 @@
 		9F383CA52C382F220093DC24 /* SqMixerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA42C382F220093DC24 /* SqMixerConfig.swift */; };
 		9F383CA72C3831110093DC24 /* SqMixerEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */; };
 		9F383CA92C3832920093DC24 /* SqMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */; };
+		9F383CAD2C3867500093DC24 /* EndpointDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CAC2C3867500093DC24 /* EndpointDictionary.swift */; };
+		9F383CAF2C386C380093DC24 /* EndpointDictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		9F383CA42C382F220093DC24 /* SqMixerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerConfig.swift; sourceTree = "<group>"; };
 		9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpoints.swift; sourceTree = "<group>"; };
 		9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpointsTest.swift; sourceTree = "<group>"; };
+		9F383CAC2C3867500093DC24 /* EndpointDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionary.swift; sourceTree = "<group>"; };
+		9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionaryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				9F26485D2C37805000C5D357 /* Assets.xcassets */,
-				9F2648592C37805000C5D357 /* ContentView.swift */,
+				9F383CAC2C3867500093DC24 /* EndpointDictionary.swift */,
 				9F383CA22C382D8C0093DC24 /* MessagePublisher.swift */,
 				9F26485F2C37805000C5D357 /* Preview Content */,
 				9F383CA42C382F220093DC24 /* SqMixerConfig.swift */,
@@ -108,6 +112,7 @@
 				9F2648572C37805000C5D357 /* sqOSCApp.swift */,
 				9F2648892C378B6800C5D357 /* SqOscHandler.swift */,
 				9F383C9D2C381D4B0093DC24 /* Values.swift */,
+				9F383CB02C386C410093DC24 /* Views */,
 			);
 			path = sqOSC;
 			sourceTree = "<group>";
@@ -127,6 +132,15 @@
 				9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */,
 			);
 			path = sqOSCTests;
+			sourceTree = "<group>";
+		};
+		9F383CB02C386C410093DC24 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9F2648592C37805000C5D357 /* ContentView.swift */,
+				9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,8 +250,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F383CAF2C386C380093DC24 /* EndpointDictionaryView.swift in Sources */,
 				9F26485A2C37805000C5D357 /* ContentView.swift in Sources */,
 				9F383C9E2C381D4B0093DC24 /* Values.swift in Sources */,
+				9F383CAD2C3867500093DC24 /* EndpointDictionary.swift in Sources */,
 				9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */,
 				9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */,
 				9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */,

@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum SqButtonState: String {
+    case PRESS
+    case RELEASE
+}
+
 enum SqChannelType: String {
     case input
     case group
@@ -17,6 +22,24 @@ enum SqChannelType: String {
     case matrix
     case dca
     case muteGroup
+
+    func isOutputLevel() -> Bool {
+        switch self {
+        case .main, .aux, .fxSend, .matrix, .dca:
+            return true
+        default:
+            return false
+        }
+    }
+
+    func hasSends() -> Bool {
+        switch self {
+        case .input, .fxReturn, .group, .main, .aux:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 enum SqMuteAction: String {

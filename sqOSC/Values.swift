@@ -23,7 +23,7 @@ class Values {
     }
 
     static func decToHex(_ dec: Int, minLength: Int = 2) -> String {
-        var hex = String(dec, radix: 16)
+        var hex = String(dec, radix: 16).uppercased()
         while hex.count < minLength {
             hex = "0\(hex)"
         }

@@ -10,8 +10,8 @@ import OSCKit
 
 class SqOscHandler: ObservableObject {
     @Published var logText = ""
+    @Published var dictionary = EndpointDictionary()
 
-    private var oscServer = OSCServer(port: 9903)
     private let addressSpace = OSCAddressSpace()
     private let messagePublisher: MessagePublisher
     private let endpoints: SqMixerEndpoints
@@ -20,8 +20,7 @@ class SqOscHandler: ObservableObject {
         self.messagePublisher = messagePublisher
         self.endpoints = SqMixerEndpoints(mixerConfig: SqMixerConfig())
         logMessage(label: "SETUP", message: "INITIALIZING")
-        setupOSCServer()
-        endpoints.register(addressSpace: addressSpace) { label, message in
+        endpoints.register(addressSpace: addressSpace, dictionary: dictionary) { label, message in
             self.publishMessage(label: label, message: message)
         }
     }
@@ -44,24 +43,5 @@ class SqOscHandler: ObservableObject {
     func publishMessage(label: String, message: String) {
         logMessage(label: label, message: message)
         messagePublisher(label, message)
-    }
-
-    private func setupOSCServer() {
-        oscServer.setHandler { [weak self] message, timeTag in
-            do {
-                try self?.handle(
-                    message: message,
-                    timeTag: timeTag
-                )
-            } catch {
-                print(error)
-            }
-        }
-
-        do {
-            try oscServer.start()
-        } catch {
-            print(error)
-        }
     }
 }
