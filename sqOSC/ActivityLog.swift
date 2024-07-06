@@ -12,5 +12,6 @@ class ActivityLog: ObservableObject {
 
     func logMessage(logText: String) {
         self.logText.append(logText)
+        self.logText.append("\n")
     }
 }

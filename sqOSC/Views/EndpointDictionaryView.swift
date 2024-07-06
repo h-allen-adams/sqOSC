@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EndpointDictionaryView: View {
-    let dictionary: EndpointDictionary
+    let dictionary: SqMixerEndpointDictionary
 
     var body: some View {
         List(dictionary.values()) { entry in
@@ -18,5 +18,5 @@ struct EndpointDictionaryView: View {
 }
 
 #Preview {
-    EndpointDictionaryView(dictionary: EndpointDictionary())
+    EndpointDictionaryView(dictionary: SqMixerEndpointDictionary())
 }

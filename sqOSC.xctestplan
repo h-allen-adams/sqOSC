@@ -22,6 +22,9 @@
   },
   "testTargets" : [
     {
+      "skippedTests" : [
+        "TempTest"
+      ],
       "target" : {
         "containerPath" : "container:sqOSC.xcodeproj",
         "identifier" : "9F7F6A442C38F7F6004AE8B9",

@@ -9,7 +9,7 @@ import Foundation
 import OSCKit
 
 class SqMixerEndpoints {
-    var dictionary = EndpointDictionary()
+    var dictionary = SqMixerEndpointDictionary()
     private let mixerConfig: SqMixerConfig
     private let mixerMessages = SqMixerMessages()
     private var addressSpace: OSCAddressSpace?

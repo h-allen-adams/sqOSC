@@ -11,20 +11,18 @@ import OSCKit
 class SqOscHandler: ObservableObject {
     private let activityLog: ActivityLog
     private let addressSpace = OSCAddressSpace()
-    private let messagePublisher: MessagePublisher
-    private let endpoints: SqMixerEndpoints
 
-    init(activityLog: ActivityLog, endpoints: SqMixerEndpoints, messagePublisher: @escaping MessagePublisher) {
+    init(activityLog: ActivityLog) {
         self.activityLog = activityLog
-        self.messagePublisher = messagePublisher
-        self.endpoints = endpoints
+    }
+
+    func register(endpoints: SqMixerEndpoints, publisher: @escaping MessagePublisher) {
         logMessage(label: "SETUP", message: "INITIALIZING")
-        endpoints.register(addressSpace: addressSpace) { label, message in
-            self.publishMessage(label: label, message: message)
-        }
+        endpoints.register(addressSpace: addressSpace, publisher: publisher)
     }
 
     public func handle(message: OSCMessage, timeTag: OSCTimeTag) throws {
+        logMessage(label: "MESSAGE", message: "\(message)")
         // execute closures for matching methods, and returns the matching method IDs
         let methodIDs = addressSpace.dispatch(message)
 
@@ -36,11 +34,6 @@ class SqOscHandler: ObservableObject {
     }
 
     func logMessage(label: String, message: String) {
-        activityLog.logMessage(logText: "\(label) -> \(message)\n")
-    }
-
-    func publishMessage(label: String, message: String) {
-        logMessage(label: label, message: message)
-        messagePublisher(label, message)
+        activityLog.logMessage(logText: "\(label) -> \(message)")
     }
 }

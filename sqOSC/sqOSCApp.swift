@@ -5,6 +5,7 @@
 //  Created by H Allen Adams on 7/4/24.
 //
 
+import MIDIKit
 import OSCKit
 import SwiftData
 import SwiftUI
@@ -16,8 +17,24 @@ struct sqOSCApp: App {
     private var apiEndpoints = SqMixerEndpoints(mixerConfig: SqMixerConfig())
     private var oscHandler: SqOscHandler
 
+    @ObservedObject var midiManager = ObservableMIDIManager(
+        clientName: "sqOSC",
+        model: "sqOSC",
+        manufacturer: "org.adamaschool"
+    )
+    @ObservedObject var midiHelper = MIDIHelper()
+
     init() {
-        self.oscHandler = SqOscHandler(activityLog: activityLog, endpoints: apiEndpoints) { _, _ in }
+        oscHandler = SqOscHandler(activityLog: activityLog)
+
+        do {
+            try midiManager.start()
+            try midiManager.addOutputConnection(to: .none, tag: "toSQ")
+            midiHelper.setup(midiManager: midiManager)
+        } catch {
+            print("Error while starting MIDI manager: \(error)")
+        }
+
         setupOSCServer()
     }
 
@@ -26,6 +43,8 @@ struct sqOSCApp: App {
             ContentView()
                 .environmentObject(apiEndpoints.dictionary)
                 .environmentObject(activityLog)
+                .environmentObject(midiManager)
+                .environmentObject(midiHelper)
         }
     }
 
@@ -40,14 +59,15 @@ struct sqOSCApp: App {
                 print(error)
             }
         }
+        let midiMessagePublisher = MidiMessagePublisher(activityLog: activityLog, midiManager: midiManager)
+        oscHandler.register(endpoints: apiEndpoints, publisher: midiMessagePublisher.publish)
 
         do {
-            let env = ProcessInfo.processInfo.environment
-            let value = env["SQOSC_MODE"] ?? "run"
-            if value == "run" {
-                try oscServer.start()
-            }
+            oscServer.isPortReuseEnabled = true
+            try oscServer.start()
+            activityLog.logMessage(logText: "OSC Server Started on Port \(oscServer.localPort)")
         } catch {
+            activityLog.logMessage(logText: "ERROR Unable to OSC Start Server on Port \(oscServer.localPort): \(error)")
             print(error)
         }
     }

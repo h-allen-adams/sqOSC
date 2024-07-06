@@ -22,5 +22,5 @@ struct EndpointDictionaryEntryView: View {
 }
 
 #Preview {
-    EndpointDictionaryEntryView(entry: EndpointDictionary().entries[EndpointOperationType.mute]!)
+    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary().entries[EndpointOperationType.mute]!)
 }

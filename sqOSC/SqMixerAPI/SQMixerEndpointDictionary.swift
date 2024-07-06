@@ -7,26 +7,26 @@
 
 import Foundation
 
-class EndpointDictionary: ObservableObject {
+class SqMixerEndpointDictionary: ObservableObject {
     var entries: [EndpointOperationType: EndpointDictEntry]
 
     init() {
         entries = [
             EndpointOperationType.recall:
                 EndpointDictEntry(title: "Scene Recall",
-                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.recall)),
+                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.recall)),
             EndpointOperationType.trigger:
                 EndpointDictEntry(title: "SoftKey Control",
-                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.trigger)),
+                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.trigger)),
             EndpointOperationType.mute:
                 EndpointDictEntry(title: "Mute Channels",
-                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.mute)),
+                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.mute)),
             EndpointOperationType.level:
                 EndpointDictEntry(title: "Output Levels",
-                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.level)),
+                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.level)),
             EndpointOperationType.sendLevel:
                 EndpointDictEntry(title: "Send Levels",
-                                  paths: EndpointDictionary.pathsFor(operation: EndpointOperationType.sendLevel)),
+                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.sendLevel)),
         ]
     }
 
