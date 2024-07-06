@@ -4,7 +4,15 @@
       "id" : "D659EB08-05D2-4341-96F6-04BCAF964BF1",
       "name" : "Configuration 1",
       "options" : {
+        "commandLineArgumentEntries" : [
 
+        ],
+        "environmentVariableEntries" : [
+          {
+            "key" : "SQOSC_MODE",
+            "value" : "test"
+          }
+        ]
       }
     }
   ],

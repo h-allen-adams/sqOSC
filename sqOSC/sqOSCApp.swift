@@ -42,7 +42,11 @@ struct sqOSCApp: App {
         }
 
         do {
-            try oscServer.start()
+            let env = ProcessInfo.processInfo.environment
+            let value = env["SQOSC_MODE"] ?? "run"
+            if value == "run" {
+                try oscServer.start()
+            }
         } catch {
             print(error)
         }
