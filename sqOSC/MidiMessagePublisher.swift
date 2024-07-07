@@ -15,8 +15,9 @@ struct MidiMessagePublisher {
     func publish(label: String, message: MIDIEvent) {
         if let connection = midiManager?.managedOutputConnections["toSQ"] {
             do {
-                try connection.send(event: message)
                 activityLog.logMessage(logText: "\(label) -> \(Self.toString(message))")
+                // try connection.send(event: MIDIEvent.sysEx7(manufacturer: .oneByte(0x7D), data: []))
+                try connection.send(event: message)
             } catch {
                 activityLog.logMessage(logText: "\(label) -> ERROR \(error)")
             }

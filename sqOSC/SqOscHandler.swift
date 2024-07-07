@@ -22,7 +22,7 @@ class SqOscHandler: ObservableObject {
     }
 
     public func handle(message: OSCMessage, timeTag: OSCTimeTag) throws {
-        logMessage(label: "MESSAGE", message: "\(message)")
+        //logMessage(label: "MESSAGE", message: "\(message)")
         // execute closures for matching methods, and returns the matching method IDs
         let methodIDs = addressSpace.dispatch(message)
 

@@ -10,7 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var activityLog: ActivityLog
     @EnvironmentObject var dictionary: SqMixerEndpointDictionary
     enum Tabs: Equatable, Hashable {
         case log
@@ -19,9 +18,8 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: /*@START_MENU_TOKEN@*/ .constant(1)/*@END_MENU_TOKEN@*/,
                 content: {
-                    ConfigurationView().tabItem { Text("Configuration") }.tag(1)
-                    EndpointDictionaryView(dictionary: dictionary).tabItem { Text("Dictionary") }.tag(1)
-                    TextEditor(text: $activityLog.logText).tabItem { Text("Activity Log") }.tag(2)
+                    ConfigurationView().tabItem { Text("Status") }.tag(1)
+                    EndpointDictionaryView(dictionary: dictionary).tabItem { Text("Dictionary") }.tag(2)
                 })
     }
 }

@@ -22,7 +22,6 @@ struct sqOSCApp: App {
         model: "sqOSC",
         manufacturer: "org.adamaschool"
     )
-    @ObservedObject var midiHelper = MIDIHelper()
 
     init() {
         oscHandler = SqOscHandler(activityLog: activityLog)
@@ -30,7 +29,6 @@ struct sqOSCApp: App {
         do {
             try midiManager.start()
             try midiManager.addOutputConnection(to: .none, tag: "toSQ")
-            midiHelper.setup(midiManager: midiManager)
         } catch {
             print("Error while starting MIDI manager: \(error)")
         }
@@ -44,7 +42,6 @@ struct sqOSCApp: App {
                 .environmentObject(apiEndpoints.dictionary)
                 .environmentObject(activityLog)
                 .environmentObject(midiManager)
-                .environmentObject(midiHelper)
         }
     }
 
@@ -60,7 +57,9 @@ struct sqOSCApp: App {
             }
         }
         let midiMessagePublisher = MidiMessagePublisher(activityLog: activityLog, midiManager: midiManager)
-        oscHandler.register(endpoints: apiEndpoints, publisher: midiMessagePublisher.publish)
+        oscHandler.register(endpoints: apiEndpoints) {
+            midiMessagePublisher.publish(label: $0, message: $1)
+        }
 
         do {
             oscServer.isPortReuseEnabled = true

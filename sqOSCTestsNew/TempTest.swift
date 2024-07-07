@@ -39,6 +39,7 @@ final class TempTest: XCTestCase {
                     connection.add(inputs: [endpoint.asIdentity()])
                 }
             }
+            try connection.send(event: MIDIEvent.sysEx7(manufacturer: .oneByte(0x7D), data: []))
             try connection.send(event: MIDIEvent.noteOn(60, velocity: .midi1(64), channel: 0))
             try connection.send(event: mixerMessages.softKeyMessage(midiChannel: 1, button: 1, state: SqButtonState.PRESS)!)
             try connection.send(event: mixerMessages.sendLevelMessage(midiChannel: 1, sourceType: EndpointType.input, sourceChannel: 1,

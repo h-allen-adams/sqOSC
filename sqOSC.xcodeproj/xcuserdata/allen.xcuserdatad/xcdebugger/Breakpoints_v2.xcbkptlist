@@ -190,8 +190,38 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "35"
             endingLineNumber = "35"
-            landmarkName = "setUpWithError()"
+            landmarkName = "testExample()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0BE7B422-4B4F-46E3-8423-6768A62D0A06 - 893d43007c34b076"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "sqOSCTestsNew.TempTest.testExample() throws -&gt; ()"
+                  moduleName = "sqOSCTestsNew"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/allen/dev/sqOSC/sqOSCTestsNew/TempTest.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35">
+               </Location>
+               <Location
+                  uuid = "0BE7B422-4B4F-46E3-8423-6768A62D0A06 - 893d43007c34b076"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "sqOSCTestsNew.TempTest.testExample() throws -&gt; ()"
+                  moduleName = "sqOSCTestsNew"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/allen/dev/sqOSC/sqOSCTestsNew/TempTest.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -206,7 +236,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "34"
             endingLineNumber = "34"
-            landmarkName = "setUpWithError()"
+            landmarkName = "testExample()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -240,6 +270,146 @@
             endingLineNumber = "67"
             landmarkName = "registerMute(_:_:_:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2D30D2D8-7A5B-44FD-B1F0-68AC7BF5ED2F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "sqOSC/MidiMessagePublisher.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "publish(label:message:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D5FE87B1-3D06-465D-B668-FAD429AC0BCE"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "sqOSC/Views/ConfigurationView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BAED77E0-9362-4B03-BDCB-0D5355294E94"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "sqOSC/SqOscHandler.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "logMessage(label:message:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4149EB19-B30F-4B94-B60F-4E60826ED01A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "sqOSC/MidiMessagePublisher.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "publish(label:message:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F4D0FE77-06D3-415E-AEC5-2ADDD8D609F3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "sqOSC/MidiMessagePublisher.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "publish(label:message:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1B070B0D-E3F9-4587-8D60-918D5C0296DE"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../Library/Developer/Xcode/DerivedData/sqOSC-bxpffayricayngamubnwlgmlvmpr/SourcePackages/checkouts/MIDIKit/Sources/MIDIKitCore/Events/MIDIEvent/System Exclusive/SysEx7/SysEx7 Parser.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "sysEx7(rawBytes:group:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1B070B0D-E3F9-4587-8D60-918D5C0296DE - 75e32710a338ee7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static MIDIKitCore.MIDIEvent.sysEx7(rawBytes: Swift.Array&lt;Swift.UInt8&gt;, group: MIDIKitCore.UInt4) throws -&gt; MIDIKitCore.MIDIEvent"
+                  moduleName = "sqOSC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/allen/Library/Developer/Xcode/DerivedData/sqOSC-bxpffayricayngamubnwlgmlvmpr/SourcePackages/checkouts/MIDIKit/Sources/MIDIKitCore/Events/MIDIEvent/System%20Exclusive/SysEx7/SysEx7%20Parser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19">
+               </Location>
+               <Location
+                  uuid = "1B070B0D-E3F9-4587-8D60-918D5C0296DE - e64d9b99c49fe563"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static MIDIKitCore.MIDIEvent.sysEx7(rawBytes: Swift.Array&lt;Swift.UInt8&gt;, group: MIDIKitCore.UInt4) throws -&gt; MIDIKitCore.MIDIEvent.readPosAdvance(by: Swift.Int) throws -&gt; ()"
+                  moduleName = "sqOSC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/allen/Library/Developer/Xcode/DerivedData/sqOSC-bxpffayricayngamubnwlgmlvmpr/SourcePackages/checkouts/MIDIKit/Sources/MIDIKitCore/Events/MIDIEvent/System%20Exclusive/SysEx7/SysEx7%20Parser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19">
+               </Location>
+               <Location
+                  uuid = "1B070B0D-E3F9-4587-8D60-918D5C0296DE - c401259537af2ebc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static MIDIKitCore.MIDIEvent.sysEx7(rawBytes: Swift.Array&lt;Swift.UInt8&gt;, group: MIDIKitCore.UInt4) throws -&gt; MIDIKitCore.MIDIEvent.readData() throws -&gt; Swift.Array&lt;Swift.UInt8&gt;"
+                  moduleName = "sqOSC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/allen/Library/Developer/Xcode/DerivedData/sqOSC-bxpffayricayngamubnwlgmlvmpr/SourcePackages/checkouts/MIDIKit/Sources/MIDIKitCore/Events/MIDIEvent/System%20Exclusive/SysEx7/SysEx7%20Parser.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "19"
+                  endingLineNumber = "19">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
