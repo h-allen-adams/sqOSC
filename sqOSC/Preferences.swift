@@ -26,7 +26,12 @@ final class Preferences {
     @UserDefault(PrefKeys.midiInName, defaultValue: nil)
     var midiInputName: String?
 
+    @UserDefault(PrefKeys.midiChannel, defaultValue: 1)
+    var midiChannel: Int
+
     enum PrefKeys {
+        static let midiChannel = "midiChannel"
+
         static let midiInID = "midiInput"
         static let midiInName = "midiInputName"
 

@@ -12,6 +12,7 @@ import SwiftUI
 struct ConfigurationView: View {
     @Preference(\.midiInput) var midiInput
     @Preference(\.midiInputName) var midiInputName
+    @Preference(\.midiChannel) var midiChannel
 
     @EnvironmentObject private var midiManager: ObservableMIDIManager
     @EnvironmentObject private var activityLog: ActivityLog
@@ -27,8 +28,16 @@ struct ConfigurationView: View {
                 hideOwned: true
             )
             .updatingOutputConnection(withTag: "toSQ")
+            Picker("MIDI Channel", selection: $midiChannel) {
+                ForEach(midiChannels, id: \.self) {
+                    Text("\($0)")
+                }
+            }
+            .pickerStyle(.palette)
         }
     }
+
+    var midiChannels: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 }
 
 @propertyWrapper

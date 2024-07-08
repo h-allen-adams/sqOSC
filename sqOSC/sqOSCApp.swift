@@ -14,7 +14,7 @@ import SwiftUI
 struct sqOSCApp: App {
     private var activityLog = ActivityLog()
     private var oscServer = OSCServer(port: 9903)
-    private var apiEndpoints = SqMixerEndpoints(mixerConfig: SqMixerConfig())
+    private var apiEndpoints = SqMixerEndpoints(preferences: .standard)
     private var oscHandler: SqOscHandler
 
     @ObservedObject var midiManager = ObservableMIDIManager(

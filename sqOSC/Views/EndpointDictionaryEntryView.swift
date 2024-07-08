@@ -14,7 +14,7 @@ struct EndpointDictionaryEntryView: View {
         VStack(alignment: .leading) {
             Section(header: Text(entry.title).font(.title3)) {
                 ForEach(entry.displayPaths()) { displayPath in
-                    Text(displayPath.path)
+                    Text("\(displayPath.path) \t\(displayPath.parameters)")
                 }
             }
         }

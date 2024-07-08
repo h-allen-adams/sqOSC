@@ -10,13 +10,12 @@ import OSCKitCore
 import XCTest
 
 final class SqMixerEndpointsTest: XCTestCase {
-    private var mixerConfig = SqMixerConfig(numSoftKeys: 3, numInput: 4, numGroup: 2, numMain: 1, numAux: 2, numfxReturn: 4, numfxSend: 2, numMatrix: 3, numDca: 2, numMuteGroup: 2)
     private var mixerEndpoints: SqMixerEndpoints?
     private var addressSpace: OSCAddressSpace?
     private var message = ""
 
     override func setUpWithError() throws {
-        mixerEndpoints = SqMixerEndpoints(mixerConfig: mixerConfig)
+        mixerEndpoints = SqMixerEndpoints(preferences: .standard)
         addressSpace = OSCAddressSpace()
         message = "UNSET"
 

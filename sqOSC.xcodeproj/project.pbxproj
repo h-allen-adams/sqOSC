@@ -19,7 +19,6 @@
 		9F383C9E2C381D4B0093DC24 /* Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C9D2C381D4B0093DC24 /* Values.swift */; };
 		9F383CA02C3821410093DC24 /* SqMixerEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C9F2C3821410093DC24 /* SqMixerEnums.swift */; };
 		9F383CA32C382D8C0093DC24 /* MessagePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA22C382D8C0093DC24 /* MessagePublisher.swift */; };
-		9F383CA52C382F220093DC24 /* SqMixerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA42C382F220093DC24 /* SqMixerConfig.swift */; };
 		9F383CA72C3831110093DC24 /* SqMixerEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */; };
 		9F383CAD2C3867500093DC24 /* SQMixerEndpointDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CAC2C3867500093DC24 /* SQMixerEndpointDictionary.swift */; };
 		9F383CAF2C386C380093DC24 /* EndpointDictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */; };
@@ -59,7 +58,6 @@
 		9F383C9F2C3821410093DC24 /* SqMixerEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEnums.swift; sourceTree = "<group>"; };
 		9F383CA12C38256C0093DC24 /* sqOSC.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.xctestplan; sourceTree = "<group>"; };
 		9F383CA22C382D8C0093DC24 /* MessagePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePublisher.swift; sourceTree = "<group>"; };
-		9F383CA42C382F220093DC24 /* SqMixerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerConfig.swift; sourceTree = "<group>"; };
 		9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpoints.swift; sourceTree = "<group>"; };
 		9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpointsTest.swift; sourceTree = "<group>"; };
 		9F383CAC2C3867500093DC24 /* SQMixerEndpointDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQMixerEndpointDictionary.swift; sourceTree = "<group>"; };
@@ -175,7 +173,6 @@
 			isa = PBXGroup;
 			children = (
 				9F383CAC2C3867500093DC24 /* SQMixerEndpointDictionary.swift */,
-				9F383CA42C382F220093DC24 /* SqMixerConfig.swift */,
 				9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */,
 				9F383C9F2C3821410093DC24 /* SqMixerEnums.swift */,
 				9F383C952C381B400093DC24 /* SqMixerMessages.swift */,
@@ -307,7 +304,6 @@
 				9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */,
 				9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */,
 				9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */,
-				9F383CA52C382F220093DC24 /* SqMixerConfig.swift in Sources */,
 				9F26B63D2C3A031D00BD0C9F /* MidiMessagePublisher.swift in Sources */,
 				9F383CA32C382D8C0093DC24 /* MessagePublisher.swift in Sources */,
 				9F7F6A632C399237004AE8B9 /* ActivityLog.swift in Sources */,

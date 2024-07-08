@@ -250,8 +250,8 @@
             filePath = "sqOSCTestsNew/SqMixerEndpointsTest.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "23"
-            endingLineNumber = "23"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "setUpWithError()"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,9 +266,9 @@
             filePath = "sqOSC/SqMixerAPI/SqMixerEndpoints.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "registerMute(_:_:_:)"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "registerOutputLevel(_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -298,8 +298,8 @@
             filePath = "sqOSC/Views/ConfigurationView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

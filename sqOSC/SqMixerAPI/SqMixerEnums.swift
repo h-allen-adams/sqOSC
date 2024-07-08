@@ -8,13 +8,36 @@
 import Foundation
 
 enum EndpointOperationType: Int, CaseIterable {
-    case recall = 0
-    case trigger
-    case mute
-    case level
+    case mute = 0
     case sendLevel
+    case level
+    case trigger
+    case recall
 
-    func endpoints() -> [EndpointType] {
+    public var title: String {
+        switch self {
+        case .level: "Output Levels"
+        case .mute: "Mute Channels"
+        case .recall: "Scene Recall"
+        case .sendLevel: "Send Levels"
+        case .trigger: "SoftKey Control"
+        }
+    }
+
+    func parameters(endpoint: EndpointType) -> String {
+        switch self {
+        case .level: return "{-100..10}"
+        case .mute: return"{ON|OFF}"
+        case .recall: return"{1..300}"
+        case .sendLevel:
+            let strings = endpoint.sendTargets.map { String(describing: $0) }
+            let destinations = strings.joined(separator: "|")
+            return "{\(destinations)}  {destNum}  {-100..10}"
+        case .trigger: return"{PRESS|RELEASE}"
+        }
+    }
+
+    public var endpoints: [EndpointType] {
         switch self {
         case .level: [EndpointType.aux,
                       EndpointType.dca,
@@ -54,6 +77,22 @@ enum EndpointType: String, CaseIterable {
     case scene
     case keys
 
+    public var count: Int {
+        switch self {
+        case .aux: 12
+        case .dca: 8
+        case .fxReturn: 8
+        case .fxSend: 4
+        case .group: 12
+        case .input: 48
+        case .keys: 16
+        case .main: 1
+        case .matrix: 3
+        case .muteGroup: 8
+        case .scene: 1
+        }
+    }
+
     func isOutputLevel() -> Bool {
         switch self {
         case .main, .aux, .fxSend, .matrix, .dca:
@@ -69,6 +108,17 @@ enum EndpointType: String, CaseIterable {
             return true
         default:
             return false
+        }
+    }
+
+    public var sendTargets: [EndpointType] {
+        switch self {
+        case .input: [.main, .aux, .fxSend]
+        case .fxReturn: [.main, .aux, .fxSend]
+        case .group: [.main, .aux, .fxSend, .matrix]
+        case .main: [.matrix]
+        case .aux: [.matrix]
+        default: []
         }
     }
 

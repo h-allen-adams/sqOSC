@@ -11,27 +11,11 @@ class SqMixerEndpointDictionary: ObservableObject {
     var entries: [EndpointOperationType: EndpointDictEntry]
 
     init() {
-        entries = [
-            EndpointOperationType.recall:
-                EndpointDictEntry(title: "Scene Recall",
-                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.recall)),
-            EndpointOperationType.trigger:
-                EndpointDictEntry(title: "SoftKey Control",
-                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.trigger)),
-            EndpointOperationType.mute:
-                EndpointDictEntry(title: "Mute Channels",
-                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.mute)),
-            EndpointOperationType.level:
-                EndpointDictEntry(title: "Output Levels",
-                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.level)),
-            EndpointOperationType.sendLevel:
-                EndpointDictEntry(title: "Send Levels",
-                                  paths: SqMixerEndpointDictionary.pathsFor(operation: EndpointOperationType.sendLevel)),
-        ]
+        entries = EndpointOperationType.allCases.reduce(into: [:]) { $0[$1] = EndpointDictEntry(operation: $1) }
     }
 
-    func resolvePath(entryType: EndpointOperationType, pathType: EndpointType, pathValues: [String: String] = [:]) -> String? {
-        return entries[entryType]?.resolvePath(pathType: pathType, pathValues: pathValues)
+    func resolvePath(operation: EndpointOperationType, endpoint: EndpointType, pathValues: [String: String] = [:]) -> String? {
+        return entries[operation]?.resolvePath(pathType: endpoint, pathValues: pathValues)
     }
 
     func values() -> [EndpointDictEntry] {
@@ -42,18 +26,21 @@ class SqMixerEndpointDictionary: ObservableObject {
         }
         return result
     }
-
-    static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
-        return operation.endpoints().reduce(into: [:]) {
-            $0[$1] = "\($1.basePath())/\(operation)"
-        }
-    }
 }
 
 struct EndpointDictEntry: Hashable, Identifiable {
     let id = UUID()
-    let title: String
+    let operation: EndpointOperationType
     let paths: [EndpointType: String]
+
+    init(operation: EndpointOperationType) {
+        self.operation = operation
+        paths = Self.pathsFor(operation: operation)
+    }
+
+    public var title: String {
+        return operation.title
+    }
 
     func resolvePath(pathType: EndpointType, pathValues: [String: String]) -> String? {
         guard let path = paths[pathType] else { return nil }
@@ -69,7 +56,7 @@ struct EndpointDictEntry: Hashable, Identifiable {
         let sorted = paths.sorted { $0.1 < $1.1 }
 
         for entry in sorted {
-            result.append(DisplayPath(path: entry.value))
+            result.append(DisplayPath(path: entry.value, parameters: operation.parameters(endpoint: entry.key)))
         }
         return result
     }
@@ -77,5 +64,12 @@ struct EndpointDictEntry: Hashable, Identifiable {
     struct DisplayPath: Identifiable {
         let id = UUID()
         let path: String
+        let parameters: String
+    }
+
+    static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
+        return operation.endpoints.reduce(into: [:]) {
+            $0[$1] = "\($1.basePath())/\(operation)"
+        }
     }
 }
