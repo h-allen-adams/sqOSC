@@ -33,7 +33,7 @@ struct ConfigurationView: View {
                     Text("\($0)")
                 }
             }
-            .pickerStyle(.palette)
+            .pickerStyle(.segmented)
         }
     }
 

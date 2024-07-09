@@ -10,10 +10,13 @@ import OSCKit
 import SwiftData
 import SwiftUI
 
+var oscServer = OSCServer(port: 9903)
+var activityLog = ActivityLog()
+
 @main
 struct sqOSCApp: App {
-    private var activityLog = ActivityLog()
-    private var oscServer = OSCServer(port: 9903)
+    @NSApplicationDelegateAdaptor(SwOscAppDelegate.self) var appDelegate: SwOscAppDelegate
+
     private var apiEndpoints = SqMixerEndpoints(preferences: .standard)
     private var oscHandler: SqOscHandler
 
@@ -43,6 +46,7 @@ struct sqOSCApp: App {
                 .environmentObject(activityLog)
                 .environmentObject(midiManager)
         }
+        .windowResizability(.contentSize)
     }
 
     private func setupOSCServer() {
@@ -69,5 +73,17 @@ struct sqOSCApp: App {
             activityLog.logMessage(logText: "ERROR Unable to OSC Start Server on Port \(oscServer.localPort): \(error)")
             print(error)
         }
+    }
+}
+
+class SwOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return true
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        oscServer.stop()
+        activityLog.logMessage(logText: "OSC Server Stopped")
+        print("OSC Server Stopped")
     }
 }

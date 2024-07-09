@@ -20,7 +20,7 @@ struct ContentView: View {
                 content: {
                     ConfigurationView().tabItem { Text("Status") }.tag(1)
                     EndpointDictionaryView(dictionary: dictionary).tabItem { Text("Dictionary") }.tag(2)
-                })
+                }).frame(minWidth: 600, maxWidth: 600, minHeight: 400, maxHeight: 400)
     }
 }
 
