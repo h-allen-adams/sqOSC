@@ -16,8 +16,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "11"
             endingLineNumber = "11"
-            landmarkName = "SqMixerMessagesTests"
-            landmarkType = "3">
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -110,7 +110,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
             endingLineNumber = "43"
-            landmarkName = "testSendLevelMessage()"
+            landmarkName = "testMuteMessage()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -192,36 +192,6 @@
             endingLineNumber = "35"
             landmarkName = "testExample()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0BE7B422-4B4F-46E3-8423-6768A62D0A06 - 893d43007c34b076"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "sqOSCTestsNew.TempTest.testExample() throws -&gt; ()"
-                  moduleName = "sqOSCTestsNew"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/allen/dev/sqOSC/sqOSCTestsNew/TempTest.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35">
-               </Location>
-               <Location
-                  uuid = "0BE7B422-4B4F-46E3-8423-6768A62D0A06 - 893d43007c34b076"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "sqOSCTestsNew.TempTest.testExample() throws -&gt; ()"
-                  moduleName = "sqOSCTestsNew"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/allen/dev/sqOSC/sqOSCTestsNew/TempTest.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "35"
-                  endingLineNumber = "35">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

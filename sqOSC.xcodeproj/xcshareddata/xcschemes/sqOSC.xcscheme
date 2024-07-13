@@ -40,7 +40,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9F2648662C37805100C5D357"
+               BlueprintIdentifier = "9F08065D2C42ED3F00F533F4"
                BuildableName = "sqOSCTests.xctest"
                BlueprintName = "sqOSCTests"
                ReferencedContainer = "container:sqOSC.xcodeproj">

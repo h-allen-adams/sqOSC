@@ -26,38 +26,57 @@ final class SqMixerEndpointsTest: XCTestCase {
 
     func testRegisterMutes() throws {
         XCTAssertEqual(callEndpoint("/sq/input/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 00 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/input/2/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 01 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/input/3/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 02 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/input/4/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 03 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/input/48/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 2F B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/main/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 44 B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/aux/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 45 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/aux/2/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 46 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/aux/12/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 50 B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/group/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 30 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/group/2/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 31 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/group/12/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 3B B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/fxReturn/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 3C B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/fxReturn/2/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 3D B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/fxReturn/3/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 3E B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/fxReturn/4/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 3F B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/fxReturn/8/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 43 B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/fxSend/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 51 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/fxSend/2/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 52 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/fxSend/4/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 54 B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/matrix/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 55 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/matrix/3/mute", OSCValues(arrayLiteral: "ON")), "B0 63 00 B0 62 57 B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/dca/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 02 B0 62 00 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/dca/2/mute", OSCValues(arrayLiteral: "ON")), "B0 63 02 B0 62 01 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/dca/8/mute", OSCValues(arrayLiteral: "ON")), "B0 63 02 B0 62 07 B0 06 00 B0 26 01")
         XCTAssertEqual(callEndpoint("/sq/muteGroup/1/mute", OSCValues(arrayLiteral: "ON")), "B0 63 04 B0 62 00 B0 06 00 B0 26 01")
-        XCTAssertEqual(callEndpoint("/sq/muteGroup/2/mute", OSCValues(arrayLiteral: "ON")), "B0 63 04 B0 62 01 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/muteGroup/8/mute", OSCValues(arrayLiteral: "ON")), "B0 63 04 B0 62 07 B0 06 00 B0 26 01")
     }
 
     func testRegisterOutputLevels() throws {
         XCTAssertEqual(callEndpoint("/sq/main/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 00 B0 06 76 B0 26 5C")
         XCTAssertEqual(callEndpoint("/sq/aux/1/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 01 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/aux/2/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 02 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/aux/12/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 0C B0 06 76 B0 26 5C")
         XCTAssertEqual(callEndpoint("/sq/fxSend/1/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 0D B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/fxSend/2/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 0E B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/fxSend/4/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 10 B0 06 76 B0 26 5C")
         XCTAssertEqual(callEndpoint("/sq/matrix/1/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 11 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/matrix/2/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 12 B0 06 76 B0 26 5C")
         XCTAssertEqual(callEndpoint("/sq/matrix/3/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 13 B0 06 76 B0 26 5C")
         XCTAssertEqual(callEndpoint("/sq/dca/1/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 20 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/dca/2/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 21 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/dca/8/level", OSCValues(arrayLiteral: 0)), "B0 63 4F B0 62 27 B0 06 76 B0 26 5C")
+    }
+
+    func testRegisterSendLevels() throws {
+        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel", OSCValues(arrayLiteral: "main", 1, 0)),
+                       "B0 63 40 B0 62 00 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel", OSCValues(arrayLiteral: "main", 1, 0)),
+                       "B0 63 40 B0 62 2F B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel", OSCValues(arrayLiteral: "aux", 1, 0)),
+                       "B0 63 40 B0 62 44 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel", OSCValues(arrayLiteral: "aux", 1, 0)),
+                       "B0 63 44 B0 62 78 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel", OSCValues(arrayLiteral: "aux", 12, 0)),
+                       "B0 63 40 B0 62 4F B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel", OSCValues(arrayLiteral: "aux", 12, 0)),
+                       "B0 63 45 B0 62 03 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel", OSCValues(arrayLiteral: "fxSend", 1, 0)),
+                       "B0 63 4C B0 62 14 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel", OSCValues(arrayLiteral: "fxSend", 1, 0)),
+                       "B0 63 4D B0 62 50 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel", OSCValues(arrayLiteral: "fxSend", 4, 0)),
+                       "B0 63 4C B0 62 17 B0 06 76 B0 26 5C")
+        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel", OSCValues(arrayLiteral: "fxSend", 4, 0)),
+                       "B0 63 4D B0 62 53 B0 06 76 B0 26 5C")
     }
 
     func testRegisterSceneRecall() throws {
