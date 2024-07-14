@@ -30,6 +30,7 @@ struct sqOSCApp: App {
         oscHandler = SqOscHandler(activityLog: activityLog)
 
         do {
+            midiManager.preferredAPI = .legacyCoreMIDI
             try midiManager.start()
             try midiManager.addOutputConnection(to: .none, tag: "toSQ")
         } catch {
