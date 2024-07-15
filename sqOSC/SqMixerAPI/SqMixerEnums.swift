@@ -24,15 +24,12 @@ enum EndpointOperationType: Int, CaseIterable {
         }
     }
 
-    func parameters(endpoint: EndpointType) -> String {
+    func parameters() -> String {
         switch self {
         case .level: return "{-100..10}"
-        case .mute: return"{ON|OFF}"
-        case .recall: return"{1..300}"
-        case .sendLevel:
-            let strings = endpoint.sendTargets.map { String(describing: $0) }
-            let destinations = strings.joined(separator: "|")
-            return "{\(destinations)}  {destNum}  {-100..10}"
+        case .mute: return "{ON|OFF}"
+        case .recall: return "{1..300}"
+        case .sendLevel: return "{-100..10}"
         case .trigger: return"{PRESS|RELEASE}"
         }
     }

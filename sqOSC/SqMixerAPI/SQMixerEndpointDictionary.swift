@@ -56,7 +56,7 @@ struct EndpointDictEntry: Hashable, Identifiable {
         let sorted = paths.sorted { $0.1 < $1.1 }
 
         for entry in sorted {
-            result.append(DisplayPath(path: entry.value, parameters: operation.parameters(endpoint: entry.key)))
+            result.append(DisplayPath(path: entry.value, parameters: operation.parameters()))
         }
         return result
     }
@@ -68,8 +68,14 @@ struct EndpointDictEntry: Hashable, Identifiable {
     }
 
     static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
-        return operation.endpoints.reduce(into: [:]) {
-            $0[$1] = "\($1.basePath())/\(operation)"
+        if operation == .sendLevel {
+            return operation.endpoints.reduce(into: [:]) {
+                $0[$1] = "\($1.basePath())/\(operation)/{dest}"
+            }
+        } else {
+            return operation.endpoints.reduce(into: [:]) {
+                $0[$1] = "\($1.basePath())/\(operation)"
+            }
         }
     }
 }

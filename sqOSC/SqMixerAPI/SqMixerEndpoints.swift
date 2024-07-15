@@ -44,7 +44,17 @@ class SqMixerEndpoints {
                 registerOutputLevel(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.level, endpoint: channelType, pathValues: channelPathValues)!)
             }
             if channelType.hasSends() {
-                registerSendLevel(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.sendLevel, endpoint: channelType, pathValues: channelPathValues)!)
+                for destType in channelType.sendTargets {
+                    for destChannel in 1 ... destType.count {
+                        var dest = "\(destType)/\(destChannel)"
+                        if destType.count == 1 {
+                            dest = "\(destType)"
+                        }
+                        registerSendLevel(channelType, c,
+                                          destType, destChannel,
+                                          dictionary.resolvePath(operation: EndpointOperationType.sendLevel, endpoint: channelType, pathValues: ["chNum": "\(c)", "dest": dest])!)
+                    }
+                }
             }
         }
     }
@@ -81,15 +91,14 @@ class SqMixerEndpoints {
         }
     }
 
-    private func registerSendLevel(_ channelType: EndpointType, _ channelNum: Int, _ channelLevelPath: String) {
+    private func registerSendLevel(_ sourceType: EndpointType, _ sourceNum: Int, _ destType: EndpointType, _ destNum: Int, _ channelLevelPath: String) {
         addressSpace?.register(localAddress: channelLevelPath) { values in
-            guard let (destTypeStr, destChannel, dbLevel) = try? values.masked(String.self, Int.self, Int.self) else { return }
-            guard let destType = EndpointType(rawValue: destTypeStr) else { return }
+            guard let dbLevel = try? values.masked(Int.self) else { return }
             if let midiMessage = self.mixerMessages.sendLevelMessage(midiChannel: self.preferences.midiChannel,
-                                                                     sourceType: channelType,
-                                                                     sourceChannel: channelNum,
+                                                                     sourceType: sourceType,
+                                                                     sourceChannel: sourceNum,
                                                                      destType: destType,
-                                                                     destChannel: destChannel,
+                                                                     destChannel: destNum,
                                                                      dbLevel: dbLevel)
             {
                 self.publisher!("\(channelLevelPath) \(values)", midiMessage)
