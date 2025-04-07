@@ -15,6 +15,7 @@ struct EndpointDictionaryEntryView: View {
             Section(header: Text(entry.title).font(.title3)) {
                 ForEach(entry.displayPaths()) { displayPath in
                     Text("\(displayPath.path) \t\(displayPath.parameters)")
+                        .textSelection(.enabled)
                 }
             }
         }

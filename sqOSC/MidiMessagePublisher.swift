@@ -12,7 +12,7 @@ struct MidiMessagePublisher {
     let activityLog: ActivityLog
     var midiManager: MIDIManager?
 
-    func publish(label: String, message: MIDIEvent) {
+    @MainActor func publish(label: String, message: MIDIEvent) {
         if let connection = midiManager?.managedOutputConnections["toSQ"] {
             do {
                 activityLog.logMessage(logText: "\(label) -> \(Self.toString(message))")

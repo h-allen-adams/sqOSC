@@ -16,11 +16,11 @@ struct ContentView: View {
     }
 
     var body: some View {
-        TabView(selection: /*@START_MENU_TOKEN@*/ .constant(1)/*@END_MENU_TOKEN@*/,
-                content: {
-                    ConfigurationView().tabItem { Text("Status") }.tag(1)
-                    EndpointDictionaryView(dictionary: dictionary).tabItem { Text("Dictionary") }.tag(2)
-                }).frame(minWidth: 600, maxWidth: 600, minHeight: 400, maxHeight: 400)
+        TabView(
+            content: {
+                ConfigurationView().tabItem { Text("Status") }.tag(1)
+                EndpointDictionaryView(dictionary: dictionary).tabItem { Text("Dictionary") }.tag(2)
+            }).frame(minWidth: 600, maxWidth: 600, minHeight: 400, maxHeight: 400)
     }
 }
 
@@ -28,5 +28,5 @@ struct ContentView: View {
     ContentView()
         .environmentObject(ActivityLog())
         .environmentObject(SqMixerEndpointDictionary())
-        .environmentObject(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
+        .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
 }

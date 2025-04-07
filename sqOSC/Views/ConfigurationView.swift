@@ -14,7 +14,7 @@ struct ConfigurationView: View {
     @Preference(\.midiInputName) var midiInputName
     @Preference(\.midiChannel) var midiChannel
 
-    @EnvironmentObject private var midiManager: ObservableMIDIManager
+    // @Environment(ObservableMIDIManager.self) private var midiManager
     @EnvironmentObject private var activityLog: ActivityLog
 
     var body: some View {
@@ -83,7 +83,7 @@ final class PublisherObservableObject: ObservableObject {
 
 #Preview {
     ConfigurationView()
-        .environmentObject(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
+        .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
         .environmentObject(SqMixerEndpointDictionary())
         .environmentObject(ActivityLog())
 }

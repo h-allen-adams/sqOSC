@@ -20,7 +20,7 @@ struct sqOSCApp: App {
     private var apiEndpoints = SqMixerEndpoints(preferences: .standard)
     private var oscHandler: SqOscHandler
 
-    @ObservedObject var midiManager = ObservableMIDIManager(
+    @State var midiManager = ObservableMIDIManager(
         clientName: "sqOSC",
         model: "sqOSC",
         manufacturer: "org.adamaschool"
@@ -30,9 +30,9 @@ struct sqOSCApp: App {
         oscHandler = SqOscHandler(activityLog: activityLog)
 
         do {
-            midiManager.preferredAPI = .legacyCoreMIDI
+            midiManager.preferredAPI = CoreMIDIAPIVersion.legacyCoreMIDI
             try midiManager.start()
-            try midiManager.addOutputConnection(to: .none, tag: "toSQ")
+            try midiManager.addOutputConnection(to: MIDIOutputConnectionMode.none, tag: "toSQ")
         } catch {
             print("Error while starting MIDI manager: \(error)")
         }
@@ -45,7 +45,7 @@ struct sqOSCApp: App {
             ContentView()
                 .environmentObject(apiEndpoints.dictionary)
                 .environmentObject(activityLog)
-                .environmentObject(midiManager)
+                .environment(midiManager)
         }
         .windowResizability(.contentSize)
     }
@@ -53,7 +53,7 @@ struct sqOSCApp: App {
     private func setupOSCServer() {
         oscServer.setHandler { message, timeTag in
             do {
-                try self.oscHandler.handle(
+                try await self.oscHandler.handle(
                     message: message,
                     timeTag: timeTag
                 )

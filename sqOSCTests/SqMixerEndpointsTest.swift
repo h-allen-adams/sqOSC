@@ -13,6 +13,7 @@ final class SqMixerEndpointsTest: XCTestCase {
     private var mixerEndpoints: SqMixerEndpoints?
     private var addressSpace: OSCAddressSpace?
     private var message = ""
+    private let flag = DispatchSemaphore(value: 0)
 
     override func setUpWithError() throws {
         mixerEndpoints = SqMixerEndpoints(preferences: .standard)
@@ -21,6 +22,7 @@ final class SqMixerEndpointsTest: XCTestCase {
 
         mixerEndpoints?.register(addressSpace: addressSpace!) { _, message in
             self.message = MidiMessagePublisher.toString(message)
+            self.flag.signal()
         }
     }
 
@@ -91,6 +93,9 @@ final class SqMixerEndpointsTest: XCTestCase {
     private func callEndpoint(_ address: String, _ values: OSCValues) -> String {
         message = "UNSET"
         addressSpace?.dispatch(OSCMessage(OSCAddressPattern(address), values: values))
+        if flag.wait(timeout: DispatchTime.now() + 3) == .timedOut {
+            message = "TIMEOUT"
+        }
         return message
     }
 }
