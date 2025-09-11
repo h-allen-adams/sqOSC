@@ -10,14 +10,18 @@ import Foundation
 enum EndpointOperationType: Int, CaseIterable {
     case mute = 0
     case sendLevel
+    case pan
     case level
+    case balance
     case trigger
     case recall
 
     public var title: String {
         switch self {
+        case .balance: "Output Balance"
         case .level: "Output Levels"
         case .mute: "Mute Channels"
+        case .pan: "Send Pan / Balance"
         case .recall: "Scene Recall"
         case .sendLevel: "Send Levels"
         case .trigger: "SoftKey Control"
@@ -26,8 +30,10 @@ enum EndpointOperationType: Int, CaseIterable {
 
     func parameters() -> String {
         switch self {
+        case .balance: return "{-100..100}"
         case .level: return "{-100..10}"
         case .mute: return "{ON|OFF}"
+        case .pan: return "{-100..100}"
         case .recall: return "{1..300}"
         case .sendLevel: return "{-100..10}"
         case .trigger: return"{PRESS|RELEASE}"
@@ -36,27 +42,49 @@ enum EndpointOperationType: Int, CaseIterable {
 
     public var endpoints: [EndpointType] {
         switch self {
-        case .level: [EndpointType.aux,
-                      EndpointType.dca,
-                      EndpointType.fxSend,
-                      EndpointType.main,
-                      EndpointType.matrix]
-        case .mute: [EndpointType.aux,
-                     EndpointType.dca,
-                     EndpointType.fxReturn,
-                     EndpointType.fxSend,
-                     EndpointType.group,
-                     EndpointType.input,
-                     EndpointType.main,
-                     EndpointType.matrix,
-                     EndpointType.muteGroup]
-        case .recall: [EndpointType.scene]
-        case .sendLevel: [EndpointType.aux,
-                          EndpointType.fxReturn,
-                          EndpointType.group,
-                          EndpointType.input,
-                          EndpointType.main]
-        case .trigger: [EndpointType.keys]
+        case .balance: [
+                EndpointType.aux,
+                EndpointType.main,
+                EndpointType.matrix
+            ]
+        case .level: [
+                EndpointType.aux,
+                EndpointType.dca,
+                EndpointType.fxSend,
+                EndpointType.main,
+                EndpointType.matrix
+            ]
+        case .mute: [
+                EndpointType.aux,
+                EndpointType.dca,
+                EndpointType.fxReturn,
+                EndpointType.fxSend,
+                EndpointType.group,
+                EndpointType.input,
+                EndpointType.main,
+                EndpointType.matrix,
+                EndpointType.muteGroup
+            ]
+        case .pan: [
+                EndpointType.aux,
+                EndpointType.input,
+                EndpointType.group,
+                EndpointType.fxReturn,
+                EndpointType.main
+            ]
+        case .recall: [
+                EndpointType.scene
+            ]
+        case .sendLevel: [
+                EndpointType.aux,
+                EndpointType.fxReturn,
+                EndpointType.group,
+                EndpointType.input,
+                EndpointType.main
+            ]
+        case .trigger: [
+                EndpointType.keys
+            ]
         }
     }
 }
@@ -90,6 +118,15 @@ enum EndpointType: String, CaseIterable {
         }
     }
 
+    func isOutputBalance() -> Bool {
+        switch self {
+        case .main, .aux, .matrix:
+            return true
+        default:
+            return false
+        }
+    }
+
     func isOutputLevel() -> Bool {
         switch self {
         case .main, .aux, .fxSend, .matrix, .dca:
@@ -113,6 +150,17 @@ enum EndpointType: String, CaseIterable {
         case .input: [.main, .aux, .fxSend]
         case .fxReturn: [.main, .aux, .fxSend]
         case .group: [.main, .aux, .fxSend, .matrix]
+        case .main: [.matrix]
+        case .aux: [.matrix]
+        default: []
+        }
+    }
+
+    public var panTargets: [EndpointType] {
+        switch self {
+        case .input: [.main, .aux]
+        case .fxReturn: [.main, .aux]
+        case .group: [.main, .aux, .matrix]
         case .main: [.matrix]
         case .aux: [.matrix]
         default: []

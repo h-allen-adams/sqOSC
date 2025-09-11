@@ -68,7 +68,7 @@ struct EndpointDictEntry: Hashable, Identifiable {
     }
 
     static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
-        if operation == .sendLevel {
+        if operation == .sendLevel || operation == .pan {
             return operation.endpoints.reduce(into: [:]) {
                 $0[$1] = "\($1.basePath())/\(operation)/{dest}"
             }

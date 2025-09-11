@@ -81,6 +81,17 @@ final class SqMixerEndpointsTest: XCTestCase {
                        "B0 63 4D B0 62 53 B0 06 76 B0 26 5C")
     }
 
+    func testRegisterSendPan() throws {
+        XCTAssertEqual(callEndpoint("/sq/input/1/pan/main", OSCValues(arrayLiteral: -100)),
+                       "B0 63 50 B0 62 00 B0 06 00 B0 26 00")
+        XCTAssertEqual(callEndpoint("/sq/input/1/pan/main", OSCValues(arrayLiteral: 0)),
+                       "B0 63 50 B0 62 00 B0 06 3F B0 26 7F")
+        XCTAssertEqual(callEndpoint("/sq/input/24/pan/main", OSCValues(arrayLiteral: 20)),
+                       "B0 63 50 B0 62 17 B0 06 4C B0 26 65")
+        XCTAssertEqual(callEndpoint("/sq/input/24/pan/aux/5", OSCValues(arrayLiteral: 20)),
+                       "B0 63 52 B0 62 5C B0 06 4C B0 26 65")
+    }
+
     func testRegisterSceneRecall() throws {
         // XCTAssertEqual(callEndpoint("/sq/scene/recall", OSCValues(arrayLiteral: 156)), "B0 00 01 C0 1B")
     }

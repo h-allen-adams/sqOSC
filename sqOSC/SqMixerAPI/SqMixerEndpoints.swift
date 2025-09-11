@@ -40,6 +40,9 @@ class SqMixerEndpoints {
         for c in 1 ... channelType.count {
             let channelPathValues = ["chNum": "\(c)"]
             registerMute(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.mute, endpoint: channelType, pathValues: channelPathValues)!)
+            if channelType.isOutputBalance() {
+                registerOutputBalance(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.level, endpoint: channelType, pathValues: channelPathValues)!)
+            }
             if channelType.isOutputLevel() {
                 registerOutputLevel(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.level, endpoint: channelType, pathValues: channelPathValues)!)
             }
@@ -53,8 +56,25 @@ class SqMixerEndpoints {
                         registerSendLevel(channelType, c,
                                           destType, destChannel,
                                           dictionary.resolvePath(operation: EndpointOperationType.sendLevel, endpoint: channelType, pathValues: ["chNum": "\(c)", "dest": dest])!)
+                        if channelType.panTargets.contains(destType) {
+                            registerSendPan(channelType, c, destType, destChannel,
+                                            dictionary.resolvePath(operation: EndpointOperationType.pan, endpoint: channelType, pathValues: ["chNum": "\(c)", "dest": dest])!)
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    private func registerOutputBalance(_ channelType: EndpointType, _ channelNum: Int, _ channelLevelPath: String) {
+        addressSpace?.register(localAddress: channelLevelPath) { values in
+            guard let panLevel = try? values.masked(Int.self) else { return }
+            if let midiMessage = self.mixerMessages.outputBalanceMessage(midiChannel: self.preferences.midiChannel,
+                                                                         outputType: channelType,
+                                                                         outputChannel: channelNum,
+                                                                         panLevel: panLevel)
+            {
+                self.publisher!("\(channelLevelPath) \(values)", midiMessage)
             }
         }
     }
@@ -100,6 +120,21 @@ class SqMixerEndpoints {
                                                                      destType: destType,
                                                                      destChannel: destNum,
                                                                      dbLevel: dbLevel)
+            {
+                self.publisher!("\(channelLevelPath) \(values)", midiMessage)
+            }
+        }
+    }
+
+    private func registerSendPan(_ sourceType: EndpointType, _ sourceNum: Int, _ destType: EndpointType, _ destNum: Int, _ channelLevelPath: String) {
+        addressSpace?.register(localAddress: channelLevelPath) { values in
+            guard let panLevel = try? values.masked(Int.self) else { return }
+            if let midiMessage = self.mixerMessages.sendPanMessage(midiChannel: self.preferences.midiChannel,
+                                                                   sourceType: sourceType,
+                                                                   sourceChannel: sourceNum,
+                                                                   destType: destType,
+                                                                   destChannel: destNum,
+                                                                   panLevel: panLevel)
             {
                 self.publisher!("\(channelLevelPath) \(values)", midiMessage)
             }

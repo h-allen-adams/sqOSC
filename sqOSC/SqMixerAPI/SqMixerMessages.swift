@@ -10,7 +10,7 @@ import MIDIKitCore
 import SwiftRadix
 
 class SqMixerMessages {
-    // Linear adjustements are based on 16384 possible values, approx 119 values per dB
+    // Linear adjustments are based on 16384 possible values, approx 119 values per dB
     // +10db is value 16384, so scale down from there
     func linearFader(dbLevel: Int) -> Int {
         var workingDb = dbLevel
@@ -22,8 +22,19 @@ class SqMixerMessages {
         return v
     }
 
+    // Pan -100: 00 00, 0: 3F 7F, 100: 7F 7F
+    func panValue(panLevel: Int) -> Int {
+        let zero = Values.toParameterNumber("3F", "7F")
+        let factor = Double(zero) / 100.0
+        var workingLevel = panLevel
+        if workingLevel > 100 { workingLevel = 100 }
+        if workingLevel < -100 { workingLevel = -100 }
+        let v = zero + Int(round(Double(workingLevel) * factor))
+        return v
+    }
+
     // BN 63 MB BN 62 LB BN 06 VC BN 26 VF
-    private let outputParameters = [
+    private let outputLevelParameters = [
         EndpointType.main: Values.toParameterNumber("4F", "00"),
         EndpointType.aux: Values.toParameterNumber("4F", "01"),
         EndpointType.fxSend: Values.toParameterNumber("4F", "0D"),
@@ -31,9 +42,25 @@ class SqMixerMessages {
         EndpointType.dca: Values.toParameterNumber("4F", "20")
     ]
     func outputLevelMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, dbLevel: Int) -> MIDIEvent? {
-        if let pn0 = outputParameters[outputType] {
+        if let pn0 = outputLevelParameters[outputType] {
             let pn = pn0 + outputChannel - 1
             let pv = linearFader(dbLevel: dbLevel)
+            return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
+                                  data: (UInt7(pv / 128), UInt7(pv % 128)),
+                                  channel: UInt4(midiChannel - 1))
+        }
+        return nil
+    }
+
+    private let outputBalanceParameters = [
+        EndpointType.main: Values.toParameterNumber("5F", "00"),
+        EndpointType.aux: Values.toParameterNumber("5F", "01"),
+        EndpointType.matrix: Values.toParameterNumber("5F", "11")
+    ]
+    func outputBalanceMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, panLevel: Int) -> MIDIEvent? {
+        if let pn0 = outputLevelParameters[outputType] {
+            let pn = pn0 + outputChannel - 1
+            let pv = panValue(panLevel: panLevel)
             return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
                                   data: (UInt7(pv / 128), UInt7(pv % 128)),
                                   channel: UInt4(midiChannel - 1))
@@ -77,6 +104,38 @@ class SqMixerMessages {
         guard let pn0 = sourceParams[destType] else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = linearFader(dbLevel: dbLevel)
+        return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
+                              data: (UInt7(pv / 128), UInt7(pv % 128)),
+                              channel: UInt4(midiChannel - 1))
+    }
+
+    private let sendPanParams = [
+        EndpointType.input: [
+            EndpointType.main: Values.toParameterNumber("50", "00"),
+            EndpointType.aux: Values.toParameterNumber("50", "44")
+        ],
+        EndpointType.group: [
+            EndpointType.main: Values.toParameterNumber("50", "30"),
+            EndpointType.aux: Values.toParameterNumber("55", "04"),
+            EndpointType.matrix: Values.toParameterNumber("5E", "4B")
+        ],
+        EndpointType.fxReturn: [
+            EndpointType.main: Values.toParameterNumber("50", "3C"),
+            EndpointType.aux: Values.toParameterNumber("56", "14")
+        ],
+        EndpointType.main: [
+            EndpointType.matrix: Values.toParameterNumber("5E", "24")
+        ],
+        EndpointType.aux: [
+            EndpointType.matrix: Values.toParameterNumber("5E", "27")
+        ]
+    ]
+    func sendPanMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, panLevel: Int) -> MIDIEvent? {
+        guard let numCols = sendNumCols[destType] else { return nil }
+        guard let sourceParams = sendPanParams[sourceType] else { return nil }
+        guard let pn0 = sourceParams[destType] else { return nil }
+        let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
+        let pv = panValue(panLevel: panLevel)
         return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
                               data: (UInt7(pv / 128), UInt7(pv % 128)),
                               channel: UInt4(midiChannel - 1))
