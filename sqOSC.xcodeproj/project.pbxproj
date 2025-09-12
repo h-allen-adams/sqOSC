@@ -23,6 +23,7 @@
 		9F383CAD2C3867500093DC24 /* SQMixerEndpointDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CAC2C3867500093DC24 /* SQMixerEndpointDictionary.swift */; };
 		9F383CAF2C386C380093DC24 /* EndpointDictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */; };
 		9F6333042C3B298000177337 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F6333032C3B298000177337 /* Preferences.swift */; };
+		9F73E4482E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F73E4472E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift */; };
 		9F7F6A5F2C398BB1004AE8B9 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7F6A5E2C398BB1004AE8B9 /* SwiftRadix */; };
 		9F7F6A612C398BCE004AE8B9 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7F6A602C398BCE004AE8B9 /* MIDIKit */; };
 		9F7F6A632C399237004AE8B9 /* ActivityLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7F6A622C399237004AE8B9 /* ActivityLog.swift */; };
@@ -65,6 +66,7 @@
 		9F383CAC2C3867500093DC24 /* SQMixerEndpointDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQMixerEndpointDictionary.swift; sourceTree = "<group>"; };
 		9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionaryView.swift; sourceTree = "<group>"; };
 		9F6333032C3B298000177337 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		9F73E4472E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionaryDisplayPathView.swift; sourceTree = "<group>"; };
 		9F7F6A532C38FCB4004AE8B9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9F7F6A622C399237004AE8B9 /* ActivityLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLog.swift; sourceTree = "<group>"; };
 		9F9FDE542C39ADB200F198E5 /* ConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationView.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				9F2648592C37805000C5D357 /* ContentView.swift */,
 				9FC5BFAA2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift */,
 				9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */,
+				9F73E4472E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				9F6333042C3B298000177337 /* Preferences.swift in Sources */,
 				9FC5BFAB2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift in Sources */,
 				9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */,
+				9F73E4482E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift in Sources */,
 				9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */,
 				9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */,
 				9F26B63D2C3A031D00BD0C9F /* MidiMessagePublisher.swift in Sources */,

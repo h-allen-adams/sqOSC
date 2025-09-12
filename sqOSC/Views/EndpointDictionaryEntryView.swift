@@ -10,12 +10,19 @@ import SwiftUI
 struct EndpointDictionaryEntryView: View {
     let entry: EndpointDictEntry
 
+    var len: Int {
+        var count = 0
+        entry.displayPaths().forEach { displayPath in
+            count = max(count, displayPath.path.count)
+        }
+        return count
+    }
+
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 1) {
             Section(header: Text(entry.title).font(.title3)) {
                 ForEach(entry.displayPaths()) { displayPath in
-                    Text("\(displayPath.path) \t\(displayPath.parameters)")
-                        .textSelection(.enabled)
+                    EndpointDictionaryDisplayPathView(len: len, displayPath: displayPath)
                 }
             }
         }
@@ -23,5 +30,5 @@ struct EndpointDictionaryEntryView: View {
 }
 
 #Preview {
-    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary().entries[EndpointOperationType.mute]!)
+    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary().entries[EndpointOperationType.sendLevel]!)
 }
