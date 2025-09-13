@@ -1,0 +1,68 @@
+//
+//  MuteBuilderView.swift
+//  sqOSC
+//
+//  Created by H Allen Adams on 9/12/25.
+//
+
+import SwiftUI
+
+struct MuteBuilderView: View {
+    let dictionary: SqMixerEndpointDictionary
+    let operation: EndpointOperationType = .mute
+
+    @Binding var resolvedPath: String
+    @State private var selectedChannelType: EndpointType = EndpointOperationType.mute.endpoints.first!
+    @State private var selectedChannelNum: Int = 1
+    @State private var selectedToggle: String = "ON"
+
+    var body: some View {
+        VStack {
+            Picker("Channel Type", selection: $selectedChannelType) {
+                ForEach(operation.endpoints) { endpoint in
+                    Text(endpoint.rawValue)
+                }
+            }
+            .pickerStyle(.segmented)
+            HStack {
+                Picker("Channel Num", selection: $selectedChannelNum) {
+                    ForEach(Array(1 ... selectedChannelType.count), id: \.self) {
+                        Text("\($0)")
+                    }
+                }
+                .pickerStyle(.menu)
+                Picker("Toggle", selection: $selectedToggle) {
+                    ForEach(["ON", "OFF"], id: \.self) {
+                        Text("\($0)")
+                    }
+                }
+                .pickerStyle(.segmented)
+            }
+        }
+        .onAppear {
+            updateResolvedPath()
+        }
+        .onChange(of: selectedChannelType) { _, _ in
+            updateResolvedPath()
+        }
+        .onChange(of: selectedChannelNum) { _, _ in
+            updateResolvedPath()
+        }
+        .onChange(of: selectedToggle) { _, _ in
+            updateResolvedPath()
+        }
+    }
+
+    func updateResolvedPath() {
+        let pathValues = [
+            "chNum": "\(selectedChannelNum)"
+        ]
+        resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType, pathValues: pathValues)!
+            + " \(selectedToggle)"
+    }
+}
+
+#Preview {
+    @Previewable @State var resolvedPath = ""
+    MuteBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+}

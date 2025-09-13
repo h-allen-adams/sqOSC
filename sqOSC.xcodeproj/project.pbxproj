@@ -28,6 +28,15 @@
 		9F7F6A612C398BCE004AE8B9 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7F6A602C398BCE004AE8B9 /* MIDIKit */; };
 		9F7F6A632C399237004AE8B9 /* ActivityLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7F6A622C399237004AE8B9 /* ActivityLog.swift */; };
 		9F9FDE552C39ADB200F198E5 /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9FDE542C39ADB200F198E5 /* ConfigurationView.swift */; };
+		9FA831B12E74D07000CA9EE3 /* BuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B02E74D07000CA9EE3 /* BuilderView.swift */; };
+		9FA831B42E74DB1B00CA9EE3 /* MuteBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B32E74DB1B00CA9EE3 /* MuteBuilderView.swift */; };
+		9FA831B62E74EB8D00CA9EE3 /* SendLevelBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B52E74EB8D00CA9EE3 /* SendLevelBuilderView.swift */; };
+		9FA831B82E74F3AA00CA9EE3 /* SendPanBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B72E74F3AA00CA9EE3 /* SendPanBuilderView.swift */; };
+		9FA831BA2E74F61F00CA9EE3 /* OutputLevelBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B92E74F61F00CA9EE3 /* OutputLevelBuilderView.swift */; };
+		9FA831BC2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831BB2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift */; };
+		9FA831BE2E75048900CA9EE3 /* SoftkeyBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831BD2E75048900CA9EE3 /* SoftkeyBuilderView.swift */; };
+		9FA831C02E75073F00CA9EE3 /* SceneRecallBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831BF2E75073F00CA9EE3 /* SceneRecallBuilderView.swift */; };
+		9FA831C22E7508BA00CA9EE3 /* OSCMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831C12E7508BA00CA9EE3 /* OSCMessageView.swift */; };
 		9FAB96612C42EEF200E9D123 /* SqMixerMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */; };
 		9FAB96622C42EEF200E9D123 /* SqMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */; };
 		9FAB96632C42EEF200E9D123 /* TempTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC8CEC92C39D75B00A7A622 /* TempTest.swift */; };
@@ -70,6 +79,15 @@
 		9F7F6A532C38FCB4004AE8B9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9F7F6A622C399237004AE8B9 /* ActivityLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLog.swift; sourceTree = "<group>"; };
 		9F9FDE542C39ADB200F198E5 /* ConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationView.swift; sourceTree = "<group>"; };
+		9FA831B02E74D07000CA9EE3 /* BuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderView.swift; sourceTree = "<group>"; };
+		9FA831B32E74DB1B00CA9EE3 /* MuteBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteBuilderView.swift; sourceTree = "<group>"; };
+		9FA831B52E74EB8D00CA9EE3 /* SendLevelBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLevelBuilderView.swift; sourceTree = "<group>"; };
+		9FA831B72E74F3AA00CA9EE3 /* SendPanBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPanBuilderView.swift; sourceTree = "<group>"; };
+		9FA831B92E74F61F00CA9EE3 /* OutputLevelBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputLevelBuilderView.swift; sourceTree = "<group>"; };
+		9FA831BB2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputBalanceBuilderView.swift; sourceTree = "<group>"; };
+		9FA831BD2E75048900CA9EE3 /* SoftkeyBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftkeyBuilderView.swift; sourceTree = "<group>"; };
+		9FA831BF2E75073F00CA9EE3 /* SceneRecallBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneRecallBuilderView.swift; sourceTree = "<group>"; };
+		9FA831C12E7508BA00CA9EE3 /* OSCMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSCMessageView.swift; sourceTree = "<group>"; };
 		9FAB96642C430D7E00E9D123 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9FAB96652C430E0C00E9D123 /* sqOSC.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.sdef; sourceTree = "<group>"; };
 		9FC5BFAA2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionaryEntryView.swift; sourceTree = "<group>"; };
@@ -160,11 +178,13 @@
 		9F383CB02C386C410093DC24 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9FA831B22E74DB0300CA9EE3 /* Builder */,
 				9F9FDE542C39ADB200F198E5 /* ConfigurationView.swift */,
 				9F2648592C37805000C5D357 /* ContentView.swift */,
 				9FC5BFAA2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift */,
 				9F383CAE2C386C380093DC24 /* EndpointDictionaryView.swift */,
 				9F73E4472E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift */,
+				9FA831B02E74D07000CA9EE3 /* BuilderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -186,6 +206,21 @@
 				9F383C952C381B400093DC24 /* SqMixerMessages.swift */,
 			);
 			path = SqMixerAPI;
+			sourceTree = "<group>";
+		};
+		9FA831B22E74DB0300CA9EE3 /* Builder */ = {
+			isa = PBXGroup;
+			children = (
+				9FA831B32E74DB1B00CA9EE3 /* MuteBuilderView.swift */,
+				9FA831BD2E75048900CA9EE3 /* SoftkeyBuilderView.swift */,
+				9FA831BF2E75073F00CA9EE3 /* SceneRecallBuilderView.swift */,
+				9FA831B52E74EB8D00CA9EE3 /* SendLevelBuilderView.swift */,
+				9FA831B92E74F61F00CA9EE3 /* OutputLevelBuilderView.swift */,
+				9FA831B72E74F3AA00CA9EE3 /* SendPanBuilderView.swift */,
+				9FA831BB2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift */,
+				9FA831C12E7508BA00CA9EE3 /* OSCMessageView.swift */,
+			);
+			path = Builder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -319,12 +354,21 @@
 				9F6333042C3B298000177337 /* Preferences.swift in Sources */,
 				9FC5BFAB2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift in Sources */,
 				9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */,
+				9FA831BC2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift in Sources */,
+				9FA831BA2E74F61F00CA9EE3 /* OutputLevelBuilderView.swift in Sources */,
+				9FA831C22E7508BA00CA9EE3 /* OSCMessageView.swift in Sources */,
 				9F73E4482E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift in Sources */,
 				9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */,
+				9FA831BE2E75048900CA9EE3 /* SoftkeyBuilderView.swift in Sources */,
 				9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */,
+				9FA831C02E75073F00CA9EE3 /* SceneRecallBuilderView.swift in Sources */,
+				9FA831B12E74D07000CA9EE3 /* BuilderView.swift in Sources */,
 				9F26B63D2C3A031D00BD0C9F /* MidiMessagePublisher.swift in Sources */,
+				9FA831B42E74DB1B00CA9EE3 /* MuteBuilderView.swift in Sources */,
 				9F383CA32C382D8C0093DC24 /* MessagePublisher.swift in Sources */,
 				9F7F6A632C399237004AE8B9 /* ActivityLog.swift in Sources */,
+				9FA831B62E74EB8D00CA9EE3 /* SendLevelBuilderView.swift in Sources */,
+				9FA831B82E74F3AA00CA9EE3 /* SendPanBuilderView.swift in Sources */,
 				9F383CA72C3831110093DC24 /* SqMixerEndpoints.swift in Sources */,
 				9F383CA02C3821410093DC24 /* SqMixerEnums.swift in Sources */,
 			);
@@ -509,7 +553,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -523,7 +567,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -541,7 +585,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -555,7 +599,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

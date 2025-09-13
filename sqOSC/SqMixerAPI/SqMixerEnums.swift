@@ -7,7 +7,9 @@
 
 import Foundation
 
-enum EndpointOperationType: Int, CaseIterable {
+enum EndpointOperationType: Int, CaseIterable, Identifiable {
+    var id: Self { self }
+
     case mute = 0
     case sendLevel
     case pan
@@ -19,11 +21,11 @@ enum EndpointOperationType: Int, CaseIterable {
     public var title: String {
         switch self {
         case .balance: "Output Balance"
-        case .level: "Output Levels"
-        case .mute: "Mute Channels"
-        case .pan: "Send Pan / Balance"
+        case .level: "Output Level"
+        case .mute: "Channel Mute"
+        case .pan: "Channel Send Pan / Balance"
         case .recall: "Scene Recall"
-        case .sendLevel: "Send Levels"
+        case .sendLevel: "Channel Send Level"
         case .trigger: "SoftKey Control"
         }
     }
@@ -89,7 +91,9 @@ enum EndpointOperationType: Int, CaseIterable {
     }
 }
 
-enum EndpointType: String, CaseIterable {
+enum EndpointType: String, CaseIterable, Identifiable {
+    var id: Self { self }
+
     case input
     case group
     case fxReturn
