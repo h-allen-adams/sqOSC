@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OSCMessageView: View {
     @Binding var resolvedPath: String
-    @EnvironmentObject private var oscHandler: SqOscHandler
+    @EnvironmentObject private var oscHandler: SqOscManager
 
     var body: some View {
         HStack(alignment: .top, spacing: 0.0) {

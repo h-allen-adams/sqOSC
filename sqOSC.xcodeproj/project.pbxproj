@@ -13,7 +13,7 @@
 		9F2648612C37805000C5D357 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F2648602C37805000C5D357 /* Preview Assets.xcassets */; };
 		9F2648862C3782C200C5D357 /* OSCKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F2648852C3782C200C5D357 /* OSCKit */; };
 		9F2648882C3782C200C5D357 /* OSCKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9F2648872C3782C200C5D357 /* OSCKitCore */; };
-		9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648892C378B6800C5D357 /* SqOscHandler.swift */; };
+		9F26488A2C378B6800C5D357 /* SqOscManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648892C378B6800C5D357 /* SqOscManager.swift */; };
 		9F26B63D2C3A031D00BD0C9F /* MidiMessagePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26B63C2C3A031D00BD0C9F /* MidiMessagePublisher.swift */; };
 		9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C952C381B400093DC24 /* SqMixerMessages.swift */; };
 		9F383C9E2C381D4B0093DC24 /* Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C9D2C381D4B0093DC24 /* Values.swift */; };
@@ -62,7 +62,7 @@
 		9F26485D2C37805000C5D357 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F2648602C37805000C5D357 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9F2648622C37805000C5D357 /* sqOSC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sqOSC.entitlements; sourceTree = "<group>"; };
-		9F2648892C378B6800C5D357 /* SqOscHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqOscHandler.swift; sourceTree = "<group>"; };
+		9F2648892C378B6800C5D357 /* SqOscManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqOscManager.swift; sourceTree = "<group>"; };
 		9F26B63C2C3A031D00BD0C9F /* MidiMessagePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MidiMessagePublisher.swift; sourceTree = "<group>"; };
 		9F383C952C381B400093DC24 /* SqMixerMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerMessages.swift; sourceTree = "<group>"; };
 		9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerMessagesTests.swift; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 				9F2648622C37805000C5D357 /* sqOSC.entitlements */,
 				9FAB96652C430E0C00E9D123 /* sqOSC.sdef */,
 				9F2648572C37805000C5D357 /* sqOSCApp.swift */,
-				9F2648892C378B6800C5D357 /* SqOscHandler.swift */,
+				9F2648892C378B6800C5D357 /* SqOscManager.swift */,
 				9F383C9D2C381D4B0093DC24 /* Values.swift */,
 				9F383CB02C386C410093DC24 /* Views */,
 			);
@@ -358,7 +358,7 @@
 				9FA831BA2E74F61F00CA9EE3 /* OutputLevelBuilderView.swift in Sources */,
 				9FA831C22E7508BA00CA9EE3 /* OSCMessageView.swift in Sources */,
 				9F73E4482E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift in Sources */,
-				9F26488A2C378B6800C5D357 /* SqOscHandler.swift in Sources */,
+				9F26488A2C378B6800C5D357 /* SqOscManager.swift in Sources */,
 				9FA831BE2E75048900CA9EE3 /* SoftkeyBuilderView.swift in Sources */,
 				9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */,
 				9FA831C02E75073F00CA9EE3 /* SceneRecallBuilderView.swift in Sources */,

@@ -16,7 +16,7 @@ class ActivityLog: ObservableObject {
         return formatter
     }()
 
-    func logMessage(logText: String) {
+    @MainActor func logMessage(logText: String) {
         var textToInsert = self.dateFormatter.string(from: Date())
         textToInsert.append(": ")
         textToInsert.append(logText)

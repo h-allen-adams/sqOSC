@@ -14,7 +14,6 @@ struct ConfigurationView: View {
     @Preference(\.midiInputName) var midiInputName
     @Preference(\.midiChannel) var midiChannel
 
-    // @Environment(ObservableMIDIManager.self) private var midiManager
     @EnvironmentObject private var activityLog: ActivityLog
 
     var body: some View {

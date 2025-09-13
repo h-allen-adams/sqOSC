@@ -26,8 +26,10 @@ struct ContentView: View {
 }
 
 #Preview {
+    @Previewable var endpoints = SqMixerEndpoints(preferences: .standard)
+    @Previewable var activityLog = ActivityLog()
     ContentView()
-        .environmentObject(ActivityLog())
-        .environmentObject(SqMixerEndpointDictionary())
+        .environmentObject(activityLog)
+        .environmentObject(endpoints.dictionary)
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
 }

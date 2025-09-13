@@ -9,18 +9,19 @@ import Foundation
 import MIDIKit
 
 struct MidiMessagePublisher {
-    let activityLog: ActivityLog
+    let logger: LogPublisher
     var midiManager: MIDIManager?
 
-    @MainActor func publish(label: String, message: MIDIEvent) {
+    func publish(label: String, message: MIDIEvent) {
         if let connection = midiManager?.managedOutputConnections["toSQ"] {
             do {
-                activityLog.logMessage(logText: "\(label) -> \(Self.toString(message))")
-                // try connection.send(event: MIDIEvent.sysEx7(manufacturer: .oneByte(0x7D), data: []))
+                logMessage(label: label, message: Self.toString(message))
                 try connection.send(event: message)
             } catch {
-                activityLog.logMessage(logText: "\(label) -> ERROR \(error)")
+                logMessage(label: label, message: "ERROR \(error)")
             }
+        } else {
+            logMessage(label: label, message: "ERROR: No Connection")
         }
     }
 
@@ -30,5 +31,9 @@ struct MidiMessagePublisher {
             bytes.append(contentsOf: eventBytes)
         }
         return bytes.hex.stringValue(padTo: 2)
+    }
+
+    func logMessage(label: String, message: String) {
+        logger("\(label) -> \(message)")
     }
 }
