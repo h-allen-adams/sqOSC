@@ -10,10 +10,9 @@ import OSCKit
 
 class SqOscHandler: ObservableObject {
     private let activityLog: ActivityLog
-    private let addressSpace: OSCAddressSpace
+    @Published var addressSpace = OSCAddressSpace()
 
     init(activityLog: ActivityLog) {
-        self.addressSpace = OSCAddressSpace()
         self.activityLog = activityLog
     }
 
@@ -36,5 +35,28 @@ class SqOscHandler: ObservableObject {
 
     func logMessage(label: String, message: String) {
         activityLog.logMessage(logText: "\(label) -> \(message)")
+    }
+}
+
+extension OSCAddressSpace {
+    func callEndpoint(_ messageString: String) {
+        let parts = messageString.split(separator: " ")
+        let address = String(parts[0])
+
+        var oscValues = OSCValues()
+
+        for index in 1 ... parts.count - 1 {
+            let value = String(parts[index])
+            let intValue: Int? = Int(value)
+            if intValue != nil {
+                oscValues.append(intValue!)
+            } else {
+                oscValues.append(value)
+            }
+        }
+
+        let oscMessage = OSCMessage(OSCAddressPattern(address),
+                                    values: oscValues)
+        dispatch(oscMessage)
     }
 }

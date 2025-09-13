@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OSCMessageView: View {
     @Binding var resolvedPath: String
+    @EnvironmentObject private var oscHandler: SqOscHandler
 
     var body: some View {
         HStack(alignment: .top, spacing: 0.0) {
@@ -19,7 +20,9 @@ struct OSCMessageView: View {
             }) {
                 Image(systemName: "doc.on.doc")
             }.help("Copy to Clipboard")
-            Button(action: {}) {
+            Button(action: {
+                oscHandler.addressSpace.callEndpoint(resolvedPath)
+            }) {
                 Image(systemName: "paperplane")
             }.help("Send Message")
             Text(" ")

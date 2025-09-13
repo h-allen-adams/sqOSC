@@ -46,6 +46,7 @@ struct sqOSCApp: App {
                 .environmentObject(apiEndpoints.dictionary)
                 .environmentObject(activityLog)
                 .environment(midiManager)
+                .environmentObject(oscHandler)
         }
         .windowResizability(.contentSize)
     }
