@@ -5,11 +5,12 @@
 //  Created by H Allen Adams on 9/12/25.
 //
 
+import OSCKitCore
 import SwiftUI
 
 struct OSCMessageView: View {
     @Binding var resolvedPath: String
-    @EnvironmentObject private var oscHandler: SqOscManager
+    @EnvironmentObject private var addressSpace: OscMessageSender
 
     var body: some View {
         HStack(alignment: .top, spacing: 0.0) {
@@ -21,7 +22,7 @@ struct OSCMessageView: View {
                 Image(systemName: "doc.on.doc")
             }.help("Copy to Clipboard")
             Button(action: {
-                oscHandler.addressSpace.callEndpoint(resolvedPath)
+                addressSpace.callEndpoint(resolvedPath)
             }) {
                 Image(systemName: "paperplane")
             }.help("Send Message")
@@ -35,5 +36,5 @@ struct OSCMessageView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = "/sq/some/resolvedPath 125"
-    OSCMessageView(resolvedPath: $resolvedPath)
+    OSCMessageView(resolvedPath: $resolvedPath).environmentObject(OscMessageSender(addressSpace: nil))
 }

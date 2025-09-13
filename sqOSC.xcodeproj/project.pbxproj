@@ -645,7 +645,7 @@
 			repositoryURL = "https://github.com/orchetect/OSCKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.1;
+				minimumVersion = 1.4.0;
 			};
 		};
 		9F7F6A572C38FF2A004AE8B9 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */ = {

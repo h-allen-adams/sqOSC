@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/MIDIKit",
       "state" : {
-        "revision" : "6902607ec98a4b8b54cac6d2a4d89fd860284819",
-        "version" : "0.10.1"
+        "revision" : "2e856b27af1ebdeb41017ec9e3ac0cd3ae1411a2",
+        "version" : "0.10.5"
       }
     },
     {
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/OSCKit",
       "state" : {
-        "revision" : "4d72e4bf17484807792d5dec7d78e7da8ab3f447",
-        "version" : "0.6.2"
+        "revision" : "7b5ede4820b3c76fe7365186af4d67de51ec5b94",
+        "version" : "1.4.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/SwiftASCII",
       "state" : {
-        "revision" : "9708885ab4c3e6015f5b7b3d546afedd5afc320f",
-        "version" : "1.1.5"
+        "revision" : "ebeb819594bae044e9b0ac2757b9d7b63369e1f9",
+        "version" : "1.2.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/orchetect/TimecodeKit",
       "state" : {
-        "revision" : "1014b5723a7eaa93eeb2ea2f52dfd9ea6eb6be0d",
-        "version" : "2.3.3"
+        "revision" : "957fdaeda020396d150ee1afc7c5172791cb0ad5",
+        "version" : "2.3.4"
       }
     }
   ],

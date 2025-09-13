@@ -13,7 +13,7 @@ class SqOscManager: ObservableObject {
     private let logger: LogPublisher
     @Published var addressSpace = OSCAddressSpace()
 
-    private let oscServer = OSCServer(port: 9903)
+    private let oscServer = OSCUDPServer(port: 9903)
 
     @Published var midiManager = ObservableMIDIManager(
         clientName: "sqOSC",
@@ -22,6 +22,7 @@ class SqOscManager: ObservableObject {
     )
 
     init(logger: @escaping LogPublisher) {
+        print("SqOscManager: INIT")
         self.logger = logger
     }
 
@@ -34,11 +35,13 @@ class SqOscManager: ObservableObject {
             logMessage(label: "ERROR", message: "Error while starting MIDI manager: \(error)")
         }
 
-        oscServer.setHandler { message, timeTag in
+        oscServer.setReceiveHandler { message, timeTag, host, port in
             do {
                 try self.handle(
                     message: message,
-                    timeTag: timeTag
+                    timeTag: timeTag,
+                    host: host,
+                    port: port
                 )
             } catch {
                 self.logMessage(label: "ERROR", message: "Error while handling OSC Message: \(error)")
@@ -46,7 +49,6 @@ class SqOscManager: ObservableObject {
         }
 
         do {
-            oscServer.isPortReuseEnabled = true
             try oscServer.start()
             logger("OSC Server Started on Port \(oscServer.localPort)")
         } catch {
@@ -70,10 +72,10 @@ class SqOscManager: ObservableObject {
         }
     }
 
-    public func handle(message: OSCMessage, timeTag: OSCTimeTag) throws {
+    public func handle(message: OSCMessage, timeTag: OSCTimeTag, host: String, port: UInt16) throws {
         // logMessage(label: "MESSAGE", message: "\(message)")
         // execute closures for matching methods, and returns the matching method IDs
-        let methodIDs = addressSpace.dispatch(message)
+        let methodIDs = addressSpace.dispatch(message: message, host: host, port: port)
 
         // if no IDs are returned, it means that the OSC message address pattern did not match any
         // that were registered
@@ -85,9 +87,19 @@ class SqOscManager: ObservableObject {
     func logMessage(label: String, message: String) {
         logger("\(label) -> \(message)")
     }
+
+    func messageSender() -> OscMessageSender {
+        return OscMessageSender(addressSpace: addressSpace)
+    }
 }
 
-extension OSCAddressSpace {
+class OscMessageSender: ObservableObject {
+    var addressSpace: OSCAddressSpace?
+
+    init(addressSpace: OSCAddressSpace? = nil) {
+        self.addressSpace = addressSpace
+    }
+
     func callEndpoint(_ messageString: String) {
         let parts = messageString.split(separator: " ")
         let address = String(parts[0])
@@ -106,6 +118,6 @@ extension OSCAddressSpace {
 
         let oscMessage = OSCMessage(OSCAddressPattern(address),
                                     values: oscValues)
-        dispatch(oscMessage)
+        addressSpace?.dispatch(message: oscMessage, host: "localhost", port: 0)
     }
 }

@@ -92,6 +92,11 @@ final class SqMixerEndpointsTest: XCTestCase {
                        "B0 63 52 B0 62 5C B0 06 4C B0 26 65")
     }
 
+    func testRegisterOutputBalance() throws {
+        XCTAssertEqual(callEndpoint("/sq/main/balance -100"),
+                       "B0 63 4F B0 62 00 B0 06 00 B0 26 00")
+    }
+
     func testRegisterSceneRecall() throws {
         XCTAssertEqual(callEndpoint("/sq/scene/recall 156"), "B0 00 00 B0 20 01 C0 1B")
     }
@@ -103,7 +108,7 @@ final class SqMixerEndpointsTest: XCTestCase {
 
     private func callEndpoint(_ messageString: String) -> String {
         message = "UNSET"
-        addressSpace?.callEndpoint(messageString)
+        OscMessageSender(addressSpace: addressSpace).callEndpoint(messageString)
         if flag.wait(timeout: DispatchTime.now() + 3) == .timedOut {
             message = "TIMEOUT"
         }

@@ -6,6 +6,7 @@
 //
 
 import MIDIKit
+import OSCKitCore
 import SwiftData
 import SwiftUI
 
@@ -31,5 +32,6 @@ struct ContentView: View {
     ContentView()
         .environmentObject(activityLog)
         .environmentObject(endpoints.dictionary)
+        .environmentObject(OscMessageSender(addressSpace: nil))
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
 }

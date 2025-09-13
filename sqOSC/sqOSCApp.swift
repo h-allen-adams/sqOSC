@@ -23,9 +23,6 @@ struct sqOSCApp: App {
         oscHandler = SqOscManager { message in
             activityLog.logMessage(logText: message)
         }
-
-        oscHandler.start()
-        oscHandler.register(endpoints: apiEndpoints)
     }
 
     var body: some Scene {
@@ -33,8 +30,21 @@ struct sqOSCApp: App {
             ContentView()
                 .environmentObject(apiEndpoints.dictionary)
                 .environmentObject(activityLog)
-                .environmentObject(oscHandler)
+                .environmentObject(oscHandler.messageSender())
                 .environment(oscHandler.midiManager)
+                .onAppear {
+                    if ProcessInfo.isOnPreview() {
+                        // Stupid workaround - for some reason the UI previews run the
+                        // sqOSCApp code and this prevents the server from starting
+                        // in the preview
+                        return
+                    }
+                    oscHandler.start()
+                    oscHandler.register(endpoints: apiEndpoints)
+                }
+                .onDisappear {
+                    oscHandler.stop()
+                }
         }
         .windowResizability(.contentSize)
     }
@@ -45,5 +55,13 @@ class SwOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         return true
     }
 
-    func applicationWillTerminate(_ notification: Notification) {}
+    func applicationWillTerminate(_ notification: Notification) {
+        print("Termintate Notification \(notification)")
+    }
+}
+
+extension ProcessInfo {
+    static func isOnPreview() -> Bool {
+        return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+    }
 }
