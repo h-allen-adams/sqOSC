@@ -55,9 +55,7 @@ class SwOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         return true
     }
 
-    func applicationWillTerminate(_ notification: Notification) {
-        print("Termintate Notification \(notification)")
-    }
+    func applicationWillTerminate(_ notification: Notification) {}
 }
 
 extension ProcessInfo {
