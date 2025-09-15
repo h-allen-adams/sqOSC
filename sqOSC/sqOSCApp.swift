@@ -10,52 +10,52 @@ import OSCKit
 import SwiftData
 import SwiftUI
 
-let activityLog = ActivityLog()
-
 @main
 struct sqOSCApp: App {
-    @NSApplicationDelegateAdaptor(SwOscAppDelegate.self) var appDelegate: SwOscAppDelegate
-
-    private var apiEndpoints = SqMixerEndpoints(preferences: .standard)
-    private var oscHandler: SqOscManager
-
-    init() {
-        oscHandler = SqOscManager { message in
-            activityLog.logMessage(logText: message)
-        }
-    }
+    @NSApplicationDelegateAdaptor(SqOscAppDelegate.self) var appDelegate: SqOscAppDelegate
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(apiEndpoints.dictionary)
-                .environmentObject(activityLog)
-                .environmentObject(oscHandler.messageSender())
-                .environment(oscHandler.midiManager)
-                .onAppear {
-                    if ProcessInfo.isOnPreview() {
-                        // Stupid workaround - for some reason the UI previews run the
-                        // sqOSCApp code and this prevents the server from starting
-                        // in the preview
-                        return
-                    }
-                    oscHandler.start()
-                    oscHandler.register(endpoints: apiEndpoints)
-                }
-                .onDisappear {
-                    oscHandler.stop()
-                }
+                .environmentObject(appDelegate.apiEndpoints.dictionary)
+                .environmentObject(appDelegate.activityLog)
+                .environmentObject(appDelegate.oscHandler.messageSender())
+                .environment(appDelegate.oscHandler.midiManager)
         }
         .windowResizability(.contentSize)
     }
 }
 
-class SwOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+    @Published var activityLog = ActivityLog()
+    @Published var apiEndpoints = SqMixerEndpoints(preferences: .standard)
+    @Published var oscHandler = SqOscManager()
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
 
-    func applicationWillTerminate(_ notification: Notification) {}
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        #if DEBUG
+        if ProcessInfo.isOnPreview() {
+            // Stupid workaround - for some reason the UI previews run the
+            // sqOSCApp code and this prevents the server from starting
+            // in the preview
+            return
+        }
+        #endif
+        oscHandler.start { message in
+            Task { @MainActor in
+                self.activityLog.logMessage(logText: message)
+            }
+        }
+        oscHandler.register(endpoints: apiEndpoints)
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        print("Will Terminate")
+        oscHandler.stop()
+    }
 }
 
 extension ProcessInfo {

@@ -10,7 +10,7 @@ import MIDIKit
 import OSCKit
 
 class SqOscManager: ObservableObject {
-    private let logger: LogPublisher
+    private var logger: LogPublisher = { _ in }
     @Published var addressSpace = OSCAddressSpace()
 
     private let oscServer = OSCUDPServer(port: 9903)
@@ -21,12 +21,8 @@ class SqOscManager: ObservableObject {
         manufacturer: "org.adamaschool"
     )
 
-    init(logger: @escaping LogPublisher) {
-        print("SqOscManager: INIT")
+    func start(logger: @escaping LogPublisher) {
         self.logger = logger
-    }
-
-    func start() {
         do {
             midiManager.preferredAPI = CoreMIDIAPIVersion.legacyCoreMIDI
             try midiManager.start()
@@ -51,6 +47,7 @@ class SqOscManager: ObservableObject {
         do {
             try oscServer.start()
             logger("OSC Server Started on Port \(oscServer.localPort)")
+            print("OSC Server Started on Port \(oscServer.localPort)")
         } catch {
             logger("ERROR Unable to OSC Start Server on Port \(oscServer.localPort): \(error)")
             print(error)
