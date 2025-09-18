@@ -11,6 +11,7 @@ struct OutputLevelBuilderView: View {
     let dictionary: SqMixerEndpointDictionary
     let operation: EndpointOperationType = .level
     @Binding var resolvedPath: String
+    @EnvironmentObject var mixerConfig: SqMixerConfig
     @State private var selectedChannelType: EndpointType = EndpointOperationType.level.endpoints.first!
     @State private var selectedChannelNum: Int = 1
     @State private var selectedSendLevel = 0.0
@@ -25,7 +26,7 @@ struct OutputLevelBuilderView: View {
             .pickerStyle(.segmented)
 
             Picker("Channel Num", selection: $selectedChannelNum) {
-                ForEach(Array(1 ... selectedChannelType.count), id: \.self) {
+                ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                     Text("\($0)")
                 }
             }
@@ -63,5 +64,5 @@ struct OutputLevelBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    OutputLevelBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    OutputLevelBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
 }

@@ -48,5 +48,5 @@ struct BuilderView: View {
 }
 
 #Preview {
-    BuilderView(dictionary: SqMixerEndpointDictionary())
+    BuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()))
 }

@@ -8,9 +8,12 @@
 import Foundation
 
 class SqMixerEndpointDictionary: ObservableObject {
+    let mixerConfig: SqMixerConfig
+
     var entries: [EndpointOperationType: EndpointDictEntry]
 
-    init() {
+    init(mixerConfig: SqMixerConfig) {
+        self.mixerConfig = mixerConfig
         entries = EndpointOperationType.allCases.reduce(into: [:]) { $0[$1] = EndpointDictEntry(operation: $1) }
     }
 
@@ -67,14 +70,28 @@ struct EndpointDictEntry: Hashable, Identifiable {
         let parameters: String
     }
 
+    static let basePaths = [
+        EndpointType.aux: "/sq/aux/{chNum}",
+        EndpointType.dca: "/sq/dca/{chNum}",
+        EndpointType.fxReturn: "/sq/fxReturn/{chNum}",
+        EndpointType.fxSend: "/sq/fxSend/{chNum}",
+        EndpointType.group: "/sq/group/{chNum}",
+        EndpointType.input: "/sq/input/{chNum}",
+        EndpointType.keys: "/sq/softKey/{keyNum}",
+        EndpointType.main: "/sq/main",
+        EndpointType.matrix: "/sq/matrix/{chNum}",
+        EndpointType.muteGroup: "/sq/muteGroup/{chNum}",
+        EndpointType.scene: "/sq/scene"
+    ]
+
     static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
         if operation == .sendLevel || operation == .pan {
             return operation.endpoints.reduce(into: [:]) {
-                $0[$1] = "\($1.basePath())/\(operation)/{dest}"
+                $0[$1] = "\(basePaths[$1]!)/\(operation)/{dest}"
             }
         } else {
             return operation.endpoints.reduce(into: [:]) {
-                $0[$1] = "\($1.basePath())/\(operation)"
+                $0[$1] = "\(basePaths[$1]!)/\(operation)"
             }
         }
     }

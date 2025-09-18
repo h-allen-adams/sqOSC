@@ -27,7 +27,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    @Previewable var endpoints = SqMixerEndpoints(preferences: .standard)
+    @Previewable var endpoints = SqMixerEndpoints(preferences: .standard, mixerConfig: SqMixerConfig.defaultConfig())
     @Previewable var activityLog = ActivityLog()
     ContentView()
         .environmentObject(activityLog)

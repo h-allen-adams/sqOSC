@@ -12,6 +12,7 @@ struct SoftkeyBuilderView: View {
     let operation: EndpointOperationType = .trigger
 
     @Binding var resolvedPath: String
+    @EnvironmentObject var mixerConfig: SqMixerConfig
     @State private var selectedChannelType: EndpointType = EndpointOperationType.trigger.endpoints.first!
     @State private var selectedChannelNum: Int = 1
     @State private var selectedToggle: String = "PRESS"
@@ -20,7 +21,7 @@ struct SoftkeyBuilderView: View {
         VStack {
             HStack {
                 Picker("SoftKey Num", selection: $selectedChannelNum) {
-                    ForEach(Array(1 ... selectedChannelType.count), id: \.self) {
+                    ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                         Text("\($0)")
                     }
                 }
@@ -58,5 +59,5 @@ struct SoftkeyBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
 }

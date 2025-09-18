@@ -11,6 +11,7 @@ struct OutputBalanceBuilderView: View {
     let dictionary: SqMixerEndpointDictionary
     let operation: EndpointOperationType = .balance
     @Binding var resolvedPath: String
+    @EnvironmentObject var mixerConfig: SqMixerConfig
     @State private var selectedChannelType: EndpointType = EndpointOperationType.balance.endpoints.first!
     @State private var selectedChannelNum: Int = 1
     @State private var selectedSendPan = 0.0
@@ -25,7 +26,7 @@ struct OutputBalanceBuilderView: View {
             .pickerStyle(.segmented)
 
             Picker("Channel Num", selection: $selectedChannelNum) {
-                ForEach(Array(1 ... selectedChannelType.count), id: \.self) {
+                ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                     Text("\($0)")
                 }
             }
@@ -62,5 +63,5 @@ struct OutputBalanceBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    OutputBalanceBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    OutputBalanceBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
 }

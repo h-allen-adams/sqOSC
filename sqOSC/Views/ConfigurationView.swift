@@ -83,6 +83,6 @@ final class PublisherObservableObject: ObservableObject {
 #Preview {
     ConfigurationView()
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
-        .environmentObject(SqMixerEndpointDictionary())
+        .environmentObject(SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()))
         .environmentObject(ActivityLog())
 }

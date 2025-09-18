@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F1E37352E7A65A5009E3D8F /* sq.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F1E37342E7A65A5009E3D8F /* sq.plist */; };
+		9F1E37362E7A65A5009E3D8F /* sq.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F1E37342E7A65A5009E3D8F /* sq.plist */; };
+		9F1E37382E7A664D009E3D8F /* SqMixerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1E37372E7A664D009E3D8F /* SqMixerConfig.swift */; };
+		9F1E373B2E7A6765009E3D8F /* SqMixerConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F1E373A2E7A6765009E3D8F /* SqMixerConfigTests.swift */; };
 		9F2648582C37805000C5D357 /* sqOSCApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648572C37805000C5D357 /* sqOSCApp.swift */; };
 		9F26485A2C37805000C5D357 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F2648592C37805000C5D357 /* ContentView.swift */; };
 		9F26485E2C37805000C5D357 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F26485D2C37805000C5D357 /* Assets.xcassets */; };
@@ -39,7 +43,6 @@
 		9FA831C22E7508BA00CA9EE3 /* OSCMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831C12E7508BA00CA9EE3 /* OSCMessageView.swift */; };
 		9FAB96612C42EEF200E9D123 /* SqMixerMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */; };
 		9FAB96622C42EEF200E9D123 /* SqMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */; };
-		9FAB96632C42EEF200E9D123 /* TempTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC8CEC92C39D75B00A7A622 /* TempTest.swift */; };
 		9FAB96662C430E0C00E9D123 /* sqOSC.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 9FAB96652C430E0C00E9D123 /* sqOSC.sdef */; };
 		9FC5BFAB2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC5BFAA2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift */; };
 /* End PBXBuildFile section */
@@ -56,6 +59,9 @@
 
 /* Begin PBXFileReference section */
 		9F08065E2C42ED3F00F533F4 /* sqOSCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sqOSCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F1E37342E7A65A5009E3D8F /* sq.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = sq.plist; sourceTree = "<group>"; };
+		9F1E37372E7A664D009E3D8F /* SqMixerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerConfig.swift; sourceTree = "<group>"; };
+		9F1E373A2E7A6765009E3D8F /* SqMixerConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerConfigTests.swift; sourceTree = "<group>"; };
 		9F2648542C37805000C5D357 /* sqOSC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sqOSC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F2648572C37805000C5D357 /* sqOSCApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sqOSCApp.swift; sourceTree = "<group>"; };
 		9F2648592C37805000C5D357 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,7 +97,6 @@
 		9FAB96642C430D7E00E9D123 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9FAB96652C430E0C00E9D123 /* sqOSC.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.sdef; sourceTree = "<group>"; };
 		9FC5BFAA2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointDictionaryEntryView.swift; sourceTree = "<group>"; };
-		9FC8CEC92C39D75B00A7A622 /* TempTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,9 +124,9 @@
 		9F08065F2C42ED3F00F533F4 /* sqOSCTests */ = {
 			isa = PBXGroup;
 			children = (
+				9F1E373A2E7A6765009E3D8F /* SqMixerConfigTests.swift */,
 				9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */,
 				9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */,
-				9FC8CEC92C39D75B00A7A622 /* TempTest.swift */,
 			);
 			path = sqOSCTests;
 			sourceTree = "<group>";
@@ -204,6 +209,8 @@
 				9F383CA62C3831110093DC24 /* SqMixerEndpoints.swift */,
 				9F383C9F2C3821410093DC24 /* SqMixerEnums.swift */,
 				9F383C952C381B400093DC24 /* SqMixerMessages.swift */,
+				9F1E37342E7A65A5009E3D8F /* sq.plist */,
+				9F1E37372E7A664D009E3D8F /* SqMixerConfig.swift */,
 			);
 			path = SqMixerAPI;
 			sourceTree = "<group>";
@@ -316,6 +323,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F1E37362E7A65A5009E3D8F /* sq.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +333,7 @@
 			files = (
 				9FAB96662C430E0C00E9D123 /* sqOSC.sdef in Resources */,
 				9F2648612C37805000C5D357 /* Preview Assets.xcassets in Resources */,
+				9F1E37352E7A65A5009E3D8F /* sq.plist in Resources */,
 				9F26485E2C37805000C5D357 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,8 +346,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FAB96612C42EEF200E9D123 /* SqMixerMessagesTests.swift in Sources */,
+				9F1E373B2E7A6765009E3D8F /* SqMixerConfigTests.swift in Sources */,
 				9FAB96622C42EEF200E9D123 /* SqMixerEndpointsTest.swift in Sources */,
-				9FAB96632C42EEF200E9D123 /* TempTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +362,7 @@
 				9F383CAD2C3867500093DC24 /* SQMixerEndpointDictionary.swift in Sources */,
 				9F6333042C3B298000177337 /* Preferences.swift in Sources */,
 				9FC5BFAB2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift in Sources */,
+				9F1E37382E7A664D009E3D8F /* SqMixerConfig.swift in Sources */,
 				9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */,
 				9FA831BC2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift in Sources */,
 				9FA831BA2E74F61F00CA9EE3 /* OutputLevelBuilderView.swift in Sources */,

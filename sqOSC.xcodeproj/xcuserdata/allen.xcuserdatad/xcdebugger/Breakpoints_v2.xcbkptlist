@@ -236,8 +236,8 @@
             filePath = "sqOSC/SqMixerAPI/SqMixerEndpoints.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
             landmarkName = "registerOutputLevel(_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -348,6 +348,22 @@
             endingLineNumber = "87"
             landmarkName = "SqOscManager"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6E3CD031-865E-4F3E-8E90-3EF1A70DDCDD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "sqOSC/SqMixerAPI/SqMixerMessages.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "muteMessage(midiChannel:type:channel:action:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

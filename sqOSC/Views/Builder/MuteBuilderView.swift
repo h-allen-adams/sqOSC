@@ -12,6 +12,7 @@ struct MuteBuilderView: View {
     let operation: EndpointOperationType = .mute
 
     @Binding var resolvedPath: String
+    @EnvironmentObject var mixerConfig: SqMixerConfig
     @State private var selectedChannelType: EndpointType = EndpointOperationType.mute.endpoints.first!
     @State private var selectedChannelNum: Int = 1
     @State private var selectedToggle: String = "ON"
@@ -26,7 +27,7 @@ struct MuteBuilderView: View {
             .pickerStyle(.segmented)
             HStack {
                 Picker("Channel Num", selection: $selectedChannelNum) {
-                    ForEach(Array(1 ... selectedChannelType.count), id: \.self) {
+                    ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                         Text("\($0)")
                     }
                 }
@@ -64,5 +65,5 @@ struct MuteBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    MuteBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    MuteBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
 }

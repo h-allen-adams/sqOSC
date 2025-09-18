@@ -11,47 +11,66 @@ struct SendLevelBuilderView: View {
     let dictionary: SqMixerEndpointDictionary
     let operation: EndpointOperationType = .sendLevel
     @Binding var resolvedPath: String
+    @EnvironmentObject var mixerConfig: SqMixerConfig
     @State private var selectedChannelType: EndpointType = EndpointOperationType.sendLevel.endpoints.first!
     @State private var selectedChannelNum: Int = 1
     @State private var selectedDestType: EndpointType = EndpointOperationType.sendLevel.endpoints.first!.sendTargets.first!
     @State private var selectedDestNum: Int = 1
     @State private var selectedSendLevel = 0.0
 
+    func channelTypePicker() -> some View {
+        Picker("Channel Type", selection: $selectedChannelType) {
+            ForEach(operation.endpoints) { endpoint in
+                Text(endpoint.rawValue)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    func channelNumPicker() -> some View {
+        Picker("Channel Num", selection: $selectedChannelNum) {
+            ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
+                Text("\($0)")
+            }
+        }
+        .pickerStyle(.menu)
+    }
+
+    func destTypePicker() -> some View {
+        Picker("Dest Type", selection: $selectedDestType) {
+            ForEach(selectedChannelType.sendTargets) {
+                Text(verbatim: "\($0)")
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    func destNumPicker() -> some View {
+        Picker("Dest Num", selection: $selectedDestNum) {
+            ForEach(Array(1 ... mixerConfig.channelCount(selectedDestType)!), id: \.self) {
+                Text(verbatim: "\($0)")
+            }
+        }
+        .pickerStyle(.menu)
+    }
+
+    func sendLevelSlider() -> some View {
+        Slider(value: $selectedSendLevel, in: -100 ... 10) {
+            Text("Send Level")
+        } minimumValueLabel: {
+            Text("-100dB")
+        } maximumValueLabel: {
+            Text("10dB")
+        }
+    }
+
     var body: some View {
         VStack {
-            Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(operation.endpoints) { endpoint in
-                    Text(endpoint.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
-
-            Picker("Channel Num", selection: $selectedChannelNum) {
-                ForEach(Array(1 ... selectedChannelType.count), id: \.self) {
-                    Text("\($0)")
-                }
-            }
-            .pickerStyle(.menu)
-
-            Picker("Dest Type", selection: $selectedDestType) {
-                ForEach(selectedChannelType.sendTargets) {
-                    Text("\($0)")
-                }
-            }
-            .pickerStyle(.segmented)
-            Picker("Dest Num", selection: $selectedDestNum) {
-                ForEach(Array(1 ... selectedDestType.count), id: \.self) {
-                    Text("\($0)")
-                }
-            }
-            .pickerStyle(.menu)
-            Slider(value: $selectedSendLevel, in: -100 ... 10) {
-                Text("Send Level")
-            } minimumValueLabel: {
-                Text("-100dB")
-            } maximumValueLabel: {
-                Text("10dB")
-            }
+            channelTypePicker()
+            channelNumPicker()
+            destTypePicker()
+            destNumPicker()
+            sendLevelSlider()
         }
         .onAppear {
             updateResolvedPath()
@@ -77,7 +96,7 @@ struct SendLevelBuilderView: View {
 
     func updateResolvedPath() {
         var dest = "\(selectedDestType)/\(selectedDestNum)"
-        if selectedDestType.count == 1 {
+        if mixerConfig.channelCount(selectedDestType)! == 1 {
             dest = "\(selectedDestType)"
         }
         let pathValues = [
@@ -91,5 +110,5 @@ struct SendLevelBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    SendLevelBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    SendLevelBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
 }

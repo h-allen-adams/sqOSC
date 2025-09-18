@@ -91,7 +91,7 @@ enum EndpointOperationType: Int, CaseIterable, Identifiable {
     }
 }
 
-enum EndpointType: String, CaseIterable, Identifiable {
+enum EndpointType: String, CaseIterable, Codable, Identifiable {
     var id: Self { self }
 
     case input
@@ -105,49 +105,6 @@ enum EndpointType: String, CaseIterable, Identifiable {
     case muteGroup
     case scene
     case keys
-
-    public var count: Int {
-        switch self {
-        case .aux: 12
-        case .dca: 8
-        case .fxReturn: 8
-        case .fxSend: 4
-        case .group: 12
-        case .input: 48
-        case .keys: 16
-        case .main: 1
-        case .matrix: 3
-        case .muteGroup: 8
-        case .scene: 1
-        }
-    }
-
-    func isOutputBalance() -> Bool {
-        switch self {
-        case .main, .aux, .matrix:
-            return true
-        default:
-            return false
-        }
-    }
-
-    func isOutputLevel() -> Bool {
-        switch self {
-        case .main, .aux, .fxSend, .matrix, .dca:
-            return true
-        default:
-            return false
-        }
-    }
-
-    func hasSends() -> Bool {
-        switch self {
-        case .input, .fxReturn, .group, .main, .aux:
-            return true
-        default:
-            return false
-        }
-    }
 
     public var sendTargets: [EndpointType] {
         switch self {
@@ -168,22 +125,6 @@ enum EndpointType: String, CaseIterable, Identifiable {
         case .main: [.matrix]
         case .aux: [.matrix]
         default: []
-        }
-    }
-
-    func basePath() -> String {
-        switch self {
-        case .aux: "/sq/aux/{chNum}"
-        case .dca: "/sq/dca/{chNum}"
-        case .fxReturn: "/sq/fxReturn/{chNum}"
-        case .fxSend: "/sq/fxSend/{chNum}"
-        case .group: "/sq/group/{chNum}"
-        case .input: "/sq/input/{chNum}"
-        case .keys: "/sq/softKey/{keyNum}"
-        case .main: "/sq/main"
-        case .matrix: "/sq/matrix/{chNum}"
-        case .muteGroup: "/sq/muteGroup/{chNum}"
-        case .scene: "/sq/scene"
         }
     }
 }

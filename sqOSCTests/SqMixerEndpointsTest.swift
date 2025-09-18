@@ -16,7 +16,7 @@ final class SqMixerEndpointsTest: XCTestCase {
     private let flag = DispatchSemaphore(value: 0)
 
     override func setUpWithError() throws {
-        mixerEndpoints = SqMixerEndpoints(preferences: .standard)
+        mixerEndpoints = SqMixerEndpoints(preferences: .standard, mixerConfig: SqMixerConfig.defaultConfig())
         addressSpace = OSCAddressSpace()
         message = "UNSET"
 
@@ -94,7 +94,7 @@ final class SqMixerEndpointsTest: XCTestCase {
 
     func testRegisterOutputBalance() throws {
         XCTAssertEqual(callEndpoint("/sq/main/balance -100"),
-                       "B0 63 4F B0 62 00 B0 06 00 B0 26 00")
+                       "B0 63 5F B0 62 00 B0 06 00 B0 26 00")
     }
 
     func testRegisterSceneRecall() throws {

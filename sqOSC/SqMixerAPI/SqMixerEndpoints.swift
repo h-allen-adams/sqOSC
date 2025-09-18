@@ -9,14 +9,18 @@ import Foundation
 import OSCKit
 
 class SqMixerEndpoints {
-    var dictionary = SqMixerEndpointDictionary()
+    let dictionary: SqMixerEndpointDictionary
+    let mixerConfig: SqMixerConfig
     private let preferences: Preferences
-    private let mixerMessages = SqMixerMessages()
+    private let mixerMessages: SqMixerMessages
     private var addressSpace: OSCAddressSpace?
     private var publisher: MessagePublisher?
 
-    init(preferences: Preferences) {
+    init(preferences: Preferences, mixerConfig: SqMixerConfig) {
         self.preferences = preferences
+        self.mixerConfig = mixerConfig
+        self.dictionary = SqMixerEndpointDictionary(mixerConfig: mixerConfig)
+        self.mixerMessages = SqMixerMessages(mixerConfig: mixerConfig)
     }
 
     func register(addressSpace: OSCAddressSpace?, publisher: @escaping MessagePublisher) {
@@ -37,26 +41,27 @@ class SqMixerEndpoints {
     }
 
     private func registerAudioChannels(_ channelType: EndpointType) {
-        for c in 1 ... channelType.count {
+        for c in 1 ... mixerConfig.channelCount(channelType)! {
             let channelPathValues = ["chNum": "\(c)"]
             registerMute(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.mute, endpoint: channelType, pathValues: channelPathValues)!)
-            if channelType.isOutputBalance() {
+            if mixerConfig.channelSupports(.balance, channelType) {
                 registerOutputBalance(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.balance, endpoint: channelType, pathValues: channelPathValues)!)
             }
-            if channelType.isOutputLevel() {
+            if mixerConfig.channelSupports(.level, channelType) {
                 registerOutputLevel(channelType, c, dictionary.resolvePath(operation: EndpointOperationType.level, endpoint: channelType, pathValues: channelPathValues)!)
             }
-            if channelType.hasSends() {
-                for destType in channelType.sendTargets {
-                    for destChannel in 1 ... destType.count {
+            if mixerConfig.channelSupports(.sendLevel, channelType) {
+                for destType in mixerConfig.channelTargets(.sendLevel, source: channelType) {
+                    let destTypeCount = mixerConfig.channelCount(destType)!
+                    for destChannel in 1 ... destTypeCount {
                         var dest = "\(destType)/\(destChannel)"
-                        if destType.count == 1 {
+                        if destTypeCount == 1 {
                             dest = "\(destType)"
                         }
                         registerSendLevel(channelType, c,
                                           destType, destChannel,
                                           dictionary.resolvePath(operation: EndpointOperationType.sendLevel, endpoint: channelType, pathValues: ["chNum": "\(c)", "dest": dest])!)
-                        if channelType.panTargets.contains(destType) {
+                        if mixerConfig.channelTargets(.pan, source: channelType).contains(destType) {
                             registerSendPan(channelType, c, destType, destChannel,
                                             dictionary.resolvePath(operation: EndpointOperationType.pan, endpoint: channelType, pathValues: ["chNum": "\(c)", "dest": dest])!)
                         }
@@ -142,7 +147,7 @@ class SqMixerEndpoints {
     }
 
     private func registerSoftKeys() {
-        for button in 1 ... EndpointType.keys.count {
+        for button in 1 ... mixerConfig.channelCount(EndpointType.keys)! {
             let address = dictionary.resolvePath(operation: EndpointOperationType.trigger,
                                                  endpoint: EndpointType.keys,
                                                  pathValues: ["keyNum": "\(button)"])!

@@ -10,6 +10,12 @@ import MIDIKitCore
 import SwiftRadix
 
 class SqMixerMessages {
+    let mixerConfig: SqMixerConfig
+
+    init(mixerConfig: SqMixerConfig) {
+        self.mixerConfig = mixerConfig
+    }
+
     // Linear adjustments are based on 16384 possible values, approx 119 values per dB
     // +10db is value 16384, so scale down from there
     func linearFader(dbLevel: Int) -> Int {
@@ -34,15 +40,8 @@ class SqMixerMessages {
     }
 
     // BN 63 MB BN 62 LB BN 06 VC BN 26 VF
-    private let outputLevelParameters = [
-        EndpointType.main: Values.toParameterNumber("4F", "00"),
-        EndpointType.aux: Values.toParameterNumber("4F", "01"),
-        EndpointType.fxSend: Values.toParameterNumber("4F", "0D"),
-        EndpointType.matrix: Values.toParameterNumber("4F", "11"),
-        EndpointType.dca: Values.toParameterNumber("4F", "20")
-    ]
     func outputLevelMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, dbLevel: Int) -> MIDIEvent? {
-        if let pn0 = outputLevelParameters[outputType] {
+        if let pn0 = mixerConfig.channelParameter(.level, outputType) {
             let pn = pn0 + outputChannel - 1
             let pv = linearFader(dbLevel: dbLevel)
             return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -52,13 +51,8 @@ class SqMixerMessages {
         return nil
     }
 
-    private let outputBalanceParameters = [
-        EndpointType.main: Values.toParameterNumber("5F", "00"),
-        EndpointType.aux: Values.toParameterNumber("5F", "01"),
-        EndpointType.matrix: Values.toParameterNumber("5F", "11")
-    ]
     func outputBalanceMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, panLevel: Int) -> MIDIEvent? {
-        if let pn0 = outputLevelParameters[outputType] {
+        if let pn0 = mixerConfig.channelParameter(.balance, outputType) {
             let pn = pn0 + outputChannel - 1
             let pv = panValue(panLevel: panLevel)
             return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -68,40 +62,9 @@ class SqMixerMessages {
         return nil
     }
 
-    private let sendNumCols = [
-        EndpointType.main: 1,
-        EndpointType.aux: 12,
-        EndpointType.fxSend: 4,
-        EndpointType.matrix: 3
-    ]
-    private let sendParams = [
-        EndpointType.input: [
-            EndpointType.main: Values.toParameterNumber("40", "00"),
-            EndpointType.aux: Values.toParameterNumber("40", "44"),
-            EndpointType.fxSend: Values.toParameterNumber("4C", "14")
-        ],
-        EndpointType.group: [
-            EndpointType.main: Values.toParameterNumber("40", "30"),
-            EndpointType.aux: Values.toParameterNumber("45", "04"),
-            EndpointType.fxSend: Values.toParameterNumber("4D", "54"),
-            EndpointType.matrix: Values.toParameterNumber("4E", "4B")
-        ],
-        EndpointType.fxReturn: [
-            EndpointType.main: Values.toParameterNumber("40", "3C"),
-            EndpointType.aux: Values.toParameterNumber("46", "14"),
-            EndpointType.fxSend: Values.toParameterNumber("4E", "04")
-        ],
-        EndpointType.main: [
-            EndpointType.matrix: Values.toParameterNumber("4E", "24")
-        ],
-        EndpointType.aux: [
-            EndpointType.matrix: Values.toParameterNumber("4E", "27")
-        ]
-    ]
     func sendLevelMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, dbLevel: Int) -> MIDIEvent? {
-        guard let numCols = sendNumCols[destType] else { return nil }
-        guard let sourceParams = sendParams[sourceType] else { return nil }
-        guard let pn0 = sourceParams[destType] else { return nil }
+        guard let numCols = mixerConfig.channelCount(destType) else { return nil }
+        guard let pn0 = mixerConfig.channelParameter(.sendLevel, source: sourceType, dest: destType) else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = linearFader(dbLevel: dbLevel)
         return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -109,31 +72,9 @@ class SqMixerMessages {
                               channel: UInt4(midiChannel - 1))
     }
 
-    private let sendPanParams = [
-        EndpointType.input: [
-            EndpointType.main: Values.toParameterNumber("50", "00"),
-            EndpointType.aux: Values.toParameterNumber("50", "44")
-        ],
-        EndpointType.group: [
-            EndpointType.main: Values.toParameterNumber("50", "30"),
-            EndpointType.aux: Values.toParameterNumber("55", "04"),
-            EndpointType.matrix: Values.toParameterNumber("5E", "4B")
-        ],
-        EndpointType.fxReturn: [
-            EndpointType.main: Values.toParameterNumber("50", "3C"),
-            EndpointType.aux: Values.toParameterNumber("56", "14")
-        ],
-        EndpointType.main: [
-            EndpointType.matrix: Values.toParameterNumber("5E", "24")
-        ],
-        EndpointType.aux: [
-            EndpointType.matrix: Values.toParameterNumber("5E", "27")
-        ]
-    ]
     func sendPanMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, panLevel: Int) -> MIDIEvent? {
-        guard let numCols = sendNumCols[destType] else { return nil }
-        guard let sourceParams = sendPanParams[sourceType] else { return nil }
-        guard let pn0 = sourceParams[destType] else { return nil }
+        guard let numCols = mixerConfig.channelCount(destType) else { return nil }
+        guard let pn0 = mixerConfig.channelParameter(.pan, source: sourceType, dest: destType) else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = panValue(panLevel: panLevel)
         return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -146,19 +87,8 @@ class SqMixerMessages {
     // where N is MIDI channel (1), MSB,LSB is channel number, ACTION=01 mute, 00= unmute
     // other values are literal hex values
     // see https://www.allen-heath.com/media/SQ-MIDI-Protocol-Issue1.pdf
-    private let muteParameters = [
-        EndpointType.input: Values.toParameterNumber("00", "00"),
-        EndpointType.group: Values.toParameterNumber("00", "30"),
-        EndpointType.fxReturn: Values.toParameterNumber("00", "3C"),
-        EndpointType.main: Values.toParameterNumber("00", "44"),
-        EndpointType.aux: Values.toParameterNumber("00", "45"),
-        EndpointType.fxSend: Values.toParameterNumber("00", "51"),
-        EndpointType.matrix: Values.toParameterNumber("00", "55"),
-        EndpointType.dca: Values.toParameterNumber("02", "00"),
-        EndpointType.muteGroup: Values.toParameterNumber("04", "00")
-    ]
     func muteMessage(midiChannel: Int, type: EndpointType, channel: Int, action: SqMuteAction) -> MIDIEvent? {
-        if let pn0 = muteParameters[type] {
+        if let pn0 = mixerConfig.channelParameter(.mute, type) {
             let pn = pn0 + channel - 1
 
             switch action {

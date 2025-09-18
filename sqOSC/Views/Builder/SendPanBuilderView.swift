@@ -11,47 +11,66 @@ struct SendPanBuilderView: View {
     let dictionary: SqMixerEndpointDictionary
     let operation: EndpointOperationType = .pan
     @Binding var resolvedPath: String
+    @EnvironmentObject var mixerConfig: SqMixerConfig
     @State private var selectedChannelType: EndpointType = EndpointOperationType.pan.endpoints.first!
     @State private var selectedChannelNum: Int = 1
     @State private var selectedDestType: EndpointType = EndpointOperationType.pan.endpoints.first!.panTargets.first!
     @State private var selectedDestNum: Int = 1
     @State private var selectedSendPan = 0.0
 
+    func channelTypePicker() -> some View {
+        Picker("Channel Type", selection: $selectedChannelType) {
+            ForEach(operation.endpoints) { endpoint in
+                Text(endpoint.rawValue)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    func channelNumPicker() -> some View {
+        Picker("Channel Num", selection: $selectedChannelNum) {
+            ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
+                Text("\($0)")
+            }
+        }
+        .pickerStyle(.menu)
+    }
+
+    func destTypePicker() -> some View {
+        Picker("Dest Type", selection: $selectedDestType) {
+            ForEach(selectedChannelType.panTargets) {
+                Text(verbatim: "\($0)")
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    func destNumPicker() -> some View {
+        Picker("Dest Num", selection: $selectedDestNum) {
+            ForEach(Array(1 ... mixerConfig.channelCount(selectedDestType)!), id: \.self) {
+                Text("\($0)")
+            }
+        }
+        .pickerStyle(.menu)
+    }
+
+    func sendPanSlider() -> some View {
+        Slider(value: $selectedSendPan, in: -100 ... 100) {
+            Text("Send Pan")
+        } minimumValueLabel: {
+            Text("L 100%")
+        } maximumValueLabel: {
+            Text("R 100%")
+        }
+    }
+
     var body: some View {
         VStack {
-            Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(operation.endpoints) { endpoint in
-                    Text(endpoint.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
-
-            Picker("Channel Num", selection: $selectedChannelNum) {
-                ForEach(Array(1 ... selectedChannelType.count), id: \.self) {
-                    Text("\($0)")
-                }
-            }
-            .pickerStyle(.menu)
-
-            Picker("Dest Type", selection: $selectedDestType) {
-                ForEach(selectedChannelType.panTargets) {
-                    Text("\($0)")
-                }
-            }
-            .pickerStyle(.segmented)
-            Picker("Dest Num", selection: $selectedDestNum) {
-                ForEach(Array(1 ... selectedDestType.count), id: \.self) {
-                    Text("\($0)")
-                }
-            }
-            .pickerStyle(.menu)
-            Slider(value: $selectedSendPan, in: -100 ... 100) {
-                Text("Send Pan")
-            } minimumValueLabel: {
-                Text("L 100%")
-            } maximumValueLabel: {
-                Text("R 100%")
-            }
+            channelTypePicker()
+            channelNumPicker()
+            destTypePicker()
+            destNumPicker()
+            sendPanSlider()
         }
         .onAppear {
             updateResolvedPath()
@@ -77,7 +96,7 @@ struct SendPanBuilderView: View {
 
     func updateResolvedPath() {
         var dest = "\(selectedDestType)/\(selectedDestNum)"
-        if selectedDestType.count == 1 {
+        if mixerConfig.channelCount(selectedDestType)! == 1 {
             dest = "\(selectedDestType)"
         }
         let pathValues = [
@@ -91,5 +110,5 @@ struct SendPanBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    SendPanBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    SendPanBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
 }

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>parameters</key>
+	<dict>
+		<key>mute</key>
+		<dict>
+			<key>input</key>
+			<string>00 00</string>
+			<key>group</key>
+			<string>00 30</string>
+			<key>fxReturn</key>
+			<string>00 3C</string>
+			<key>main</key>
+			<string>00 44</string>
+			<key>aux</key>
+			<string>00 45</string>
+			<key>fxSend</key>
+			<string>00 51</string>
+			<key>matrix</key>
+			<string>00 55</string>
+			<key>dca</key>
+			<string>02 00</string>
+			<key>muteGroup</key>
+			<string>04 00</string>
+		</dict>
+		<key>sendLevel</key>
+		<dict>
+			<key>input</key>
+			<dict>
+				<key>main</key>
+				<string>40 00</string>
+				<key>aux</key>
+				<string>40 44</string>
+				<key>fxSend</key>
+				<string>4C 14</string>
+			</dict>
+			<key>group</key>
+			<dict>
+				<key>main</key>
+				<string>40 30</string>
+				<key>aux</key>
+				<string>45 04</string>
+				<key>fxSend</key>
+				<string>4D 54</string>
+				<key>matrix</key>
+				<string>4E 4B</string>
+			</dict>
+			<key>fxReturn</key>
+			<dict>
+				<key>main</key>
+				<string>40 3C</string>
+				<key>aux</key>
+				<string>46 14</string>
+				<key>fxSend</key>
+				<string>4E 04</string>
+			</dict>
+			<key>main</key>
+			<dict>
+				<key>matrix</key>
+				<string>4E 24</string>
+			</dict>
+			<key>aux</key>
+			<dict>
+				<key>matrix</key>
+				<string>4E 27</string>
+			</dict>
+		</dict>
+		<key>level</key>
+		<dict>
+			<key>main</key>
+			<string>4F 00</string>
+			<key>aux</key>
+			<string>4F 01</string>
+			<key>fxSend</key>
+			<string>4F 0D</string>
+			<key>matrix</key>
+			<string>4F 11</string>
+			<key>dca</key>
+			<string>4F 20</string>
+		</dict>
+		<key>pan</key>
+		<dict>
+			<key>input</key>
+			<dict>
+				<key>main</key>
+				<string>50 00</string>
+				<key>aux</key>
+				<string>50 44</string>
+			</dict>
+			<key>group</key>
+			<dict>
+				<key>main</key>
+				<string>50 30</string>
+				<key>aux</key>
+				<string>55 04</string>
+				<key>matrix</key>
+				<string>5E 4B</string>
+			</dict>
+			<key>fxReturn</key>
+			<dict>
+				<key>main</key>
+				<string>50 3C</string>
+				<key>aux</key>
+				<string>56 14</string>
+			</dict>
+			<key>main</key>
+			<dict>
+				<key>matrix</key>
+				<string>5E 24</string>
+			</dict>
+			<key>aux</key>
+			<dict>
+				<key>matrix</key>
+				<string>5E 27</string>
+			</dict>
+		</dict>
+		<key>balance</key>
+		<dict>
+			<key>main</key>
+			<string>5F 00</string>
+			<key>aux</key>
+			<string>5F 01</string>
+			<key>matrix</key>
+			<string>5F 11</string>
+		</dict>
+	</dict>
+	<key>endpoints</key>
+	<dict>
+		<key>aux</key>
+		<dict>
+			<key>count</key>
+			<integer>12</integer>
+		</dict>
+		<key>dca</key>
+		<dict>
+			<key>count</key>
+			<integer>8</integer>
+		</dict>
+		<key>fxReturn</key>
+		<dict>
+			<key>count</key>
+			<integer>8</integer>
+		</dict>
+		<key>fxSend</key>
+		<dict>
+			<key>count</key>
+			<integer>4</integer>
+		</dict>
+		<key>group</key>
+		<dict>
+			<key>count</key>
+			<integer>12</integer>
+		</dict>
+		<key>input</key>
+		<dict>
+			<key>count</key>
+			<integer>48</integer>
+		</dict>
+		<key>keys</key>
+		<dict>
+			<key>count</key>
+			<integer>16</integer>
+		</dict>
+		<key>main</key>
+		<dict>
+			<key>count</key>
+			<integer>1</integer>
+		</dict>
+		<key>matrix</key>
+		<dict>
+			<key>count</key>
+			<integer>3</integer>
+		</dict>
+		<key>muteGroup</key>
+		<dict>
+			<key>count</key>
+			<integer>8</integer>
+		</dict>
+		<key>scene</key>
+		<dict>
+			<key>count</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+</dict>
+</plist>

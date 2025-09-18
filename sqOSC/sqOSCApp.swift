@@ -17,19 +17,25 @@ struct sqOSCApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(appDelegate.apiEndpoints.dictionary)
-                .environmentObject(appDelegate.activityLog)
-                .environmentObject(appDelegate.oscHandler.messageSender())
                 .environment(appDelegate.oscHandler.midiManager)
+                .environmentObject(appDelegate.activityLog)
+                .environmentObject(appDelegate.apiEndpoints.dictionary)
+                .environmentObject(appDelegate.oscHandler.messageSender())
+                .environmentObject(appDelegate.mixerConfig)
         }
         .windowResizability(.contentSize)
     }
 }
 
 class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-    @Published var activityLog = ActivityLog()
-    @Published var apiEndpoints = SqMixerEndpoints(preferences: .standard)
-    @Published var oscHandler = SqOscManager()
+    public let activityLog = ActivityLog()
+    public let apiEndpoints: SqMixerEndpoints
+    public let mixerConfig = SqMixerConfig.defaultConfig()
+    public let oscHandler = SqOscManager()
+
+    override init() {
+        self.apiEndpoints = SqMixerEndpoints(preferences: .standard, mixerConfig: mixerConfig)
+    }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
@@ -43,7 +49,7 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             // in the preview
             return
         }
-        #endif
+        #endif // DEBUG
         oscHandler.start { message in
             Task { @MainActor in
                 self.activityLog.logMessage(logText: message)
