@@ -7,14 +7,26 @@
 
 import SwiftUI
 
-struct OutputLevelBuilderView: View {
+struct ChannelValueRangeBuilderView: View {
+    let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType = .level
+    let operation: EndpointOperationType
+
     @Binding var resolvedPath: String
-    @EnvironmentObject var mixerConfig: SqMixerConfig
-    @State private var selectedChannelType: EndpointType = EndpointOperationType.level.endpoints.first!
+    @State private var selectedChannelType: EndpointType
     @State private var selectedChannelNum: Int = 1
-    @State private var selectedSendLevel = 0.0
+    @State private var selectedValue = 0.0
+
+    init(operation: EndpointOperationType, dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+        let mixerConfig = SqMixerConfig.singletonInstance()
+        self.mixerConfig = mixerConfig
+        self.operation = operation
+        self.dictionary = dictionary
+        self._resolvedPath = resolvedPath
+
+        let source = mixerConfig.channelsFor(operation).first!
+        self.selectedChannelType = source
+    }
 
     var body: some View {
         VStack {
@@ -31,12 +43,12 @@ struct OutputLevelBuilderView: View {
                 }
             }
             .pickerStyle(.menu)
-            Slider(value: $selectedSendLevel, in: -100 ... 10) {
-                Text("Output Level")
+            Slider(value: $selectedValue, in: operation.valueRange) {
+                Text("Value")
             } minimumValueLabel: {
-                Text("-100dB")
+                Text("\(Int(operation.valueRange.lowerBound))\(operation.units)")
             } maximumValueLabel: {
-                Text("10dB")
+                Text("\(Int(operation.valueRange.upperBound))\(operation.units)")
             }
         }
         .onAppear {
@@ -47,8 +59,7 @@ struct OutputLevelBuilderView: View {
             updateResolvedPath()
         }.onChange(of: selectedChannelNum) { _, _ in
             updateResolvedPath()
-        }
-        .onChange(of: selectedSendLevel) { _, _ in
+        }.onChange(of: selectedValue) { _, _ in
             updateResolvedPath()
         }
     }
@@ -58,11 +69,11 @@ struct OutputLevelBuilderView: View {
             "chNum": "\(selectedChannelNum)"
         ]
         resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType, pathValues: pathValues)!
-            + " \(Int(selectedSendLevel))"
+            + " \(Int(selectedValue))"
     }
 }
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    OutputLevelBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
+    ChannelValueRangeBuilderView(operation: .balance, dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
 }

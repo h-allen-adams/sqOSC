@@ -7,19 +7,32 @@
 
 import SwiftUI
 
-struct SendLevelBuilderView: View {
+struct ChannelToChannelValueRangeBuilderView: View {
+    let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType = .sendLevel
+    let operation: EndpointOperationType
+
     @Binding var resolvedPath: String
-    @EnvironmentObject var mixerConfig: SqMixerConfig
-    @State private var selectedChannelType: EndpointType = EndpointOperationType.sendLevel.endpoints.first!
+    @State private var selectedChannelType: EndpointType
+    @State private var selectedDestType: EndpointType
     @State private var selectedChannelNum: Int = 1
-    @State private var selectedDestType: EndpointType = EndpointOperationType.sendLevel.endpoints.first!.sendTargets.first!
     @State private var selectedDestNum: Int = 1
-    @State private var selectedSendLevel = 0.0
+    @State private var selectedValue = 0.0
+
+    init(operation: EndpointOperationType, dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+        let mixerConfig = SqMixerConfig.singletonInstance()
+        self.mixerConfig = mixerConfig
+        self.operation = operation
+        self.dictionary = dictionary
+        self._resolvedPath = resolvedPath
+
+        let source = mixerConfig.channelsFor(operation).first!
+        self.selectedChannelType = source
+        self.selectedDestType = mixerConfig.channelTargets(operation, source: source).first!
+    }
 
     func channelTypePicker() -> some View {
-        Picker("Channel Type", selection: $selectedChannelType) {
+        Picker("Source Type", selection: $selectedChannelType) {
             ForEach(operation.endpoints) { endpoint in
                 Text(endpoint.rawValue)
             }
@@ -28,7 +41,7 @@ struct SendLevelBuilderView: View {
     }
 
     func channelNumPicker() -> some View {
-        Picker("Channel Num", selection: $selectedChannelNum) {
+        Picker("Source Num", selection: $selectedChannelNum) {
             ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                 Text("\($0)")
             }
@@ -38,7 +51,7 @@ struct SendLevelBuilderView: View {
 
     func destTypePicker() -> some View {
         Picker("Dest Type", selection: $selectedDestType) {
-            ForEach(selectedChannelType.sendTargets) {
+            ForEach(mixerConfig.channelTargets(operation, source: selectedChannelType)) {
                 Text(verbatim: "\($0)")
             }
         }
@@ -48,19 +61,19 @@ struct SendLevelBuilderView: View {
     func destNumPicker() -> some View {
         Picker("Dest Num", selection: $selectedDestNum) {
             ForEach(Array(1 ... mixerConfig.channelCount(selectedDestType)!), id: \.self) {
-                Text(verbatim: "\($0)")
+                Text("\($0)")
             }
         }
         .pickerStyle(.menu)
     }
 
-    func sendLevelSlider() -> some View {
-        Slider(value: $selectedSendLevel, in: -100 ... 10) {
-            Text("Send Level")
+    func sendPanSlider() -> some View {
+        Slider(value: $selectedValue, in: operation.valueRange) {
+            Text("Value")
         } minimumValueLabel: {
-            Text("-100dB")
+            Text("\(Int(operation.valueRange.lowerBound))\(operation.units)")
         } maximumValueLabel: {
-            Text("10dB")
+            Text("\(Int(operation.valueRange.upperBound))\(operation.units)")
         }
     }
 
@@ -70,14 +83,14 @@ struct SendLevelBuilderView: View {
             channelNumPicker()
             destTypePicker()
             destNumPicker()
-            sendLevelSlider()
+            sendPanSlider()
         }
         .onAppear {
             updateResolvedPath()
         }
         .onChange(of: selectedChannelType) { _, _ in
             selectedChannelNum = 1
-            selectedDestType = selectedChannelType.sendTargets.first!
+            selectedDestType = mixerConfig.channelTargets(operation, source: selectedChannelType).first!
             updateResolvedPath()
         }.onChange(of: selectedChannelNum) { _, _ in
             updateResolvedPath()
@@ -86,10 +99,10 @@ struct SendLevelBuilderView: View {
             updateResolvedPath()
         }
         .onChange(of: selectedDestNum) { _, _ in
-            selectedSendLevel = 0
+            selectedValue = 0
             updateResolvedPath()
         }
-        .onChange(of: selectedSendLevel) { _, _ in
+        .onChange(of: selectedValue) { _, _ in
             updateResolvedPath()
         }
     }
@@ -104,11 +117,11 @@ struct SendLevelBuilderView: View {
             "dest": dest
         ]
         resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType, pathValues: pathValues)!
-            + " \(Int(selectedSendLevel))"
+            + " \(Int(selectedValue))"
     }
 }
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    SendLevelBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
+    ChannelToChannelValueRangeBuilderView(operation: .pan, dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
 }

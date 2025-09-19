@@ -10,7 +10,7 @@ import MIDIKitCore
 import XCTest
 
 final class SqMixerMessagesTests: XCTestCase {
-    private var mixerMessages = SqMixerMessages(mixerConfig: SqMixerConfig.defaultConfig())
+    private var mixerMessages = SqMixerMessages()
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

@@ -30,5 +30,5 @@ struct EndpointDictionaryEntryView: View {
 }
 
 #Preview {
-    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()).entries[EndpointOperationType.sendLevel]!)
+    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary().entries[EndpointOperationType.sendLevel]!)
 }

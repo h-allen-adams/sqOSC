@@ -26,13 +26,13 @@ struct BuilderView: View {
                 case .mute:
                     MuteBuilderView(dictionary: dictionary, resolvedPath: $resolvedPath)
                 case .sendLevel:
-                    SendLevelBuilderView(dictionary: dictionary, resolvedPath: $resolvedPath)
+                    ChannelToChannelValueRangeBuilderView(operation: .sendLevel, dictionary: dictionary, resolvedPath: $resolvedPath)
                 case .pan:
-                    SendPanBuilderView(dictionary: dictionary, resolvedPath: $resolvedPath)
+                    ChannelToChannelValueRangeBuilderView(operation: .pan, dictionary: dictionary, resolvedPath: $resolvedPath)
                 case .level:
-                    OutputLevelBuilderView(dictionary: dictionary, resolvedPath: $resolvedPath)
+                    ChannelValueRangeBuilderView(operation: .level, dictionary: dictionary, resolvedPath: $resolvedPath)
                 case .balance:
-                    OutputBalanceBuilderView(dictionary: dictionary, resolvedPath: $resolvedPath)
+                    ChannelValueRangeBuilderView(operation: .balance, dictionary: dictionary, resolvedPath: $resolvedPath)
                 case .trigger:
                     SoftkeyBuilderView(dictionary: dictionary, resolvedPath: $resolvedPath)
                 case .recall:
@@ -48,5 +48,5 @@ struct BuilderView: View {
 }
 
 #Preview {
-    BuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()))
+    BuilderView(dictionary: SqMixerEndpointDictionary())
 }

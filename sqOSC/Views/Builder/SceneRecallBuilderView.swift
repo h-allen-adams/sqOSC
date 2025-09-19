@@ -44,5 +44,5 @@ struct SceneRecallBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
+    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
 }

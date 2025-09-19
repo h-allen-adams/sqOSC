@@ -18,5 +18,5 @@ struct EndpointDictionaryView: View {
 }
 
 #Preview {
-    EndpointDictionaryView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()))
+    EndpointDictionaryView(dictionary: SqMixerEndpointDictionary())
 }

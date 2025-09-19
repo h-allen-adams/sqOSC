@@ -9,16 +9,17 @@
 import XCTest
 
 final class SqMixerConfigTest: XCTestCase {
-    let mixerConfig = SqMixerConfig.defaultConfig()
+    let mixerConfig = SqMixerConfig.singletonInstance()
 
     func testEndpointCounts() throws {
-        XCTAssertEqual(mixerConfig.endpoints["aux"]?.count, 12)
+        XCTAssertEqual(mixerConfig.channelCount(.aux), 12)
     }
 
     func testChannelSupports() throws {
         XCTAssertTrue(mixerConfig.channelSupports(.mute, .input))
         XCTAssertTrue(mixerConfig.channelSupports(.level, .matrix))
         XCTAssertTrue(mixerConfig.channelSupports(.balance, .aux))
+        XCTAssertTrue(mixerConfig.channelSupports(.sendLevel, .input))
         XCTAssertFalse(mixerConfig.channelSupports(.level, .input))
     }
 
@@ -41,7 +42,9 @@ final class SqMixerConfigTest: XCTestCase {
     }
 
     func testSourceDestParameters() throws {
-        XCTAssertEqual(mixerConfig.channelParameter(.sendLevel, source: .input, dest: .main)!, Values.toParameterNumber("40", "00"))
-        XCTAssertEqual(mixerConfig.channelParameter(.pan, source: .main, dest: .matrix)!, Values.toParameterNumber("5E", "24"))
+        XCTAssertEqual(mixerConfig.channelToChannelParameter(.sendLevel, source: .input, dest: .main)!,
+                       Values.toParameterNumber("40", "00"))
+        XCTAssertEqual(mixerConfig.channelToChannelParameter(.pan, source: .main, dest: .matrix)!,
+                       Values.toParameterNumber("5E", "24"))
     }
 }

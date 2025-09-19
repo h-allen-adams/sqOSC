@@ -21,7 +21,6 @@ struct sqOSCApp: App {
                 .environmentObject(appDelegate.activityLog)
                 .environmentObject(appDelegate.apiEndpoints.dictionary)
                 .environmentObject(appDelegate.oscHandler.messageSender())
-                .environmentObject(appDelegate.mixerConfig)
         }
         .windowResizability(.contentSize)
     }
@@ -30,11 +29,10 @@ struct sqOSCApp: App {
 class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     public let activityLog = ActivityLog()
     public let apiEndpoints: SqMixerEndpoints
-    public let mixerConfig = SqMixerConfig.defaultConfig()
     public let oscHandler = SqOscManager()
 
     override init() {
-        self.apiEndpoints = SqMixerEndpoints(preferences: .standard, mixerConfig: mixerConfig)
+        self.apiEndpoints = SqMixerEndpoints(preferences: .standard)
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {

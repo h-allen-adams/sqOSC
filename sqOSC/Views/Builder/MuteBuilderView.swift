@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct MuteBuilderView: View {
+    let mixerConfig = SqMixerConfig.singletonInstance()
     let dictionary: SqMixerEndpointDictionary
     let operation: EndpointOperationType = .mute
 
     @Binding var resolvedPath: String
-    @EnvironmentObject var mixerConfig: SqMixerConfig
     @State private var selectedChannelType: EndpointType = EndpointOperationType.mute.endpoints.first!
     @State private var selectedChannelNum: Int = 1
     @State private var selectedToggle: String = "ON"
@@ -65,5 +65,5 @@ struct MuteBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedPath = ""
-    MuteBuilderView(dictionary: SqMixerEndpointDictionary(mixerConfig: SqMixerConfig.defaultConfig()), resolvedPath: $resolvedPath)
+    MuteBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
 }

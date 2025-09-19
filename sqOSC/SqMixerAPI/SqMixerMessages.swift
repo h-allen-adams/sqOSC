@@ -10,11 +10,7 @@ import MIDIKitCore
 import SwiftRadix
 
 class SqMixerMessages {
-    let mixerConfig: SqMixerConfig
-
-    init(mixerConfig: SqMixerConfig) {
-        self.mixerConfig = mixerConfig
-    }
+    let mixerConfig = SqMixerConfig.singletonInstance()
 
     // Linear adjustments are based on 16384 possible values, approx 119 values per dB
     // +10db is value 16384, so scale down from there
@@ -64,7 +60,7 @@ class SqMixerMessages {
 
     func sendLevelMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, dbLevel: Int) -> MIDIEvent? {
         guard let numCols = mixerConfig.channelCount(destType) else { return nil }
-        guard let pn0 = mixerConfig.channelParameter(.sendLevel, source: sourceType, dest: destType) else { return nil }
+        guard let pn0 = mixerConfig.channelToChannelParameter(.sendLevel, source: sourceType, dest: destType) else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = linearFader(dbLevel: dbLevel)
         return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -74,7 +70,7 @@ class SqMixerMessages {
 
     func sendPanMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, panLevel: Int) -> MIDIEvent? {
         guard let numCols = mixerConfig.channelCount(destType) else { return nil }
-        guard let pn0 = mixerConfig.channelParameter(.pan, source: sourceType, dest: destType) else { return nil }
+        guard let pn0 = mixerConfig.channelToChannelParameter(.pan, source: sourceType, dest: destType) else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = panValue(panLevel: panLevel)
         return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),

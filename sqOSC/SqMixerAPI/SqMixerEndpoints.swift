@@ -10,17 +10,16 @@ import OSCKit
 
 class SqMixerEndpoints {
     let dictionary: SqMixerEndpointDictionary
-    let mixerConfig: SqMixerConfig
+    let mixerConfig = SqMixerConfig.singletonInstance()
     private let preferences: Preferences
     private let mixerMessages: SqMixerMessages
     private var addressSpace: OSCAddressSpace?
     private var publisher: MessagePublisher?
 
-    init(preferences: Preferences, mixerConfig: SqMixerConfig) {
+    init(preferences: Preferences) {
         self.preferences = preferences
-        self.mixerConfig = mixerConfig
-        self.dictionary = SqMixerEndpointDictionary(mixerConfig: mixerConfig)
-        self.mixerMessages = SqMixerMessages(mixerConfig: mixerConfig)
+        self.dictionary = SqMixerEndpointDictionary()
+        self.mixerMessages = SqMixerMessages()
     }
 
     func register(addressSpace: OSCAddressSpace?, publisher: @escaping MessagePublisher) {

@@ -30,6 +30,28 @@ enum EndpointOperationType: Int, CaseIterable, Identifiable {
         }
     }
 
+    public var valueRange: ClosedRange<Double> {
+        switch self {
+        case .balance: -100 ... 100
+        case .level: -100 ... 10
+        case .pan: -100 ... 100
+        case .sendLevel: -100 ... 10
+        default: 0 ... 0
+        }
+    }
+
+    public var units: String {
+        switch self {
+        case .balance: "%"
+        case .level: "dB"
+        case .mute: ""
+        case .pan: "%"
+        case .recall: ""
+        case .sendLevel: "dB"
+        case .trigger: ""
+        }
+    }
+
     func parameters() -> String {
         switch self {
         case .balance: return "{-100..100}"
@@ -105,28 +127,6 @@ enum EndpointType: String, CaseIterable, Codable, Identifiable {
     case muteGroup
     case scene
     case keys
-
-    public var sendTargets: [EndpointType] {
-        switch self {
-        case .input: [.main, .aux, .fxSend]
-        case .fxReturn: [.main, .aux, .fxSend]
-        case .group: [.main, .aux, .fxSend, .matrix]
-        case .main: [.matrix]
-        case .aux: [.matrix]
-        default: []
-        }
-    }
-
-    public var panTargets: [EndpointType] {
-        switch self {
-        case .input: [.main, .aux]
-        case .fxReturn: [.main, .aux]
-        case .group: [.main, .aux, .matrix]
-        case .main: [.matrix]
-        case .aux: [.matrix]
-        default: []
-        }
-    }
 }
 
 enum SqButtonState: String {

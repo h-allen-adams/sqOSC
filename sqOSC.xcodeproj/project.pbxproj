@@ -34,10 +34,8 @@
 		9F9FDE552C39ADB200F198E5 /* ConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9FDE542C39ADB200F198E5 /* ConfigurationView.swift */; };
 		9FA831B12E74D07000CA9EE3 /* BuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B02E74D07000CA9EE3 /* BuilderView.swift */; };
 		9FA831B42E74DB1B00CA9EE3 /* MuteBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B32E74DB1B00CA9EE3 /* MuteBuilderView.swift */; };
-		9FA831B62E74EB8D00CA9EE3 /* SendLevelBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B52E74EB8D00CA9EE3 /* SendLevelBuilderView.swift */; };
-		9FA831B82E74F3AA00CA9EE3 /* SendPanBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B72E74F3AA00CA9EE3 /* SendPanBuilderView.swift */; };
-		9FA831BA2E74F61F00CA9EE3 /* OutputLevelBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B92E74F61F00CA9EE3 /* OutputLevelBuilderView.swift */; };
-		9FA831BC2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831BB2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift */; };
+		9FA831B82E74F3AA00CA9EE3 /* ChannelToChannelValueRangeBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831B72E74F3AA00CA9EE3 /* ChannelToChannelValueRangeBuilderView.swift */; };
+		9FA831BC2E7502F100CA9EE3 /* ChannelValueRangeBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831BB2E7502F100CA9EE3 /* ChannelValueRangeBuilderView.swift */; };
 		9FA831BE2E75048900CA9EE3 /* SoftkeyBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831BD2E75048900CA9EE3 /* SoftkeyBuilderView.swift */; };
 		9FA831C02E75073F00CA9EE3 /* SceneRecallBuilderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831BF2E75073F00CA9EE3 /* SceneRecallBuilderView.swift */; };
 		9FA831C22E7508BA00CA9EE3 /* OSCMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA831C12E7508BA00CA9EE3 /* OSCMessageView.swift */; };
@@ -87,10 +85,8 @@
 		9F9FDE542C39ADB200F198E5 /* ConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationView.swift; sourceTree = "<group>"; };
 		9FA831B02E74D07000CA9EE3 /* BuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuilderView.swift; sourceTree = "<group>"; };
 		9FA831B32E74DB1B00CA9EE3 /* MuteBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuteBuilderView.swift; sourceTree = "<group>"; };
-		9FA831B52E74EB8D00CA9EE3 /* SendLevelBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLevelBuilderView.swift; sourceTree = "<group>"; };
-		9FA831B72E74F3AA00CA9EE3 /* SendPanBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPanBuilderView.swift; sourceTree = "<group>"; };
-		9FA831B92E74F61F00CA9EE3 /* OutputLevelBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputLevelBuilderView.swift; sourceTree = "<group>"; };
-		9FA831BB2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutputBalanceBuilderView.swift; sourceTree = "<group>"; };
+		9FA831B72E74F3AA00CA9EE3 /* ChannelToChannelValueRangeBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelToChannelValueRangeBuilderView.swift; sourceTree = "<group>"; };
+		9FA831BB2E7502F100CA9EE3 /* ChannelValueRangeBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelValueRangeBuilderView.swift; sourceTree = "<group>"; };
 		9FA831BD2E75048900CA9EE3 /* SoftkeyBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftkeyBuilderView.swift; sourceTree = "<group>"; };
 		9FA831BF2E75073F00CA9EE3 /* SceneRecallBuilderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneRecallBuilderView.swift; sourceTree = "<group>"; };
 		9FA831C12E7508BA00CA9EE3 /* OSCMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSCMessageView.swift; sourceTree = "<group>"; };
@@ -218,14 +214,12 @@
 		9FA831B22E74DB0300CA9EE3 /* Builder */ = {
 			isa = PBXGroup;
 			children = (
+				9FA831BB2E7502F100CA9EE3 /* ChannelValueRangeBuilderView.swift */,
+				9FA831B72E74F3AA00CA9EE3 /* ChannelToChannelValueRangeBuilderView.swift */,
 				9FA831B32E74DB1B00CA9EE3 /* MuteBuilderView.swift */,
-				9FA831BD2E75048900CA9EE3 /* SoftkeyBuilderView.swift */,
-				9FA831BF2E75073F00CA9EE3 /* SceneRecallBuilderView.swift */,
-				9FA831B52E74EB8D00CA9EE3 /* SendLevelBuilderView.swift */,
-				9FA831B92E74F61F00CA9EE3 /* OutputLevelBuilderView.swift */,
-				9FA831B72E74F3AA00CA9EE3 /* SendPanBuilderView.swift */,
-				9FA831BB2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift */,
 				9FA831C12E7508BA00CA9EE3 /* OSCMessageView.swift */,
+				9FA831BF2E75073F00CA9EE3 /* SceneRecallBuilderView.swift */,
+				9FA831BD2E75048900CA9EE3 /* SoftkeyBuilderView.swift */,
 			);
 			path = Builder;
 			sourceTree = "<group>";
@@ -364,8 +358,7 @@
 				9FC5BFAB2C38D3A4003C0662 /* EndpointDictionaryEntryView.swift in Sources */,
 				9F1E37382E7A664D009E3D8F /* SqMixerConfig.swift in Sources */,
 				9F383C962C381B400093DC24 /* SqMixerMessages.swift in Sources */,
-				9FA831BC2E7502F100CA9EE3 /* OutputBalanceBuilderView.swift in Sources */,
-				9FA831BA2E74F61F00CA9EE3 /* OutputLevelBuilderView.swift in Sources */,
+				9FA831BC2E7502F100CA9EE3 /* ChannelValueRangeBuilderView.swift in Sources */,
 				9FA831C22E7508BA00CA9EE3 /* OSCMessageView.swift in Sources */,
 				9F73E4482E74B54400E42C2B /* EndpointDictionaryDisplayPathView.swift in Sources */,
 				9F26488A2C378B6800C5D357 /* SqOscManager.swift in Sources */,
@@ -377,8 +370,7 @@
 				9FA831B42E74DB1B00CA9EE3 /* MuteBuilderView.swift in Sources */,
 				9F383CA32C382D8C0093DC24 /* MessagePublisher.swift in Sources */,
 				9F7F6A632C399237004AE8B9 /* ActivityLog.swift in Sources */,
-				9FA831B62E74EB8D00CA9EE3 /* SendLevelBuilderView.swift in Sources */,
-				9FA831B82E74F3AA00CA9EE3 /* SendPanBuilderView.swift in Sources */,
+				9FA831B82E74F3AA00CA9EE3 /* ChannelToChannelValueRangeBuilderView.swift in Sources */,
 				9F383CA72C3831110093DC24 /* SqMixerEndpoints.swift in Sources */,
 				9F383CA02C3821410093DC24 /* SqMixerEnums.swift in Sources */,
 			);

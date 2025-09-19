@@ -2,7 +2,32 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>parameters</key>
+	<key>channelCounts</key>
+	<dict>
+		<key>aux</key>
+		<integer>12</integer>
+		<key>dca</key>
+		<integer>8</integer>
+		<key>fxReturn</key>
+		<integer>8</integer>
+		<key>fxSend</key>
+		<integer>4</integer>
+		<key>group</key>
+		<integer>12</integer>
+		<key>input</key>
+		<integer>48</integer>
+		<key>keys</key>
+		<integer>16</integer>
+		<key>main</key>
+		<integer>1</integer>
+		<key>matrix</key>
+		<integer>3</integer>
+		<key>muteGroup</key>
+		<integer>8</integer>
+		<key>scene</key>
+		<integer>1</integer>
+	</dict>
+	<key>channelParameters</key>
 	<dict>
 		<key>mute</key>
 		<dict>
@@ -25,6 +50,31 @@
 			<key>muteGroup</key>
 			<string>04 00</string>
 		</dict>
+		<key>level</key>
+		<dict>
+			<key>main</key>
+			<string>4F 00</string>
+			<key>aux</key>
+			<string>4F 01</string>
+			<key>fxSend</key>
+			<string>4F 0D</string>
+			<key>matrix</key>
+			<string>4F 11</string>
+			<key>dca</key>
+			<string>4F 20</string>
+		</dict>
+		<key>balance</key>
+		<dict>
+			<key>main</key>
+			<string>5F 00</string>
+			<key>aux</key>
+			<string>5F 01</string>
+			<key>matrix</key>
+			<string>5F 11</string>
+		</dict>
+	</dict>
+	<key>channelToChannelParameters</key>
+	<dict>
 		<key>sendLevel</key>
 		<dict>
 			<key>input</key>
@@ -67,19 +117,6 @@
 				<string>4E 27</string>
 			</dict>
 		</dict>
-		<key>level</key>
-		<dict>
-			<key>main</key>
-			<string>4F 00</string>
-			<key>aux</key>
-			<string>4F 01</string>
-			<key>fxSend</key>
-			<string>4F 0D</string>
-			<key>matrix</key>
-			<string>4F 11</string>
-			<key>dca</key>
-			<string>4F 20</string>
-		</dict>
 		<key>pan</key>
 		<dict>
 			<key>input</key>
@@ -115,73 +152,6 @@
 				<key>matrix</key>
 				<string>5E 27</string>
 			</dict>
-		</dict>
-		<key>balance</key>
-		<dict>
-			<key>main</key>
-			<string>5F 00</string>
-			<key>aux</key>
-			<string>5F 01</string>
-			<key>matrix</key>
-			<string>5F 11</string>
-		</dict>
-	</dict>
-	<key>endpoints</key>
-	<dict>
-		<key>aux</key>
-		<dict>
-			<key>count</key>
-			<integer>12</integer>
-		</dict>
-		<key>dca</key>
-		<dict>
-			<key>count</key>
-			<integer>8</integer>
-		</dict>
-		<key>fxReturn</key>
-		<dict>
-			<key>count</key>
-			<integer>8</integer>
-		</dict>
-		<key>fxSend</key>
-		<dict>
-			<key>count</key>
-			<integer>4</integer>
-		</dict>
-		<key>group</key>
-		<dict>
-			<key>count</key>
-			<integer>12</integer>
-		</dict>
-		<key>input</key>
-		<dict>
-			<key>count</key>
-			<integer>48</integer>
-		</dict>
-		<key>keys</key>
-		<dict>
-			<key>count</key>
-			<integer>16</integer>
-		</dict>
-		<key>main</key>
-		<dict>
-			<key>count</key>
-			<integer>1</integer>
-		</dict>
-		<key>matrix</key>
-		<dict>
-			<key>count</key>
-			<integer>3</integer>
-		</dict>
-		<key>muteGroup</key>
-		<dict>
-			<key>count</key>
-			<integer>8</integer>
-		</dict>
-		<key>scene</key>
-		<dict>
-			<key>count</key>
-			<integer>1</integer>
 		</dict>
 	</dict>
 </dict>
