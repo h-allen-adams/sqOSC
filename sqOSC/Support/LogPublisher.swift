@@ -6,7 +6,5 @@
 //
 
 import Foundation
-import MIDIKitCore
 
-typealias MessagePublisher = (_ label: String, _ message: MIDIEvent) -> Void
 typealias LogPublisher = (_ message: String) -> Void

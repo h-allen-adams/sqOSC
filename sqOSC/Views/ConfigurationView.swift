@@ -42,10 +42,10 @@ struct ConfigurationView: View {
 @propertyWrapper
 struct Preference<Value>: DynamicProperty {
     @ObservedObject private var preferencesObserver: PublisherObservableObject
-    private let keyPath: ReferenceWritableKeyPath<Preferences, Value>
-    private let preferences: Preferences
+    private let keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>
+    private let preferences: MidiPreferences
 
-    init(_ keyPath: ReferenceWritableKeyPath<Preferences, Value>, preferences: Preferences = .standard) {
+    init(_ keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>, preferences: MidiPreferences = .standard) {
         self.keyPath = keyPath
         self.preferences = preferences
         let publisher = preferences

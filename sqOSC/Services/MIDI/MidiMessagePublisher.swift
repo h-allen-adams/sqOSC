@@ -8,6 +8,8 @@
 import Foundation
 import MIDIKit
 
+typealias MessagePublisher = (_ label: String, _ message: MIDIEvent) -> Void
+
 struct MidiMessagePublisher {
     let logger: LogPublisher
     var midiManager: MIDIManager?

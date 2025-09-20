@@ -9,8 +9,8 @@ import Combine
 import Foundation
 import MIDIKitIO
 
-final class Preferences {
-    static let standard = Preferences(userDefaults: .standard)
+final class MidiPreferences {
+    static let standard = MidiPreferences(userDefaults: .standard)
     fileprivate let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults) {
@@ -56,9 +56,9 @@ struct UserDefault<Value> {
     }
 
     public static subscript(
-        _enclosingInstance instance: Preferences,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<Preferences, Value>,
-        storage storageKeyPath: ReferenceWritableKeyPath<Preferences, Self>
+        _enclosingInstance instance: MidiPreferences,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<MidiPreferences, Value>,
+        storage storageKeyPath: ReferenceWritableKeyPath<MidiPreferences, Self>
     ) -> Value {
         get {
             let container = instance.userDefaults
