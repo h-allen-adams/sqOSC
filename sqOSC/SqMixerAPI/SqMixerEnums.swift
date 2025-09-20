@@ -63,54 +63,6 @@ enum EndpointOperationType: Int, CaseIterable, Identifiable {
         case .trigger: return"{PRESS|RELEASE}"
         }
     }
-
-    public var endpoints: [EndpointType] {
-        switch self {
-        case .balance: [
-                EndpointType.aux,
-                EndpointType.main,
-                EndpointType.matrix
-            ]
-        case .level: [
-                EndpointType.aux,
-                EndpointType.dca,
-                EndpointType.fxSend,
-                EndpointType.main,
-                EndpointType.matrix
-            ]
-        case .mute: [
-                EndpointType.aux,
-                EndpointType.dca,
-                EndpointType.fxReturn,
-                EndpointType.fxSend,
-                EndpointType.group,
-                EndpointType.input,
-                EndpointType.main,
-                EndpointType.matrix,
-                EndpointType.muteGroup
-            ]
-        case .pan: [
-                EndpointType.aux,
-                EndpointType.input,
-                EndpointType.group,
-                EndpointType.fxReturn,
-                EndpointType.main
-            ]
-        case .recall: [
-                EndpointType.scene
-            ]
-        case .sendLevel: [
-                EndpointType.aux,
-                EndpointType.fxReturn,
-                EndpointType.group,
-                EndpointType.input,
-                EndpointType.main
-            ]
-        case .trigger: [
-                EndpointType.keys
-            ]
-        }
-    }
 }
 
 enum EndpointType: String, CaseIterable, Codable, Identifiable {

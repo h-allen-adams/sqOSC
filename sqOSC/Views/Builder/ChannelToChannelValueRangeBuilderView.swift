@@ -33,7 +33,7 @@ struct ChannelToChannelValueRangeBuilderView: View {
 
     func channelTypePicker() -> some View {
         Picker("Source Type", selection: $selectedChannelType) {
-            ForEach(operation.endpoints) { endpoint in
+            ForEach(mixerConfig.channelsFor(operation)) { endpoint in
                 Text(endpoint.rawValue)
             }
         }

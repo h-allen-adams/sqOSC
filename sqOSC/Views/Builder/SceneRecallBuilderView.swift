@@ -8,12 +8,23 @@
 import SwiftUI
 
 struct SceneRecallBuilderView: View {
+    let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType = .recall
+    let operation: EndpointOperationType
 
     @Binding var resolvedPath: String
-    @State private var selectedChannelType: EndpointType = EndpointOperationType.recall.endpoints.first!
+    @State private var selectedChannelType: EndpointType
     @State private var selectedSceneNum: Int = 1
+
+    init(dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+        let mixerConfig = SqMixerConfig.singletonInstance()
+        let operation = EndpointOperationType.recall
+        self.dictionary = dictionary
+        self.mixerConfig = mixerConfig
+        self.operation = operation
+        self._resolvedPath = resolvedPath
+        self.selectedChannelType = mixerConfig.channelsFor(operation).first!
+    }
 
     var body: some View {
         VStack {

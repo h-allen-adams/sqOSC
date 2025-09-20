@@ -8,14 +8,24 @@
 import SwiftUI
 
 struct SoftkeyBuilderView: View {
-    let mixerConfig = SqMixerConfig.singletonInstance()
+    let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType = .trigger
+    let operation: EndpointOperationType
 
     @Binding var resolvedPath: String
-    @State private var selectedChannelType: EndpointType = EndpointOperationType.trigger.endpoints.first!
+    @State private var selectedChannelType: EndpointType
     @State private var selectedChannelNum: Int = 1
     @State private var selectedToggle: String = "PRESS"
+
+    init(dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+        let mixerConfig = SqMixerConfig.singletonInstance()
+        let operation = EndpointOperationType.trigger
+        self.dictionary = dictionary
+        self.operation = operation
+        self.mixerConfig = mixerConfig
+        self._resolvedPath = resolvedPath
+        self.selectedChannelType = mixerConfig.channelsFor(operation).first!
+    }
 
     var body: some View {
         VStack {

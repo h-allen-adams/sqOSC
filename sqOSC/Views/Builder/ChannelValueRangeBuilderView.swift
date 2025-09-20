@@ -31,7 +31,7 @@ struct ChannelValueRangeBuilderView: View {
     var body: some View {
         VStack {
             Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(operation.endpoints) { endpoint in
+                ForEach(mixerConfig.channelsFor(operation)) { endpoint in
                     Text(endpoint.rawValue)
                 }
             }

@@ -8,19 +8,29 @@
 import SwiftUI
 
 struct MuteBuilderView: View {
-    let mixerConfig = SqMixerConfig.singletonInstance()
+    let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType = .mute
+    let operation: EndpointOperationType
 
     @Binding var resolvedPath: String
-    @State private var selectedChannelType: EndpointType = EndpointOperationType.mute.endpoints.first!
+    @State private var selectedChannelType: EndpointType
     @State private var selectedChannelNum: Int = 1
     @State private var selectedToggle: String = "ON"
+
+    init(dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+        let mixerConfig = SqMixerConfig.singletonInstance()
+        let operation = EndpointOperationType.mute
+        self.dictionary = dictionary
+        self.mixerConfig = mixerConfig
+        self.operation = operation
+        self._resolvedPath = resolvedPath
+        self.selectedChannelType = mixerConfig.channelsFor(operation).first!
+    }
 
     var body: some View {
         VStack {
             Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(operation.endpoints) { endpoint in
+                ForEach(mixerConfig.channelsFor(operation)) { endpoint in
                     Text(endpoint.rawValue)
                 }
             }

@@ -84,12 +84,13 @@ struct EndpointDictEntry: Hashable, Identifiable {
     ]
 
     static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
+        let mixerConfig = SqMixerConfig.singletonInstance()
         if operation == .sendLevel || operation == .pan {
-            return operation.endpoints.reduce(into: [:]) {
+            return mixerConfig.channelsFor(operation).reduce(into: [:]) {
                 $0[$1] = "\(basePaths[$1]!)/\(operation)/{dest}"
             }
         } else {
-            return operation.endpoints.reduce(into: [:]) {
+            return mixerConfig.channelsFor(operation).reduce(into: [:]) {
                 $0[$1] = "\(basePaths[$1]!)/\(operation)"
             }
         }

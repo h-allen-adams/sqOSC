@@ -19,17 +19,24 @@ class SqMixerConfig: Codable {
     }
 
     func channelsFor(_ operation: EndpointOperationType) -> [EndpointType] {
-        let opkey = String(describing: operation)
-        if let channelParameter = channelParameters[opkey] {
-            return channelParameter.keys.map { key in
-                EndpointType(rawValue: key)!
+        switch operation {
+        case .recall:
+            return [.scene]
+        case .trigger:
+            return [.keys]
+        default:
+            let opkey = String(describing: operation)
+            if let channelParameter = channelParameters[opkey] {
+                return channelParameter.keys.map { key in
+                    EndpointType(rawValue: key)!
+                }
+            } else if let channelParameter = channelToChannelParameters[opkey] {
+                return channelParameter.keys.map { key in
+                    EndpointType(rawValue: key)!
+                }
+            } else {
+                return []
             }
-        } else if let channelParameter = channelToChannelParameters[opkey] {
-            return channelParameter.keys.map { key in
-                EndpointType(rawValue: key)!
-            }
-        } else {
-            return []
         }
     }
 
