@@ -43,7 +43,7 @@ struct BuilderView: View {
                 OSCMessageView(resolvedPath: $resolvedPath)
             }
             Spacer()
-        }
+        }.padding(.all)
     }
 }
 

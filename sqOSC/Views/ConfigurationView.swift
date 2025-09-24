@@ -19,20 +19,22 @@ struct ConfigurationView: View {
     var body: some View {
         VStack {
             TextEditor(text: $activityLog.logText)
-            MIDIInputsPicker(
-                title: "MIDI Destination",
-                selectionID: $midiInput,
-                selectionDisplayName: $midiInputName,
-                showIcons: false,
-                hideOwned: true
-            )
-            .updatingOutputConnection(withTag: "toSQ")
-            Picker("MIDI Channel", selection: $midiChannel) {
-                ForEach(midiChannels, id: \.self) {
-                    Text("\($0)")
+            VStack {
+                MIDIInputsPicker(
+                    title: "MIDI Destination",
+                    selectionID: $midiInput,
+                    selectionDisplayName: $midiInputName,
+                    showIcons: false,
+                    hideOwned: true
+                )
+                .updatingOutputConnection(withTag: "toSQ")
+                Picker("MIDI Channel", selection: $midiChannel) {
+                    ForEach(midiChannels, id: \.self) {
+                        Text("\($0)")
+                    }
                 }
-            }
-            .pickerStyle(.segmented)
+                .pickerStyle(.segmented)
+            }.padding(.all)
         }
     }
 
