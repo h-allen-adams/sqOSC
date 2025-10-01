@@ -464,7 +464,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -499,7 +499,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -578,7 +578,7 @@
 			repositoryURL = "https://github.com/orchetect/MIDIKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.10.1;
+				minimumVersion = 0.10.5;
 			};
 		};
 		9F7F6A5D2C398BB1004AE8B9 /* XCRemoteSwiftPackageReference "SwiftRadix" */ = {

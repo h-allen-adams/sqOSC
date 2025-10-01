@@ -7,11 +7,18 @@
 
 import Foundation
 
+/**
+ 
+ */
 class SqMixerEndpointDictionary: ObservableObject {
     let mixerConfig = SqMixerConfig.singletonInstance()
 
     var entries: [EndpointOperationType: EndpointDictEntry]
 
+    /**
+     Create a dictionary where each key are EndpointOperationType's and the
+     associated value is the EndpointDictEntry for that operation.
+     */
     init() {
         entries = EndpointOperationType.allCases.reduce(into: [:]) { $0[$1] = EndpointDictEntry(operation: $1) }
     }

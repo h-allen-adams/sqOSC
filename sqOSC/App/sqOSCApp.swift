@@ -10,6 +10,9 @@ import OSCKit
 import SwiftData
 import SwiftUI
 
+/**
+ Main Application
+ */
 @main
 struct sqOSCApp: App {
     @NSApplicationDelegateAdaptor(SqOscAppDelegate.self) var appDelegate: SqOscAppDelegate
@@ -17,29 +20,44 @@ struct sqOSCApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(appDelegate.oscHandler.midiManager)
+                .environment(appDelegate.midiManager)
                 .environmentObject(appDelegate.activityLog)
-                .environmentObject(appDelegate.apiEndpoints.dictionary)
-                .environmentObject(appDelegate.oscHandler.messageSender())
+                .environmentObject(appDelegate.oscDictionary)
+                .environmentObject(appDelegate.oscMessageSender)
         }
         .windowResizability(.contentSize)
     }
 }
 
+/**
+ The App Delegate manages the application services and shared view models.
+ */
 class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     public let activityLog = ActivityLog()
     public let apiEndpoints: SqMixerEndpoints
-    public let oscHandler = SqOscManager()
+    public let oscDictionary = SqMixerEndpointDictionary()
+    public let oscHandler: SqOscManager
+    public let oscMessageSender: OscMessageSender
+    public let midiManager = ObservableMIDIManager(
+        clientName: "sqOSC",
+        model: "sqOSC",
+        manufacturer: "org.adamaschool"
+    )
 
     override init() {
-        self.apiEndpoints = SqMixerEndpoints(preferences: .standard)
+        self.apiEndpoints = SqMixerEndpoints(dictionary: oscDictionary, preferences: .midiStandard)
+        self.oscHandler = SqOscManager(midiManager: midiManager)
+        self.oscMessageSender = oscHandler.messageSender()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
 
-    func applicationDidFinishLaunching(_ notification: Notification) {
+    /**
+     Start MIDI and OSC services on application startup
+     */
+    func applicationWillFinishLaunching(_ notification: Notification) {
         #if DEBUG
         if ProcessInfo.isOnPreview() {
             // Stupid workaround - for some reason the UI previews run the
@@ -48,6 +66,16 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             return
         }
         #endif // DEBUG
+
+        do {
+            midiManager.preferredAPI = CoreMIDIAPIVersion.legacyCoreMIDI
+            try midiManager.start()
+            try midiManager.addOutputConnection(to: MIDIOutputConnectionMode.none, tag: "toSQ")
+            activityLog.logMessage(logText: "MIDI Manager Started")
+        } catch {
+            activityLog.logMessage(logText: "ERROR -> Error while starting MIDI manager: \(error)")
+        }
+
         oscHandler.start { message in
             Task { @MainActor in
                 self.activityLog.logMessage(logText: message)
@@ -56,6 +84,9 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         oscHandler.register(endpoints: apiEndpoints)
     }
 
+    /**
+     Shutdown OSC service (MIDI services do not need to be explicitly stopped)
+     */
     func applicationWillTerminate(_ notification: Notification) {
         print("Will Terminate")
         oscHandler.stop()

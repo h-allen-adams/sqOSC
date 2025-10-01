@@ -7,6 +7,9 @@
 
 import Foundation
 
+/**
+ Define the basic Mixer Operation types
+ */
 enum EndpointOperationType: Int, CaseIterable, Identifiable {
     var id: Self { self }
 
@@ -65,6 +68,9 @@ enum EndpointOperationType: Int, CaseIterable, Identifiable {
     }
 }
 
+/**
+ Define the basic Mixer Channel / OSC Endpoint types
+ */
 enum EndpointType: String, CaseIterable, Codable, Identifiable {
     var id: Self { self }
 

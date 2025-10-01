@@ -16,7 +16,7 @@ final class SqMixerEndpointsTest: XCTestCase {
     private let flag = DispatchSemaphore(value: 0)
 
     override func setUpWithError() throws {
-        mixerEndpoints = SqMixerEndpoints(preferences: .standard)
+        mixerEndpoints = SqMixerEndpoints(preferences: .midiStandard)
         addressSpace = OSCAddressSpace()
         message = "UNSET"
 

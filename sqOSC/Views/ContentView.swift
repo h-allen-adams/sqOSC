@@ -12,9 +12,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var dictionary: SqMixerEndpointDictionary
-    enum Tabs: Equatable, Hashable {
-        case log
-    }
 
     var body: some View {
         TabView(
@@ -27,7 +24,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    @Previewable var endpoints = SqMixerEndpoints(preferences: .standard)
+    @Previewable var endpoints = SqMixerEndpoints(dictionary: SqMixerEndpointDictionary(), preferences: .midiStandard)
     @Previewable var activityLog = ActivityLog()
     ContentView()
         .environmentObject(activityLog)

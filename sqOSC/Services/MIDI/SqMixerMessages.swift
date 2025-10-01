@@ -9,6 +9,9 @@ import Foundation
 import MIDIKitCore
 import SwiftRadix
 
+/**
+ Generate Mixer MIDI Messages. See https://www.allen-heath.com/media/SQ-MIDI-Protocol-Issue1.pdf
+ */
 class SqMixerMessages {
     let mixerConfig = SqMixerConfig.singletonInstance()
 
@@ -35,7 +38,12 @@ class SqMixerMessages {
         return v
     }
 
-    // BN 63 MB BN 62 LB BN 06 VC BN 26 VF
+    /**
+     3.4 Output Levels - Generate an Output  Level message to set the audio level
+     on the outputChannel.
+
+     BN 63 MB BN 62 LB BN 06 VC BN 26 VF
+     */
     func outputLevelMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, dbLevel: Int) -> MIDIEvent? {
         if let pn0 = mixerConfig.channelParameter(.level, outputType) {
             let pn = pn0 + outputChannel - 1
@@ -47,6 +55,10 @@ class SqMixerMessages {
         return nil
     }
 
+    /**
+     3.5 Output Pan/Balance  - Generate a Pan/Balance message to set the audio
+     balance on the outputChannel.
+     */
     func outputBalanceMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, panLevel: Int) -> MIDIEvent? {
         if let pn0 = mixerConfig.channelParameter(.balance, outputType) {
             let pn = pn0 + outputChannel - 1
@@ -58,6 +70,10 @@ class SqMixerMessages {
         return nil
     }
 
+    /**
+     3.4 Send Levels - Generate a Send Level message to set the audio level
+     sent from  the sourceChannel to the destChannel.
+     */
     func sendLevelMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, dbLevel: Int) -> MIDIEvent? {
         guard let numCols = mixerConfig.channelCount(destType) else { return nil }
         guard let pn0 = mixerConfig.channelToChannelParameter(.sendLevel, source: sourceType, dest: destType) else { return nil }
@@ -68,6 +84,10 @@ class SqMixerMessages {
                               channel: UInt4(midiChannel - 1))
     }
 
+    /**
+     3.5 Send Pan  - Generate a Send Pan message to set the audio pan sent
+     from the sourceChannel to the destChannel.
+     */
     func sendPanMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, panLevel: Int) -> MIDIEvent? {
         guard let numCols = mixerConfig.channelCount(destType) else { return nil }
         guard let pn0 = mixerConfig.channelToChannelParameter(.pan, source: sourceType, dest: destType) else { return nil }
@@ -78,11 +98,12 @@ class SqMixerMessages {
                               channel: UInt4(midiChannel - 1))
     }
 
-    // 3.3 Mutes
-    // format of SQ Mute message is BN 63 MSB BN 62 LSB BN 06 00 BN 26 ACTION
-    // where N is MIDI channel (1), MSB,LSB is channel number, ACTION=01 mute, 00= unmute
-    // other values are literal hex values
-    // see https://www.allen-heath.com/media/SQ-MIDI-Protocol-Issue1.pdf
+    /**
+      3.3 Mutes
+      format of SQ Mute message is BN 63 MSB BN 62 LSB BN 06 00 BN 26 ACTION
+      where N is MIDI channel (1), MSB,LSB is channel number, ACTION=01 mute, 00= unmute
+      other values are literal hex values
+     */
     func muteMessage(midiChannel: Int, type: EndpointType, channel: Int, action: SqMuteAction) -> MIDIEvent? {
         if let pn0 = mixerConfig.channelParameter(.mute, type) {
             let pn = pn0 + channel - 1

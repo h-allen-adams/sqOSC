@@ -8,13 +8,21 @@
 import Foundation
 import MIDIKit
 
-typealias MessagePublisher = (_ label: String, _ message: MIDIEvent) -> Void
+typealias MessagePublisher = (_ label: String, _ message: MIDIEvent) async -> Void
 
+/**
+ Publish a MIDI Message to the configured MIDI connection, logging the message
+ to the Log Publisher along the way.
+ */
 struct MidiMessagePublisher {
     let logger: LogPublisher
     var midiManager: MIDIManager?
 
-    func publish(label: String, message: MIDIEvent) {
+    /**
+     Publish a MIDI Message to the configured MIDI connection, logging the message
+     to the Log Publisher along the way.
+     */
+    @MainActor func publish(label: String, message: MIDIEvent) {
         if let connection = midiManager?.managedOutputConnections["toSQ"] {
             do {
                 logMessage(label: label, message: Self.toString(message))
@@ -27,6 +35,9 @@ struct MidiMessagePublisher {
         }
     }
 
+    /**
+     Convert the MIDI event to a hex string for logging
+     */
     static func toString(_ event: MIDIEvent?) -> String {
         var bytes: [UInt8] = []
         if let eventBytes = event?.midi1RawBytes() {
@@ -35,6 +46,9 @@ struct MidiMessagePublisher {
         return bytes.hex.stringValue(padTo: 2)
     }
 
+    /**
+     Publish a message to the configured logger
+     */
     func logMessage(label: String, message: String) {
         logger("\(label) -> \(message)")
     }

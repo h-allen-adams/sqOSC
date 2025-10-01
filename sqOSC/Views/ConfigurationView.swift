@@ -14,6 +14,7 @@ struct ConfigurationView: View {
     @Preference(\.midiInputName) var midiInputName
     @Preference(\.midiChannel) var midiChannel
 
+    @Environment(ObservableMIDIManager.self) private var midiManager
     @EnvironmentObject private var activityLog: ActivityLog
 
     var body: some View {
@@ -28,6 +29,7 @@ struct ConfigurationView: View {
                     hideOwned: true
                 )
                 .updatingOutputConnection(withTag: "toSQ")
+                .environment(midiManager)
                 Picker("MIDI Channel", selection: $midiChannel) {
                     ForEach(midiChannels, id: \.self) {
                         Text("\($0)")
@@ -47,7 +49,7 @@ struct Preference<Value>: DynamicProperty {
     private let keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>
     private let preferences: MidiPreferences
 
-    init(_ keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>, preferences: MidiPreferences = .standard) {
+    init(_ keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>, preferences: MidiPreferences = .midiStandard) {
         self.keyPath = keyPath
         self.preferences = preferences
         let publisher = preferences

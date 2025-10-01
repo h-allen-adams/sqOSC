@@ -9,8 +9,11 @@ import Combine
 import Foundation
 import MIDIKitIO
 
+/**
+ Store and access MIDI settings in UserDefaults
+ */
 final class MidiPreferences {
-    static let standard = MidiPreferences(userDefaults: .standard)
+    static let midiStandard = MidiPreferences(userDefaults: .standard)
     fileprivate let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults) {

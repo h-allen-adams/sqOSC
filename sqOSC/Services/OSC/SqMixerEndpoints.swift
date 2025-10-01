@@ -16,9 +16,9 @@ class SqMixerEndpoints {
     private var addressSpace: OSCAddressSpace?
     private var publisher: MessagePublisher?
 
-    init(preferences: MidiPreferences) {
+    init(dictionary: SqMixerEndpointDictionary, preferences: MidiPreferences) {
         self.preferences = preferences
-        self.dictionary = SqMixerEndpointDictionary()
+        self.dictionary = dictionary
         self.mixerMessages = SqMixerMessages()
     }
 
@@ -78,7 +78,7 @@ class SqMixerEndpoints {
                                                                          outputChannel: channelNum,
                                                                          panLevel: panLevel)
             {
-                self.publisher!("\(channelLevelPath) \(values)", midiMessage)
+                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
             }
         }
     }
@@ -91,7 +91,7 @@ class SqMixerEndpoints {
                                                                        outputChannel: channelNum,
                                                                        dbLevel: dbLevel)
             {
-                self.publisher!("\(channelLevelPath) \(values)", midiMessage)
+                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
             }
         }
     }
@@ -100,7 +100,7 @@ class SqMixerEndpoints {
         addressSpace?.register(localAddress: channelMutePath) { values, _, _ in
             guard let action = try? SqMuteAction(rawValue: values.masked(String.self)) else { return }
             if let midiMessage = self.mixerMessages.muteMessage(midiChannel: self.preferences.midiChannel, type: channelType, channel: channelNum, action: action) {
-                self.publisher!("\(channelMutePath) \(values)", midiMessage)
+                await self.publisher!("\(channelMutePath) \(values)", midiMessage)
             }
         }
     }
@@ -110,7 +110,7 @@ class SqMixerEndpoints {
         addressSpace?.register(localAddress: dictionaryPath) { values, _, _ in
             guard let scene = try? values.masked(Int.self) else { return }
             if let midiMessage = self.mixerMessages.sceneRecallMessage(midiChannel: self.preferences.midiChannel, scene: scene) {
-                self.publisher!("\(dictionaryPath) \(values)", midiMessage)
+                await self.publisher!("\(dictionaryPath) \(values)", midiMessage)
             }
         }
     }
@@ -125,7 +125,7 @@ class SqMixerEndpoints {
                                                                      destChannel: destNum,
                                                                      dbLevel: dbLevel)
             {
-                self.publisher!("\(channelLevelPath) \(values)", midiMessage)
+                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
             }
         }
     }
@@ -140,7 +140,7 @@ class SqMixerEndpoints {
                                                                    destChannel: destNum,
                                                                    panLevel: panLevel)
             {
-                self.publisher!("\(channelLevelPath) \(values)", midiMessage)
+                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
             }
         }
     }
@@ -153,7 +153,7 @@ class SqMixerEndpoints {
             addressSpace?.register(localAddress: address) { values, _, _ in
                 guard let action = try? SqButtonState(rawValue: values.masked(String.self)) else { return }
                 if let midiMessage = self.mixerMessages.softKeyMessage(midiChannel: self.preferences.midiChannel, button: button, state: action) {
-                    self.publisher!("\(address) \(values)", midiMessage)
+                    await self.publisher!("\(address) \(values)", midiMessage)
                 }
             }
         }
