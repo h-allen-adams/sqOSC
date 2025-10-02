@@ -66,7 +66,7 @@ class SqOscManager: ObservableObject {
      Register OSC messages in the configured address space based on the
      SqMixerEndpoints
      */
-    func register(endpoints: SqMixerEndpoints) {
+    func register(endpoints: SqOscEndpointRegistrar) {
         logMessage(label: "SETUP", message: "INITIALIZING")
 
         let midiMessagePublisher = MidiMessagePublisher(logger: logger, midiManager: midiManager)

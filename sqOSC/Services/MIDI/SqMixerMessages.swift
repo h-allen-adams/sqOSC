@@ -12,12 +12,14 @@ import SwiftRadix
 /**
  Generate Mixer MIDI Messages. See https://www.allen-heath.com/media/SQ-MIDI-Protocol-Issue1.pdf
  */
-class SqMixerMessages {
+class SqMixerMessages
+{
     let mixerConfig = SqMixerConfig.singletonInstance()
 
     // Linear adjustments are based on 16384 possible values, approx 119 values per dB
     // +10db is value 16384, so scale down from there
-    func linearFader(dbLevel: Int) -> Int {
+    func linearFader(dbLevel: Int) -> Int
+    {
         var workingDb = dbLevel
         if workingDb > 10 { workingDb = 10 }
         if workingDb < -89 { return 0 }
@@ -28,7 +30,8 @@ class SqMixerMessages {
     }
 
     // Pan -100: 00 00, 0: 3F 7F, 100: 7F 7F
-    func panValue(panLevel: Int) -> Int {
+    func panValue(panLevel: Int) -> Int
+    {
         let zero = Values.toParameterNumber("3F", "7F")
         let factor = Double(zero) / 100.0
         var workingLevel = panLevel
@@ -44,8 +47,13 @@ class SqMixerMessages {
 
      BN 63 MB BN 62 LB BN 06 VC BN 26 VF
      */
-    func outputLevelMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, dbLevel: Int) -> MIDIEvent? {
-        if let pn0 = mixerConfig.channelParameter(.level, outputType) {
+    func outputLevelMessage(midiChannel: Int,
+                            outputType: EndpointType,
+                            outputChannel: Int,
+                            dbLevel: Int) -> MIDIEvent?
+    {
+        if let pn0 = mixerConfig.channelParameter(.level, outputType)
+        {
             let pn = pn0 + outputChannel - 1
             let pv = linearFader(dbLevel: dbLevel)
             return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -59,8 +67,13 @@ class SqMixerMessages {
      3.5 Output Pan/Balance  - Generate a Pan/Balance message to set the audio
      balance on the outputChannel.
      */
-    func outputBalanceMessage(midiChannel: Int, outputType: EndpointType, outputChannel: Int, panLevel: Int) -> MIDIEvent? {
-        if let pn0 = mixerConfig.channelParameter(.balance, outputType) {
+    func outputBalanceMessage(midiChannel: Int,
+                              outputType: EndpointType,
+                              outputChannel: Int,
+                              panLevel: Int) -> MIDIEvent?
+    {
+        if let pn0 = mixerConfig.channelParameter(.balance, outputType)
+        {
             let pn = pn0 + outputChannel - 1
             let pv = panValue(panLevel: panLevel)
             return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -74,9 +87,17 @@ class SqMixerMessages {
      3.4 Send Levels - Generate a Send Level message to set the audio level
      sent from  the sourceChannel to the destChannel.
      */
-    func sendLevelMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, dbLevel: Int) -> MIDIEvent? {
+    func sendLevelMessage(midiChannel: Int,
+                          sourceType: EndpointType,
+                          sourceChannel: Int,
+                          destType: EndpointType,
+                          destChannel: Int,
+                          dbLevel: Int) -> MIDIEvent?
+    {
         guard let numCols = mixerConfig.channelCount(destType) else { return nil }
-        guard let pn0 = mixerConfig.channelToChannelParameter(.sendLevel, source: sourceType, dest: destType) else { return nil }
+        guard let pn0 = mixerConfig.channelToChannelParameter(.sendLevel,
+                                                              source: sourceType,
+                                                              dest: destType) else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = linearFader(dbLevel: dbLevel)
         return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -88,9 +109,17 @@ class SqMixerMessages {
      3.5 Send Pan  - Generate a Send Pan message to set the audio pan sent
      from the sourceChannel to the destChannel.
      */
-    func sendPanMessage(midiChannel: Int, sourceType: EndpointType, sourceChannel: Int, destType: EndpointType, destChannel: Int, panLevel: Int) -> MIDIEvent? {
+    func sendPanMessage(midiChannel: Int,
+                        sourceType: EndpointType,
+                        sourceChannel: Int,
+                        destType: EndpointType,
+                        destChannel: Int,
+                        panLevel: Int) -> MIDIEvent?
+    {
         guard let numCols = mixerConfig.channelCount(destType) else { return nil }
-        guard let pn0 = mixerConfig.channelToChannelParameter(.pan, source: sourceType, dest: destType) else { return nil }
+        guard let pn0 = mixerConfig.channelToChannelParameter(.pan,
+                                                              source: sourceType,
+                                                              dest: destType) else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = panValue(panLevel: panLevel)
         return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
@@ -104,11 +133,17 @@ class SqMixerMessages {
       where N is MIDI channel (1), MSB,LSB is channel number, ACTION=01 mute, 00= unmute
       other values are literal hex values
      */
-    func muteMessage(midiChannel: Int, type: EndpointType, channel: Int, action: SqMuteAction) -> MIDIEvent? {
-        if let pn0 = mixerConfig.channelParameter(.mute, type) {
+    func muteMessage(midiChannel: Int,
+                     type: EndpointType,
+                     channel: Int,
+                     action: SqMuteAction) -> MIDIEvent?
+    {
+        if let pn0 = mixerConfig.channelParameter(.mute, type)
+        {
             let pn = pn0 + channel - 1
 
-            switch action {
+            switch action
+            {
             case SqMuteAction.ON:
                 return MIDIEvent.nrpn(parameter: UInt7Pair(msb: UInt7(pn / 128), lsb: UInt7(pn % 128)),
                                       data: (UInt7(0), UInt7(1)),
@@ -138,7 +173,9 @@ class SqMixerMessages {
      Scenes 129 to 256 = Bank 2 =01
      Scenes 257 to 300 = Bank 3 =02
      */
-    func sceneRecallMessage(midiChannel: Int, scene: Int) -> MIDIEvent? {
+    func sceneRecallMessage(midiChannel: Int,
+                            scene: Int) -> MIDIEvent?
+    {
         let bk = scene / 128
         let pg = (scene % 128) - 1
         let event = MIDIEvent.programChange(program: UInt7(pg),
@@ -147,31 +184,29 @@ class SqMixerMessages {
         return event
     }
 
-    func softKeyMessage(midiChannel: Int, button: Int, state: SqButtonState) -> MIDIEvent? {
+    /**
+     3.2 Soft Keys are controlled by Note ON and Note OFF messages
+     */
+    func softKeyMessage(midiChannel: Int,
+                        button: Int,
+                        state: SqButtonState) -> MIDIEvent?
+    {
         let sk = Values.hexToDec("30") + button - 1
-        switch state {
+        switch state
+        {
         case SqButtonState.PRESS:
-            if let event = try? MIDIEvent.noteOn(MIDINote(sk),
-                                                 velocity: MIDIEvent.NoteVelocity.midi1(UInt7("7F".hex!.value)),
-                                                 channel: UInt4(midiChannel - 1))
-            {
-                return event
-            } else {
-                return nil
-            }
+            return try? MIDIEvent.noteOn(MIDINote(sk),
+                                         velocity: MIDIEvent.NoteVelocity.midi1(UInt7("7F".hex!.value)),
+                                         channel: UInt4(midiChannel - 1))
         case SqButtonState.RELEASE:
-            if let event = try? MIDIEvent.noteOff(MIDINote(sk),
-                                                  velocity: MIDIEvent.NoteVelocity.midi1(UInt7("00".hex!.value)),
-                                                  channel: UInt4(midiChannel - 1))
-            {
-                return event
-            } else {
-                return nil
-            }
+            return try? MIDIEvent.noteOff(MIDINote(sk),
+                                          velocity: MIDIEvent.NoteVelocity.midi1(UInt7("00".hex!.value)),
+                                          channel: UInt4(midiChannel - 1))
         }
     }
 
-    private func channelByte(_ midiChannel: Int, flag: String = "B") -> String {
+    private func channelByte(_ midiChannel: Int, flag: String = "B") -> String
+    {
         let hex = String(midiChannel - 1, radix: 16).uppercased()
         return "\(flag)\(hex)"
     }

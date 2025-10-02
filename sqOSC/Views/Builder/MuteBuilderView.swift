@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ This view contains message builder options for mute operations
+ */
 struct MuteBuilderView: View {
     let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary

@@ -10,13 +10,14 @@ import OSCKitCore
 import XCTest
 
 final class SqMixerEndpointsTest: XCTestCase {
-    private var mixerEndpoints: SqMixerEndpoints?
+    private var mixerEndpoints: SqOscEndpointRegistrar?
     private var addressSpace: OSCAddressSpace?
     private var message = ""
     private let flag = DispatchSemaphore(value: 0)
 
     override func setUpWithError() throws {
-        mixerEndpoints = SqMixerEndpoints(preferences: .midiStandard)
+        mixerEndpoints = SqOscEndpointRegistrar(dictionary: SqMixerEndpointDictionary(),
+                                                preferences: .midiStandard)
         addressSpace = OSCAddressSpace()
         message = "UNSET"
 

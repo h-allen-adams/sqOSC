@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+ The Dictionary view displays the OSC address templates defined by an
+ SqMixerEndpointDictioanry
+ */
 struct EndpointDictionaryView: View {
     let dictionary: SqMixerEndpointDictionary
 

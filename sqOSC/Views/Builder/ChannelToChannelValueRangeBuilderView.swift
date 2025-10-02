@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+ This view displays message builder options for channel-to-channel
+ operations (sendLevel, pan).
+ */
 struct ChannelToChannelValueRangeBuilderView: View {
     let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
@@ -31,59 +35,13 @@ struct ChannelToChannelValueRangeBuilderView: View {
         self.selectedDestType = mixerConfig.channelTargets(operation, source: source).first!
     }
 
-    func channelTypePicker() -> some View {
-        Picker("Source Type", selection: $selectedChannelType) {
-            ForEach(mixerConfig.channelsFor(operation)) { endpoint in
-                Text(endpoint.rawValue)
-            }
-        }
-        .pickerStyle(.segmented)
-    }
-
-    func channelNumPicker() -> some View {
-        Picker("Source Num", selection: $selectedChannelNum) {
-            ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
-                Text("\($0)")
-            }
-        }
-        .pickerStyle(.menu)
-    }
-
-    func destTypePicker() -> some View {
-        Picker("Dest Type", selection: $selectedDestType) {
-            ForEach(mixerConfig.channelTargets(operation, source: selectedChannelType)) {
-                Text(verbatim: "\($0)")
-            }
-        }
-        .pickerStyle(.segmented)
-    }
-
-    func destNumPicker() -> some View {
-        Picker("Dest Num", selection: $selectedDestNum) {
-            ForEach(Array(1 ... mixerConfig.channelCount(selectedDestType)!), id: \.self) {
-                Text("\($0)")
-            }
-        }
-        .pickerStyle(.menu)
-    }
-
-    func sendPanSlider() -> some View {
-        Slider(value: $selectedValue, in: operation.valueRange) {
-            Text("Value")
-        } minimumValueLabel: {
-            Text("\(Int(operation.valueRange.lowerBound))\(operation.units)")
-        } maximumValueLabel: {
-            Text("\(Int(operation.valueRange.upperBound))\(operation.units)")
-        }
-    }
-
     var body: some View {
         VStack {
             channelTypePicker()
             channelNumPicker()
             destTypePicker()
             destNumPicker()
-            sendPanSlider()
+            sendValueSlider()
         }
         .onAppear {
             updateResolvedPath()
@@ -107,6 +65,70 @@ struct ChannelToChannelValueRangeBuilderView: View {
         }
     }
 
+    /**
+     Source Channel Type Picker
+     */
+    func channelTypePicker() -> some View {
+        Picker("Source Type", selection: $selectedChannelType) {
+            ForEach(mixerConfig.channelsFor(operation)) { endpoint in
+                Text(endpoint.rawValue)
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    /**
+     Source Channel Number Picker
+     */
+    func channelNumPicker() -> some View {
+        Picker("Source Num", selection: $selectedChannelNum) {
+            ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
+                Text("\($0)")
+            }
+        }
+        .pickerStyle(.menu)
+    }
+
+    /**
+     Destination Channel Type Picker
+     */
+    func destTypePicker() -> some View {
+        Picker("Dest Type", selection: $selectedDestType) {
+            ForEach(mixerConfig.channelTargets(operation, source: selectedChannelType)) {
+                Text(verbatim: "\($0)")
+            }
+        }
+        .pickerStyle(.segmented)
+    }
+
+    /**
+     Destinateion Channel Number Picker
+     */
+    func destNumPicker() -> some View {
+        Picker("Dest Num", selection: $selectedDestNum) {
+            ForEach(Array(1 ... mixerConfig.channelCount(selectedDestType)!), id: \.self) {
+                Text("\($0)")
+            }
+        }
+        .pickerStyle(.menu)
+    }
+
+    /**
+     Value Picker
+     */
+    func sendValueSlider() -> some View {
+        Slider(value: $selectedValue, in: operation.valueRange) {
+            Text("Value")
+        } minimumValueLabel: {
+            Text("\(Int(operation.valueRange.lowerBound))\(operation.units)")
+        } maximumValueLabel: {
+            Text("\(Int(operation.valueRange.upperBound))\(operation.units)")
+        }
+    }
+
+    /**
+     Update the resolvedPath when any of the picker values changes
+     */
     func updateResolvedPath() {
         var dest = "\(selectedDestType)/\(selectedDestNum)"
         if mixerConfig.channelCount(selectedDestType)! == 1 {
@@ -116,7 +138,9 @@ struct ChannelToChannelValueRangeBuilderView: View {
             "chNum": "\(selectedChannelNum)",
             "dest": dest
         ]
-        resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType, pathValues: pathValues)!
+        resolvedPath = dictionary.resolvePath(operation: operation,
+                                              endpoint: selectedChannelType,
+                                              pathValues: pathValues)!
             + " \(Int(selectedValue))"
     }
 }

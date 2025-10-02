@@ -34,7 +34,7 @@ struct sqOSCApp: App {
  */
 class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     public let activityLog = ActivityLog()
-    public let apiEndpoints: SqMixerEndpoints
+    public let apiEndpoints: SqOscEndpointRegistrar
     public let oscDictionary = SqMixerEndpointDictionary()
     public let oscHandler: SqOscManager
     public let oscMessageSender: OscMessageSender
@@ -45,7 +45,7 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     )
 
     override init() {
-        self.apiEndpoints = SqMixerEndpoints(dictionary: oscDictionary, preferences: .midiStandard)
+        self.apiEndpoints = SqOscEndpointRegistrar(dictionary: oscDictionary, preferences: .midiStandard)
         self.oscHandler = SqOscManager(midiManager: midiManager)
         self.oscMessageSender = oscHandler.messageSender()
     }

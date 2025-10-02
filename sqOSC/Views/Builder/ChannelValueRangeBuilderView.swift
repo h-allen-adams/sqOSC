@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+ This view displays message builder options for single-channel
+ operations.
+ */
 struct ChannelValueRangeBuilderView: View {
     let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary

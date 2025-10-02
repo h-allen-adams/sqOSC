@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+/**
+ View to display a single DisplayPath item, and allow the template to be copied
+ to the clipboard
+ */
 struct EndpointDictionaryDisplayPathView: View {
     let len: Int
     let displayPath: EndpointDictEntry.DisplayPath

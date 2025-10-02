@@ -10,6 +10,10 @@ import OSCKitCore
 import SwiftData
 import SwiftUI
 
+/**
+ Primary UI View with Tabs for Configuration/Status, Dictionary, and Message
+ Builder
+ */
 struct ContentView: View {
     @EnvironmentObject var dictionary: SqMixerEndpointDictionary
 
@@ -24,11 +28,10 @@ struct ContentView: View {
 }
 
 #Preview {
-    @Previewable var endpoints = SqMixerEndpoints(dictionary: SqMixerEndpointDictionary(), preferences: .midiStandard)
     @Previewable var activityLog = ActivityLog()
     ContentView()
         .environmentObject(activityLog)
-        .environmentObject(endpoints.dictionary)
+        .environmentObject(SqMixerEndpointDictionary())
         .environmentObject(OscMessageSender(addressSpace: nil))
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
 }

@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/**
+ Display the path templates defined in an EndpointDictEntry
+ */
 struct EndpointDictionaryEntryView: View {
     let entry: EndpointDictEntry
 

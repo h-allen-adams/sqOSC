@@ -9,6 +9,11 @@ import MIDIKitIO
 import MIDIKitUI
 import SwiftUI
 
+/**
+ The Configuration/Status View shows the MIDI configuration options and the live
+ message status log. Changing the MIDI options will save them to the preference
+ store
+ */
 struct ConfigurationView: View {
     @Preference(\.midiInput) var midiInput
     @Preference(\.midiInputName) var midiInputName
@@ -19,7 +24,10 @@ struct ConfigurationView: View {
 
     var body: some View {
         VStack {
+            // Activity Log Text view
             TextEditor(text: $activityLog.logText)
+
+            // MIDI Option Pickers
             VStack {
                 MIDIInputsPicker(
                     title: "MIDI Destination",
@@ -31,7 +39,7 @@ struct ConfigurationView: View {
                 .updatingOutputConnection(withTag: "toSQ")
                 .environment(midiManager)
                 Picker("MIDI Channel", selection: $midiChannel) {
-                    ForEach(midiChannels, id: \.self) {
+                    ForEach(Array(1 ... 16), id: \.self) {
                         Text("\($0)")
                     }
                 }
@@ -39,17 +47,20 @@ struct ConfigurationView: View {
             }.padding(.all)
         }
     }
-
-    var midiChannels: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 }
 
+/**
+ Prefeence Property wrapper to bind preferences to the UI for display and update
+ */
 @propertyWrapper
 struct Preference<Value>: DynamicProperty {
     @ObservedObject private var preferencesObserver: PublisherObservableObject
     private let keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>
     private let preferences: MidiPreferences
 
-    init(_ keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>, preferences: MidiPreferences = .midiStandard) {
+    init(_ keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>,
+         preferences: MidiPreferences = .midiStandard)
+    {
         self.keyPath = keyPath
         self.preferences = preferences
         let publisher = preferences

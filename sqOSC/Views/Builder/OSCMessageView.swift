@@ -8,6 +8,10 @@
 import OSCKitCore
 import SwiftUI
 
+/**
+ Display a message constructed by builder views and provide options to copy the
+ message to the clipboard, and send the corresponding MIDI message to the mixer.
+ */
 struct OSCMessageView: View {
     @Binding var resolvedPath: String
     @EnvironmentObject private var addressSpace: OscMessageSender
