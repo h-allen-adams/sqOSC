@@ -14,54 +14,54 @@ import SwiftUI
 struct BuilderView: View {
     let dictionary: SqMixerEndpointDictionary
 
-    @State private var selectedOperation: EndpointOperationType = .mute
-    @State private var selectedTarget: EndpointType = .aux
-    @State private var resolvedPath: String = ""
+    @State private var selectedMethod: MixerMethod = .mute
+    @State private var selectedTarget: MixerEndpoint = .aux
+    @State private var resolvedMessage: String = ""
 
     var body: some View {
         VStack(alignment: .leading) {
             Section(header: Text("Selections").font(.title2)) {
                 // Select an operation...
-                Picker("Operation", selection: $selectedOperation) {
-                    ForEach(EndpointOperationType.allCases) { entry in
+                Picker("Method", selection: $selectedMethod) {
+                    ForEach(MixerMethod.allCases) { entry in
                         Text("\(entry.title)")
                     }
                 }
                 // ...and display the view containing the control options
                 // specific to that operation.
-                switch selectedOperation {
+                switch selectedMethod {
                 case .mute:
                     MuteBuilderView(dictionary: dictionary,
-                                    resolvedPath: $resolvedPath)
+                                    resolvedMessage: $resolvedMessage)
                 case .sendLevel:
-                    ChannelToChannelValueRangeBuilderView(operation: .sendLevel,
+                    ChannelToChannelValueRangeBuilderView(method: .sendLevel,
                                                           dictionary: dictionary,
-                                                          resolvedPath: $resolvedPath)
+                                                          resolvedMessage: $resolvedMessage)
                 case .pan:
-                    ChannelToChannelValueRangeBuilderView(operation: .pan,
+                    ChannelToChannelValueRangeBuilderView(method: .pan,
                                                           dictionary: dictionary,
-                                                          resolvedPath: $resolvedPath)
+                                                          resolvedMessage: $resolvedMessage)
                 case .level:
-                    ChannelValueRangeBuilderView(operation: .level,
+                    ChannelValueRangeBuilderView(method: .level,
                                                  dictionary: dictionary,
-                                                 resolvedPath: $resolvedPath)
+                                                 resolvedMessage: $resolvedMessage)
                 case .balance:
-                    ChannelValueRangeBuilderView(operation: .balance,
+                    ChannelValueRangeBuilderView(method: .balance,
                                                  dictionary: dictionary,
-                                                 resolvedPath: $resolvedPath)
+                                                 resolvedMessage: $resolvedMessage)
                 case .trigger:
                     SoftkeyBuilderView(dictionary: dictionary,
-                                       resolvedPath: $resolvedPath)
+                                       resolvedMessage: $resolvedMessage)
                 case .recall:
                     SceneRecallBuilderView(dictionary: dictionary,
-                                           resolvedPath: $resolvedPath)
+                                           resolvedMessage: $resolvedMessage)
                 }
             }
             // Each view populates the resolvedPath, which is displayed by its
             // own view which provides controls for copying or sending the
             // message
             Section(header: Text("OSC Message").font(.title2)) {
-                OSCMessageView(resolvedPath: $resolvedPath)
+                OSCMessageView(resolvedMessage: $resolvedMessage)
             }
             Spacer()
         }.padding(.all)

@@ -14,28 +14,31 @@ import SwiftUI
 struct ChannelValueRangeBuilderView: View {
     let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType
+    let method: MixerMethod
 
-    @Binding var resolvedPath: String
-    @State private var selectedChannelType: EndpointType
+    @Binding var resolvedMessage: String
+    @State private var selectedChannelType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
     @State private var selectedValue = 0.0
 
-    init(operation: EndpointOperationType, dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+    init(method: MixerMethod,
+         dictionary: SqMixerEndpointDictionary,
+         resolvedMessage: Binding<String>)
+    {
         let mixerConfig = SqMixerConfig.singletonInstance()
         self.mixerConfig = mixerConfig
-        self.operation = operation
+        self.method = method
         self.dictionary = dictionary
-        self._resolvedPath = resolvedPath
+        self._resolvedMessage = resolvedMessage
 
-        let source = mixerConfig.channelsFor(operation).first!
+        let source = mixerConfig.channelsFor(method).first!
         self.selectedChannelType = source
     }
 
     var body: some View {
         VStack {
             Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(mixerConfig.channelsFor(operation)) { endpoint in
+                ForEach(mixerConfig.channelsFor(method)) { endpoint in
                     Text(endpoint.rawValue)
                 }
             }
@@ -47,37 +50,41 @@ struct ChannelValueRangeBuilderView: View {
                 }
             }
             .pickerStyle(.menu)
-            Slider(value: $selectedValue, in: operation.valueRange) {
+            Slider(value: $selectedValue, in: method.valueRange) {
                 Text("Value")
             } minimumValueLabel: {
-                Text("\(Int(operation.valueRange.lowerBound))\(operation.units)")
+                Text("\(Int(method.valueRange.lowerBound))\(method.units)")
             } maximumValueLabel: {
-                Text("\(Int(operation.valueRange.upperBound))\(operation.units)")
+                Text("\(Int(method.valueRange.upperBound))\(method.units)")
             }
         }
         .onAppear {
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedChannelType) { _, _ in
             selectedChannelNum = 1
-            updateResolvedPath()
+            updateResolvedMessage()
         }.onChange(of: selectedChannelNum) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }.onChange(of: selectedValue) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
     }
 
-    func updateResolvedPath() {
-        let pathValues = [
+    func updateResolvedMessage() {
+        let templateValues = [
             "chNum": "\(selectedChannelNum)"
         ]
-        resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType, pathValues: pathValues)!
+        resolvedMessage = dictionary.resolveOscAddress(method: method,
+                                                       endpoint: selectedChannelType,
+                                                       templateValues: templateValues)!
             + " \(Int(selectedValue))"
     }
 }
 
 #Preview {
-    @Previewable @State var resolvedPath = ""
-    ChannelValueRangeBuilderView(operation: .balance, dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    @Previewable @State var resolvedMessage = ""
+    ChannelValueRangeBuilderView(method: .balance,
+                                 dictionary: SqMixerEndpointDictionary(),
+                                 resolvedMessage: $resolvedMessage)
 }

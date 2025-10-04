@@ -19,8 +19,8 @@ struct MidiMessagePublisher {
     var midiManager: MIDIManager?
 
     /**
-     Publish a MIDI Message to the configured MIDI connection, logging the message
-     to the Log Publisher along the way.
+     Publish a MIDI Message to the configured MIDI connection, logging the
+     message to the Log Publisher along the way.
      */
     @MainActor func publish(label: String, message: MIDIEvent) {
         if let connection = midiManager?.managedOutputConnections["toSQ"] {

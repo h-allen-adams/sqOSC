@@ -10,38 +10,25 @@ import MIDIKit
 import OSCKit
 
 /**
- OSC Service class managing OSC endpoints and converting OSC messages to MIDI
- messages
+ OSC Service class managing an OSC Server and the associated Address Space OSC
+ endpoints. Incoming OSC Messages are dispatched to the Address Space to be
+ processed by individual handler methods which generate and publish the matching
+ MIDI Message.
  */
 class SqOscManager: ObservableObject {
-    private var logger: LogPublisher = { _ in }
-    @Published var addressSpace = OSCAddressSpace()
-
+    private let addressSpace = OSCAddressSpace()
+    private let logger: LogPublisher
     private let oscServer = OSCUDPServer(port: 9903)
-    private let midiManager: MIDIManager
 
-    init(midiManager: MIDIManager) {
-        self.midiManager = midiManager
+    init(logger: @escaping LogPublisher) {
+        self.logger = logger
     }
 
     /**
      Start the OSC Server and register the message handler
      */
-    func start(logger: @escaping LogPublisher) {
-        self.logger = logger
-
-        oscServer.setReceiveHandler { message, timeTag, host, port in
-            do {
-                try self.handle(
-                    message: message,
-                    timeTag: timeTag,
-                    host: host,
-                    port: port
-                )
-            } catch {
-                self.logMessage(label: "ERROR", message: "Error while handling OSC Message: \(error)")
-            }
-        }
+    func start() {
+        oscServer.setReceiveHandler(dispatchOscMessage)
 
         do {
             try oscServer.start()
@@ -63,22 +50,21 @@ class SqOscManager: ObservableObject {
     }
 
     /**
-     Register OSC messages in the configured address space based on the
-     SqMixerEndpoints
+     Populate the OSC Address Space using the given registrar
      */
-    func register(endpoints: SqOscEndpointRegistrar) {
-        logMessage(label: "SETUP", message: "INITIALIZING")
-
-        let midiMessagePublisher = MidiMessagePublisher(logger: logger, midiManager: midiManager)
-        endpoints.register(addressSpace: addressSpace) { label, midiMessage in
-            await midiMessagePublisher.publish(label: label, message: midiMessage)
-        }
+    func populateOscAddressSpace(with: SqOscEndpointRegistrar) {
+        logger("Initializing OSC Address Space")
+        with.populate(addressSpace: addressSpace)
     }
 
     /**
-     OSC Message handler. Dispatch the OSC Message to the configured address space.
+     OSC Message handler. Dispatch the OSC Message to the configured Address Space.
      */
-    public func handle(message: OSCMessage, timeTag: OSCTimeTag, host: String, port: UInt16) throws {
+    @Sendable public func dispatchOscMessage(message: OSCMessage,
+                                             timeTag: OSCTimeTag,
+                                             host: String,
+                                             port: UInt16)
+    {
         // logMessage(label: "MESSAGE", message: "\(message)")
         // execute closures for matching methods, and returns the matching method IDs
         let methodIDs = addressSpace.dispatch(message: message, host: host, port: port)
@@ -97,11 +83,8 @@ class SqOscManager: ObservableObject {
         logger("\(label) -> \(message)")
     }
 
-    /**
-     Create an OscMessageSender
-     */
     func messageSender() -> OscMessageSender {
-        return OscMessageSender(addressSpace: addressSpace)
+        OscMessageSender(addressSpace: addressSpace)
     }
 }
 
@@ -119,20 +102,20 @@ class OscMessageSender: ObservableObject {
      Dispatch the message to the configured address space as an OSC Message
      */
     func callEndpoint(_ messageString: String) {
-        print("callEndpoint: \(messageString)")
-
         let parts = messageString.split(separator: " ")
         let address = String(parts[0])
 
         var oscValues = OSCValues()
 
-        for index in 1 ... parts.count - 1 {
-            let value = String(parts[index])
-            let intValue: Int? = Int(value)
-            if intValue != nil {
-                oscValues.append(intValue!)
-            } else {
-                oscValues.append(value)
+        if parts.count > 1 {
+            for index in 1 ... parts.count - 1 {
+                let value = String(parts[index])
+                let intValue: Int? = Int(value)
+                if intValue != nil {
+                    oscValues.append(intValue!)
+                } else {
+                    oscValues.append(value)
+                }
             }
         }
 

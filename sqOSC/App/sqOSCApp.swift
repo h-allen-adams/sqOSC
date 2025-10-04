@@ -7,7 +7,6 @@
 
 import MIDIKit
 import OSCKit
-import SwiftData
 import SwiftUI
 
 /**
@@ -33,10 +32,10 @@ struct sqOSCApp: App {
  The App Delegate manages the application services and shared view models.
  */
 class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-    public let activityLog = ActivityLog()
-    public let apiEndpoints: SqOscEndpointRegistrar
+    public let activityLog: ActivityLog
+    public let logger: LogPublisher
     public let oscDictionary = SqMixerEndpointDictionary()
-    public let oscHandler: SqOscManager
+    public let oscManager: SqOscManager
     public let oscMessageSender: OscMessageSender
     public let midiManager = ObservableMIDIManager(
         clientName: "sqOSC",
@@ -45,9 +44,17 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     )
 
     override init() {
-        self.apiEndpoints = SqOscEndpointRegistrar(dictionary: oscDictionary, preferences: .midiStandard)
-        self.oscHandler = SqOscManager(midiManager: midiManager)
-        self.oscMessageSender = oscHandler.messageSender()
+        let activityLog = ActivityLog()
+        let logger: LogPublisher = { message in
+            Task { @MainActor in
+                activityLog.logMessage(logText: message)
+            }
+        }
+
+        self.activityLog = activityLog
+        self.logger = logger
+        self.oscManager = SqOscManager(logger: logger)
+        self.oscMessageSender = oscManager.messageSender()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -67,29 +74,49 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
         #endif // DEBUG
 
+        initializeMidiManager()
+        initializeOscHandler()
+    }
+
+    /**
+     Start the MIDI Manager and add a placeholder "toSQ" output connection. That
+     placeholder connection will be updated by the ConfigurationView when the
+     MIDI Connection Picker is initialized or changed.
+     */
+    func initializeMidiManager() {
         do {
             midiManager.preferredAPI = CoreMIDIAPIVersion.legacyCoreMIDI
             try midiManager.start()
             try midiManager.addOutputConnection(to: MIDIOutputConnectionMode.none, tag: "toSQ")
-            activityLog.logMessage(logText: "MIDI Manager Started")
+            logger("MIDI Manager Started")
         } catch {
-            activityLog.logMessage(logText: "ERROR -> Error while starting MIDI manager: \(error)")
+            logger("ERROR: Error while starting MIDI manager: \(error)")
+        }
+    }
+
+    /**
+     Start the OSC Manager and populate the OSC Address Space using the address
+     templates from the Mixer Dictionary.
+     */
+    func initializeOscHandler() {
+        let midiMessagePublisher = MidiMessagePublisher(logger: logger,
+                                                        midiManager: midiManager)
+        let endpointRegistrar = SqOscEndpointRegistrar(dictionary: oscDictionary,
+                                                       preferences: .midiStandard)
+        { label, midiMessage in
+            await midiMessagePublisher.publish(label: label, message: midiMessage)
         }
 
-        oscHandler.start { message in
-            Task { @MainActor in
-                self.activityLog.logMessage(logText: message)
-            }
-        }
-        oscHandler.register(endpoints: apiEndpoints)
+        oscManager.start()
+        oscManager.populateOscAddressSpace(with: endpointRegistrar)
     }
 
     /**
      Shutdown OSC service (MIDI services do not need to be explicitly stopped)
      */
     func applicationWillTerminate(_ notification: Notification) {
-        print("Will Terminate")
-        oscHandler.stop()
+        logger("SHUTDOWN")
+        oscManager.stop()
     }
 }
 

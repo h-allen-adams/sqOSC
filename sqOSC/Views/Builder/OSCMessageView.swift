@@ -13,25 +13,25 @@ import SwiftUI
  message to the clipboard, and send the corresponding MIDI message to the mixer.
  */
 struct OSCMessageView: View {
-    @Binding var resolvedPath: String
-    @EnvironmentObject private var addressSpace: OscMessageSender
+    @Binding var resolvedMessage: String
+    @EnvironmentObject private var messageSender: OscMessageSender
 
     var body: some View {
         HStack(alignment: .top, spacing: 0.0) {
             Button(action: {
                 let pasteboard = NSPasteboard.general
                 pasteboard.clearContents()
-                pasteboard.setString(resolvedPath, forType: .string)
+                pasteboard.setString(resolvedMessage, forType: .string)
             }) {
                 Image(systemName: "doc.on.doc")
             }.help("Copy to Clipboard")
             Button(action: {
-                addressSpace.callEndpoint(resolvedPath)
+                messageSender.callEndpoint(resolvedMessage)
             }) {
                 Image(systemName: "paperplane")
             }.help("Send Message")
             Text(" ")
-            Text(resolvedPath)
+            Text(resolvedMessage)
                 .monospaced()
                 .textSelection(.enabled)
         }
@@ -39,6 +39,7 @@ struct OSCMessageView: View {
 }
 
 #Preview {
-    @Previewable @State var resolvedPath = "/sq/some/resolvedPath 125"
-    OSCMessageView(resolvedPath: $resolvedPath).environmentObject(OscMessageSender(addressSpace: nil))
+    @Previewable @State var resolvedMessage = "/sq/some/resolvedPath 125"
+    OSCMessageView(resolvedMessage: $resolvedMessage)
+        .environmentObject(OscMessageSender(addressSpace: nil))
 }

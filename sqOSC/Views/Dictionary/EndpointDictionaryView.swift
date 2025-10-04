@@ -21,6 +21,21 @@ struct EndpointDictionaryView: View {
     }
 }
 
+extension SqMixerEndpointDictionary {
+    /**
+     Return a sorted list of EndpointDictEntry items for UI display
+     */
+    func values() -> [EndpointDictEntry] {
+        var result: [EndpointDictEntry] = []
+        let allCases = MixerMethod.allCases
+        let sorted = entries.sorted { allCases.firstIndex(of: $0.key)! < allCases.firstIndex(of: $1.key)! }
+        for entry in sorted {
+            result.append(entry.value)
+        }
+        return result
+    }
+}
+
 #Preview {
     EndpointDictionaryView(dictionary: SqMixerEndpointDictionary())
 }

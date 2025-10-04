@@ -10,21 +10,22 @@ import OSCKitCore
 import XCTest
 
 final class SqMixerEndpointsTest: XCTestCase {
-    private var mixerEndpoints: SqOscEndpointRegistrar?
+    private var endpointRegistrar: SqOscEndpointRegistrar?
     private var addressSpace: OSCAddressSpace?
     private var message = ""
     private let flag = DispatchSemaphore(value: 0)
 
     override func setUpWithError() throws {
-        mixerEndpoints = SqOscEndpointRegistrar(dictionary: SqMixerEndpointDictionary(),
-                                                preferences: .midiStandard)
-        addressSpace = OSCAddressSpace()
-        message = "UNSET"
-
-        mixerEndpoints?.register(addressSpace: addressSpace!) { _, message in
+        endpointRegistrar = SqOscEndpointRegistrar(dictionary: SqMixerEndpointDictionary(),
+                                                   preferences: .midiStandard)
+        { _, message in
             self.message = MidiMessagePublisher.toString(message)
             self.flag.signal()
         }
+        addressSpace = OSCAddressSpace()
+        message = "UNSET"
+
+        endpointRegistrar?.populate(addressSpace: addressSpace!)
     }
 
     func testRegisterMutes() throws {
@@ -60,36 +61,36 @@ final class SqMixerEndpointsTest: XCTestCase {
     }
 
     func testRegisterSendLevels() throws {
-        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel/main 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/main/sendLevel 0"),
                        "B0 63 40 B0 62 00 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel/main 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/48/to/main/sendLevel 0"),
                        "B0 63 40 B0 62 2F B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel/aux/1 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/aux/1/sendLevel 0"),
                        "B0 63 40 B0 62 44 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel/aux/1 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/48/to/aux/1/sendLevel 0"),
                        "B0 63 44 B0 62 78 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel/aux/12 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/aux/12/sendLevel 0"),
                        "B0 63 40 B0 62 4F B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel/aux/12 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/48/to/aux/12/sendLevel 0"),
                        "B0 63 45 B0 62 03 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel/fxSend/1 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/fxSend/1/sendLevel 0"),
                        "B0 63 4C B0 62 14 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel/fxSend/1 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/48/to/fxSend/1/sendLevel 0"),
                        "B0 63 4D B0 62 50 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/1/sendLevel/fxSend/4 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/fxSend/4/sendLevel 0"),
                        "B0 63 4C B0 62 17 B0 06 76 B0 26 5C")
-        XCTAssertEqual(callEndpoint("/sq/input/48/sendLevel/fxSend/4 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/48/to/fxSend/4/sendLevel 0"),
                        "B0 63 4D B0 62 53 B0 06 76 B0 26 5C")
     }
 
     func testRegisterSendPan() throws {
-        XCTAssertEqual(callEndpoint("/sq/input/1/pan/main -100"),
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/main/pan -100"),
                        "B0 63 50 B0 62 00 B0 06 00 B0 26 00")
-        XCTAssertEqual(callEndpoint("/sq/input/1/pan/main 0"),
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/main/pan 0"),
                        "B0 63 50 B0 62 00 B0 06 3F B0 26 7F")
-        XCTAssertEqual(callEndpoint("/sq/input/24/pan/main 20"),
+        XCTAssertEqual(callEndpoint("/sq/input/24/to/main/pan 20"),
                        "B0 63 50 B0 62 17 B0 06 4C B0 26 65")
-        XCTAssertEqual(callEndpoint("/sq/input/24/pan/aux/5 20"),
+        XCTAssertEqual(callEndpoint("/sq/input/24/to/aux/5/pan 20"),
                        "B0 63 52 B0 62 5C B0 06 4C B0 26 65")
     }
 
@@ -99,7 +100,7 @@ final class SqMixerEndpointsTest: XCTestCase {
     }
 
     func testRegisterSceneRecall() throws {
-        XCTAssertEqual(callEndpoint("/sq/scene/recall 156"), "B0 00 00 B0 20 01 C0 1B")
+        XCTAssertEqual(callEndpoint("/sq/scene/156/recall"), "B0 00 00 B0 20 01 C0 1B")
     }
 
     func testRegisterSoftKeys() throws {

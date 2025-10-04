@@ -9,11 +9,9 @@ import Foundation
 import OSCKit
 
 /**
- Bind the OSC message addresses defined by a SqMixerEndpointDictionary
- to an OSCAddressSpace, providing for each OSC address an OSC Message handler
- function to create and publish the corresponding MIDI message. The algorithm
- to convert fader levels, channel numbers, and other parameters into MIDI
- messages is contained in this class.
+ Bind the OSC message addresses defined by a SqMixerEndpointDictionary to an
+ OSCAddressSpace, providing for each OSC address an OSC Message handler function
+ to create and publish the corresponding MIDI message.
  */
 class SqOscEndpointRegistrar {
     let dictionary: SqMixerEndpointDictionary
@@ -21,101 +19,81 @@ class SqOscEndpointRegistrar {
     private let preferences: MidiPreferences
     private let mixerMessages: SqMixerMessages
     private var addressSpace: OSCAddressSpace?
-    private var publisher: MessagePublisher?
+    private let publisher: MessagePublisher
 
-    init(dictionary: SqMixerEndpointDictionary, preferences: MidiPreferences) {
+    init(dictionary: SqMixerEndpointDictionary,
+         preferences: MidiPreferences,
+         publisher: @escaping MessagePublisher)
+    {
         self.preferences = preferences
         self.dictionary = dictionary
+        self.publisher = publisher
         self.mixerMessages = SqMixerMessages()
     }
 
     /**
      Register endpoint dictionary entries with the given OSCAddressSpace.
      */
-    func register(addressSpace: OSCAddressSpace?, publisher: @escaping MessagePublisher) {
+    func populate(addressSpace: OSCAddressSpace?) {
         self.addressSpace = addressSpace
-        self.publisher = publisher
 
         // Register Scene and SoftKey operations
-        registerSceneRecall()
-        registerSoftKeys()
+        populateSceneRecall()
+        populateSoftKeys()
 
         // Register Audio Channel Operations
-        registerAudioChannels(EndpointType.input)
-        registerAudioChannels(EndpointType.main)
-        registerAudioChannels(EndpointType.aux)
-        registerAudioChannels(EndpointType.group)
-        registerAudioChannels(EndpointType.fxSend)
-        registerAudioChannels(EndpointType.fxReturn)
-        registerAudioChannels(EndpointType.matrix)
-        registerAudioChannels(EndpointType.dca)
-        registerAudioChannels(EndpointType.muteGroup)
+        MixerEndpoint.audioCases.forEach(populateAudioChannels)
     }
 
     /**
-     Register all the possible OSC message addresses for a type of audio
-     channel. Depending on the type, Audio channel messages can include balance,
-     level, mute, pan, and sendLevel operations.
+     Register all the possible OSC message addresses for a type of Audio
+     Channel. Depending on the type, Audio Channel messages can include balance,
+     level, mute, pan, and sendLevel methods.
      */
-    private func registerAudioChannels(_ channelType: EndpointType) {
+    private func populateAudioChannels(_ channelType: MixerEndpoint) {
         // Loop across each possible channel in the channel type, numbered 1 to n
-        for c in 1 ... mixerConfig.channelCount(channelType)! {
-            // Add a chNum substitution variable for the channel number
-            let channelPathValues = ["chNum": "\(c)"]
-
-            // All audio channels support mute, so register a mute operation for this channel
-            registerMute(channelType, c,
-                         dictionary.resolvePath(operation: EndpointOperationType.mute,
-                                                endpoint: channelType,
-                                                pathValues: channelPathValues)!)
+        for chNum in 1 ... mixerConfig.channelCount(channelType)! {
+            // All audio channels support mute, so register a mute operation for
+            // this channel
+            populateMute(channelType, chNum)
 
             // Register a balence operation for this channel, if it is supported
             if mixerConfig.channelSupports(.balance, channelType) {
-                registerOutputBalance(channelType, c,
-                                      dictionary.resolvePath(operation: EndpointOperationType.balance,
-                                                             endpoint: channelType,
-                                                             pathValues: channelPathValues)!)
+                populateOutputBalance(channelType, chNum)
             }
 
             // Register a level operation for this channel, if it is supported
             if mixerConfig.channelSupports(.level, channelType) {
-                registerOutputLevel(channelType, c,
-                                    dictionary.resolvePath(operation: EndpointOperationType.level,
-                                                           endpoint: channelType,
-                                                           pathValues: channelPathValues)!)
+                populateOutputLevel(channelType, chNum)
             }
 
             // If the channel supports send levels, create a set of operations
             // for each destination channel which can receive audio from the
             // current channel
             if mixerConfig.channelSupports(.sendLevel, channelType) {
-
                 // For each possible destination type which can recieve audio
                 // from the current channel
-                for destType in mixerConfig.channelTargets(.sendLevel, source: channelType) {
+                for destType in mixerConfig.channelTargets(.sendLevel,
+                                                           source: channelType)
+                {
+                    // Determine if the method also supports pan for this
+                    // channel pair
+                    let hasPan = mixerConfig
+                        .channelTargets(.pan, source: channelType)
+                        .contains(destType)
 
                     // Register a sendLevel operation from the current channel
                     // to each possible destination channel
                     let destTypeCount = mixerConfig.channelCount(destType)!
                     for destChannel in 1 ... destTypeCount {
-                        var dest = "\(destType)/\(destChannel)"
-                        if destTypeCount == 1 {
-                            dest = "\(destType)"
-                        }
-                        registerSendLevel(channelType, c,
-                                          destType, destChannel,
-                                          dictionary.resolvePath(operation: EndpointOperationType.sendLevel,
-                                                                 endpoint: channelType,
-                                                                 pathValues: ["chNum": "\(c)", "dest": dest])!)
+                        populateSendLevel(channelType, chNum,
+                                          destType, destChannel)
 
                         // Channels which support sendLevel messages may also
                         // support pan messages
-                        if mixerConfig.channelTargets(.pan, source: channelType).contains(destType) {
-                            registerSendPan(channelType, c,
-                                            destType, destChannel,
-                                            dictionary.resolvePath(operation: EndpointOperationType.pan,
-                                                                   endpoint: channelType,
-                                                                   pathValues: ["chNum": "\(c)", "dest": dest])!)
+                        if hasPan {
+                            populateSendPan(channelType, chNum,
+                                            destType, destChannel)
                         }
                     }
                 }
@@ -123,114 +101,228 @@ class SqOscEndpointRegistrar {
         }
     }
 
-    private func registerOutputBalance(_ channelType: EndpointType,
-                                       _ channelNum: Int,
-                                       _ channelLevelPath: String) {
-        
-        addressSpace?.register(localAddress: channelLevelPath) { values, _, _ in
-            guard let panLevel = try? values.masked(Int.self) else { return }
-            if let midiMessage = self.mixerMessages.outputBalanceMessage(midiChannel: self.preferences.midiChannel,
-                                                                         outputType: channelType,
-                                                                         outputChannel: channelNum,
-                                                                         panLevel: panLevel)
-            {
-                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
-            }
-        }
-    }
-
-    private func registerOutputLevel(_ channelType: EndpointType,
-                                     _ channelNum: Int,
-                                     _ channelLevelPath: String) {
-        addressSpace?.register(localAddress: channelLevelPath) { values, _, _ in
-            guard let dbLevel = try? values.masked(Int.self) else { return }
-            if let midiMessage = self.mixerMessages.outputLevelMessage(midiChannel: self.preferences.midiChannel,
-                                                                       outputType: channelType,
-                                                                       outputChannel: channelNum,
-                                                                       dbLevel: dbLevel)
-            {
-                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
-            }
-        }
-    }
-
-    private func registerMute(_ channelType: EndpointType,
-                              _ channelNum: Int,
-                              _ channelMutePath: String) {
-        addressSpace?.register(localAddress: channelMutePath) { values, _, _ in
-            guard let action = try? SqMuteAction(rawValue: values.masked(String.self)) else { return }
-            if let midiMessage = self.mixerMessages.muteMessage(midiChannel: self.preferences.midiChannel,
-                                                                type: channelType,
-                                                                channel: channelNum,
-                                                                action: action) {
-                await self.publisher!("\(channelMutePath) \(values)", midiMessage)
-            }
-        }
-    }
-
-    private func registerSceneRecall() {
-        let dictionaryPath = dictionary.resolvePath(operation: EndpointOperationType.recall,
-                                                    endpoint: EndpointType.scene)!
-        addressSpace?.register(localAddress: dictionaryPath) { values, _, _ in
-            guard let scene = try? values.masked(Int.self) else { return }
-            if let midiMessage = self.mixerMessages.sceneRecallMessage(midiChannel: self.preferences.midiChannel,
-                                                                       scene: scene) {
-                await self.publisher!("\(dictionaryPath) \(values)", midiMessage)
-            }
-        }
-    }
-
-    private func registerSendLevel(_ sourceType: EndpointType,
-                                   _ sourceNum: Int,
-                                   _ destType: EndpointType,
-                                   _ destNum: Int,
-                                   _ channelLevelPath: String) {
-        addressSpace?.register(localAddress: channelLevelPath) { values, _, _ in
-            guard let dbLevel = try? values.masked(Int.self) else { return }
-            if let midiMessage = self.mixerMessages.sendLevelMessage(midiChannel: self.preferences.midiChannel,
-                                                                     sourceType: sourceType,
-                                                                     sourceChannel: sourceNum,
-                                                                     destType: destType,
-                                                                     destChannel: destNum,
-                                                                     dbLevel: dbLevel)
-            {
-                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
-            }
-        }
-    }
-
-    private func registerSendPan(_ sourceType: EndpointType,
-                                 _ sourceNum: Int,
-                                 _ destType: EndpointType,
-                                 _ destNum: Int,
-                                 _ channelLevelPath: String) {
-        addressSpace?.register(localAddress: channelLevelPath) { values, _, _ in
-            guard let panLevel = try? values.masked(Int.self) else { return }
-            if let midiMessage = self.mixerMessages.sendPanMessage(midiChannel: self.preferences.midiChannel,
-                                                                   sourceType: sourceType,
-                                                                   sourceChannel: sourceNum,
-                                                                   destType: destType,
-                                                                   destChannel: destNum,
-                                                                   panLevel: panLevel)
-            {
-                await self.publisher!("\(channelLevelPath) \(values)", midiMessage)
-            }
-        }
-    }
-
-    private func registerSoftKeys() {
-        for button in 1 ... mixerConfig.channelCount(EndpointType.keys)! {
-            let address = dictionary.resolvePath(operation: EndpointOperationType.trigger,
-                                                 endpoint: EndpointType.keys,
-                                                 pathValues: ["keyNum": "\(button)"])!
-            addressSpace?.register(localAddress: address) { values, _, _ in
-                guard let action = try? SqButtonState(rawValue: values.masked(String.self)) else { return }
-                if let midiMessage = self.mixerMessages.softKeyMessage(midiChannel: self.preferences.midiChannel,
-                                                                       button: button,
-                                                                       state: action) {
-                    await self.publisher!("\(address) \(values)", midiMessage)
+    /**
+     Register the Output Balance OSC Method for the given channel. The Method
+     argument will be an integer in the range -100 (balance full left) to 100
+     (balance full right). The message handling closure will decode the
+     argument and use the SqMixerMessages.outputBalanceMessage method to publish
+     a MIDI message to the mixer.
+     */
+    private func populateOutputBalance(_ channelType: MixerEndpoint,
+                                       _ channelNum: Int)
+    {
+        let templateValues = ["chNum": "\(channelNum)"]
+        if let oscAddress =
+            dictionary.resolveOscAddress(method: MixerMethod.balance,
+                                         endpoint: channelType,
+                                         templateValues: templateValues)
+        {
+            addressSpace?.register(localAddress: oscAddress) { values, _, _ in
+                guard let panLevel = try? values.masked(Int.self) else { return }
+                if let midiMessage = self.mixerMessages
+                    .outputBalanceMessage(midiChannel: self.preferences.midiChannel,
+                                          outputType: channelType,
+                                          outputChannel: channelNum,
+                                          panLevel: panLevel)
+                {
+                    await self.publisher("\(oscAddress) \(values)", midiMessage)
                 }
             }
         }
+    }
+
+    /**
+     Register the Output Level OSC Method for the given channel. The Method
+     argument will be an integer in the range -100 to 10 dB. The message
+     handling closure will decode the argument and use the
+     SqMixerMessages.outputLevelMessage method to publish a MIDI message to the
+     mixer.
+     */
+    private func populateOutputLevel(_ channelType: MixerEndpoint,
+                                     _ channelNum: Int)
+    {
+        let templateValues = ["chNum": "\(channelNum)"]
+        if let oscAddress =
+            dictionary.resolveOscAddress(method: MixerMethod.level,
+                                         endpoint: channelType,
+                                         templateValues: templateValues)
+        {
+            addressSpace?.register(localAddress: oscAddress) { values, _, _ in
+                guard let dbLevel = try? values.masked(Int.self) else { return }
+                if let midiMessage = self.mixerMessages
+                    .outputLevelMessage(midiChannel: self.preferences.midiChannel,
+                                        outputType: channelType,
+                                        outputChannel: channelNum,
+                                        dbLevel: dbLevel)
+                {
+                    await self.publisher("\(oscAddress) \(values)", midiMessage)
+                }
+            }
+        }
+    }
+
+    /**
+     Register the Mute OSC Method for the given channel. The Method
+     argument will be a string with a value of "ON" or "OFF". The message
+     handling closure will decode the argument and use the
+     SqMixerMessages.muteMessage method to publish a MIDI message to the
+     mixer.
+     */
+    private func populateMute(_ channelType: MixerEndpoint,
+                              _ channelNum: Int)
+    {
+        let templateValues = ["chNum": "\(channelNum)"]
+        if let oscAddress =
+            dictionary.resolveOscAddress(method: MixerMethod.mute,
+                                         endpoint: channelType,
+                                         templateValues: templateValues)
+        {
+            addressSpace?.register(localAddress: oscAddress) { values, _, _ in
+                guard let action = try? SqMuteAction(rawValue: values.masked(String.self)) else { return }
+                if let midiMessage = self.mixerMessages
+                    .muteMessage(midiChannel: self.preferences.midiChannel,
+                                 type: channelType,
+                                 channel: channelNum,
+                                 action: action)
+                {
+                    await self.publisher("\(oscAddress) \(values)", midiMessage)
+                }
+            }
+        }
+    }
+
+    /**
+     Register the Scene Recall OSC Method for each supported scene. The message
+     handling closure call the SqMixerMessages.sceneRecallMessage method to
+     publish a MIDI message to the mixer.
+     */
+    private func populateSceneRecall() {
+        for scene in 1 ... mixerConfig.channelCount(MixerEndpoint.scene)! {
+            let oscAddress =
+                dictionary.resolveOscAddress(method: MixerMethod.recall,
+                                             endpoint: MixerEndpoint.scene,
+                                             templateValues: ["sceneNum": "\(scene)"])!
+            addressSpace?.register(localAddress: oscAddress) { values, _, _ in
+                if let midiMessage = self.mixerMessages
+                    .sceneRecallMessage(midiChannel: self.preferences.midiChannel,
+                                        scene: scene)
+                {
+                    await self.publisher("\(oscAddress) \(values)", midiMessage)
+                }
+            }
+        }
+    }
+
+    /**
+     Register the Send Level OSC Method for the source/dest channel pair. The
+     Method argument will be an integer in the range -100 to 10 dB. The message
+     handling closure will decode the argument and use the
+     SqMixerMessages.sendLevelMessage method to publish a MIDI message to the
+     mixer.
+     */
+    private func populateSendLevel(_ sourceType: MixerEndpoint,
+                                   _ sourceNum: Int,
+                                   _ destType: MixerEndpoint,
+                                   _ destNum: Int)
+    {
+        let templateValues = [
+            "chNum": "\(sourceNum)",
+            "dest": destFor(destType, destNum)
+        ]
+        if let oscAddress =
+            dictionary.resolveOscAddress(method: MixerMethod.sendLevel,
+                                         endpoint: sourceType,
+                                         templateValues: templateValues)
+        {
+            addressSpace?.register(localAddress: oscAddress) { values, _, _ in
+                guard let dbLevel = try? values.masked(Int.self) else { return }
+                if let midiMessage = self.mixerMessages
+                    .sendLevelMessage(midiChannel: self.preferences.midiChannel,
+                                      sourceType: sourceType,
+                                      sourceChannel: sourceNum,
+                                      destType: destType,
+                                      destChannel: destNum,
+                                      dbLevel: dbLevel)
+                {
+                    await self.publisher("\(oscAddress) \(values)", midiMessage)
+                }
+            }
+        }
+    }
+
+    /**
+     Register the Send Pan OSC Method for the given source/dest channel pair.
+     The Method argument will be an integer in the range -100 (pan full left)
+     to 100 (pan full right). The message handling closure will decode the
+     argument and use the SqMixerMessages.outputBalanceMessage method to publish
+     a MIDI message to the mixer.
+     */
+    private func populateSendPan(_ sourceType: MixerEndpoint,
+                                 _ sourceNum: Int,
+                                 _ destType: MixerEndpoint,
+                                 _ destNum: Int)
+    {
+        let channelPathValues = [
+            "chNum": "\(sourceNum)",
+            "dest": destFor(destType, destNum)
+        ]
+        if let channelLevelPath =
+            dictionary.resolveOscAddress(method: MixerMethod.pan,
+                                         endpoint: sourceType,
+                                         templateValues: channelPathValues)
+        {
+            addressSpace?.register(localAddress: channelLevelPath) { values, _, _ in
+                guard let panLevel = try? values.masked(Int.self) else { return }
+                if let midiMessage = self.mixerMessages
+                    .sendPanMessage(midiChannel: self.preferences.midiChannel,
+                                    sourceType: sourceType,
+                                    sourceChannel: sourceNum,
+                                    destType: destType,
+                                    destChannel: destNum,
+                                    panLevel: panLevel)
+                {
+                    await self.publisher("\(channelLevelPath) \(values)", midiMessage)
+                }
+            }
+        }
+    }
+
+    /**
+     Register the Soft Keys OSC Method (single address). The Method argument
+     will be a String with value "PRESS" or "RELEASE". The message handling
+     closure will decode the argument and use the SqMixerMessages.softKeyMessage
+     method to publish a MIDI message to the mixer.
+     */
+    private func populateSoftKeys() {
+        for button in 1 ... mixerConfig.channelCount(MixerEndpoint.keys)! {
+            let address = dictionary.resolveOscAddress(method: MixerMethod.trigger,
+                                                       endpoint: MixerEndpoint.keys,
+                                                       templateValues: ["keyNum": "\(button)"])!
+            addressSpace?.register(localAddress: address) { values, _, _ in
+                guard let action = try? SqButtonState(rawValue: values.masked(String.self)) else { return }
+                if let midiMessage = self.mixerMessages
+                    .softKeyMessage(midiChannel: self.preferences.midiChannel,
+                                    button: button,
+                                    state: action)
+                {
+                    await self.publisher("\(address) \(values)", midiMessage)
+                }
+            }
+        }
+    }
+
+    /**
+     Derive the "dest" template value for the given dest channel. Destination
+     types with more than one channel append the channel number to the dest
+     component. Channel types with a single channel (like main) do NOT append
+     the channel number.
+     */
+    private func destFor(_ destType: MixerEndpoint, _ destChannel: Int) -> String {
+        let destTypeCount = mixerConfig.channelCount(destType)!
+        var dest = "\(destType)/\(destChannel)"
+        if destTypeCount == 1 {
+            dest = "\(destType)"
+        }
+        return dest
     }
 }

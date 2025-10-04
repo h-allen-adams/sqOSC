@@ -17,27 +17,28 @@ class SqMixerConfig: Codable {
     /**
      Channel counts: [channel: count]
      */
-    private let channelCounts: [String: Int]
+    private let channelCounts: [MixerEndpoint: Int]
 
     /**
      Channel Operations (mute, level, balence) affect signal on a single
      channel.
      [ operation: [channel : parameter value (hex) ]]
      */
-    private let channelParameters: [String: [String: String]]
+    private let channelParameters: [MixerMethod: [MixerEndpoint: String]]
 
     /**
      Channel-to-Channel Operations (sendLevel, pan) affect how signal moves
      from a source channel to a destination channel.
      [operation: [source: [ dest: parameter value (hex) ]]]
      */
-    private let channelToChannelParameters: [String: [String: [String: String]]]
+    private let channelToChannelParameters:
+        [MixerMethod: [MixerEndpoint: [MixerEndpoint: String]]]
 
     /**
      Return the number of channels associated with the given channel/endpoint type
      */
-    func channelCount(_ channelType: EndpointType) -> Int? {
-        return channelCounts[channelType.rawValue]
+    func channelCount(_ channelType: MixerEndpoint) -> Int? {
+        return channelCounts[channelType]
     }
 
     /**
@@ -45,22 +46,17 @@ class SqMixerConfig: Codable {
      operation. For recall and trigger this is a fixed value; for all others the
      list of channelParameters/channelToChannelParameter keys is returned.
      */
-    func channelsFor(_ operation: EndpointOperationType) -> [EndpointType] {
+    func channelsFor(_ operation: MixerMethod) -> [MixerEndpoint] {
         switch operation {
         case .recall:
             return [.scene]
         case .trigger:
             return [.keys]
         default:
-            let opkey = String(describing: operation)
-            if let channelParameter = channelParameters[opkey] {
-                return channelParameter.keys.map { key in
-                    EndpointType(rawValue: key)!
-                }
-            } else if let channelParameter = channelToChannelParameters[opkey] {
-                return channelParameter.keys.map { key in
-                    EndpointType(rawValue: key)!
-                }
+            if let channelParameter = channelParameters[operation] {
+                return Array(channelParameter.keys)
+            } else if let channelParameter = channelToChannelParameters[operation] {
+                return Array(channelParameter.keys)
             } else {
                 return []
             }
@@ -71,14 +67,13 @@ class SqMixerConfig: Codable {
      Return true if the given operation supports the given channel, false
      otherwise.
      */
-    func channelSupports(_ operation: EndpointOperationType,
-                         _ channel: EndpointType) -> Bool
+    func channelSupports(_ operation: MixerMethod,
+                         _ channel: MixerEndpoint) -> Bool
     {
-        let opkey = String(describing: operation)
-        if let channelParameter = channelParameters[opkey] {
-            return channelParameter.keys.contains(channel.rawValue)
-        } else if let channelParameter = channelToChannelParameters[opkey] {
-            return channelParameter.keys.contains(channel.rawValue)
+        if let channelParameter = channelParameters[operation] {
+            return channelParameter.keys.contains(channel)
+        } else if let channelParameter = channelToChannelParameters[operation] {
+            return channelParameter.keys.contains(channel)
         } else {
             return false
         }
@@ -92,11 +87,10 @@ class SqMixerConfig: Codable {
      the mute parameter value for the first input channel is "00 00" and the
      second is "00 01".
      */
-    func channelParameter(_ operation: EndpointOperationType,
-                          _ channel: EndpointType) -> Int?
+    func channelParameter(_ operation: MixerMethod,
+                          _ channel: MixerEndpoint) -> Int?
     {
-        let opkey = String(describing: operation)
-        if let parameterString = channelParameters[opkey]?[channel.rawValue] {
+        if let parameterString = channelParameters[operation]?[channel] {
             let bytes = parameterString.split(separator: " ")
             return Values.toParameterNumber(String(bytes[0]), String(bytes[1]))
         }
@@ -107,16 +101,11 @@ class SqMixerConfig: Codable {
      Return the list of destination channels for the given operation and source
      channel.
      */
-    func channelTargets(_ operation: EndpointOperationType,
-                        source: EndpointType) -> [EndpointType]
+    func channelTargets(_ operation: MixerMethod,
+                        source: MixerEndpoint) -> [MixerEndpoint]
     {
-        let opkey = String(describing: operation)
-        if let dict = channelToChannelParameters[opkey]?[source.rawValue] {
-            let keys = dict.keys
-
-            return keys.map { key in
-                EndpointType(rawValue: key)!
-            }
+        if let dict = channelToChannelParameters[operation]?[source] {
+            return Array(dict.keys)
         }
         return []
     }
@@ -130,12 +119,11 @@ class SqMixerConfig: Codable {
      to aux 1, "40 45" for input 1 to aux 2 incrementing across the 12 possible
      auxes. Input channel 2 to aux 1 starts over at "40 50".
      */
-    func channelToChannelParameter(_ operation: EndpointOperationType,
-                                   source: EndpointType,
-                                   dest: EndpointType) -> Int?
+    func channelToChannelParameter(_ operation: MixerMethod,
+                                   source: MixerEndpoint,
+                                   dest: MixerEndpoint) -> Int?
     {
-        let opkey = String(describing: operation)
-        if let parameterString = channelToChannelParameters[opkey]?[source.rawValue]?[dest.rawValue] {
+        if let parameterString = channelToChannelParameters[operation]?[source]?[dest] {
             let bytes = parameterString.split(separator: " ")
             return Values.toParameterNumber(String(bytes[0]), String(bytes[1]))
         }

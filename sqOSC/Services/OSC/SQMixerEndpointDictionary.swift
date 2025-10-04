@@ -8,43 +8,55 @@
 import Foundation
 
 /**
- Define the OSC Address template dictionary for the mixer based on the data in
- the SqMixerConfig singleton. Once initialized, the dictionary is used for
- display on the "Dictionary" tab of the UI and to initialize the OSC Service
- with the proper addresses. The OSC message dictionary defines path templates
- which will undergo variable substitution to form OSC addresses.
+ Define the OSC Address Space for the mixer based on the data in the
+ SqMixerConfig singleton.
+
+ Every OSC server has a set of OSC Methods. OSC Methods are the potential
+ destinations of OSC messages received by the OSC server and correspond to each
+ of the points of control that the application makes available. “Invoking” an
+ OSC method is analogous to a procedure call; it means supplying the method with
+ arguments and causing the method’s effect to take place.
+
+ An OSC Server’s OSC Methods are arranged in a tree strcuture called an OSC
+ Address Space. The leaves of this tree are the OSC Methods and the branch nodes
+ are called OSC Containers. The mixer OSC Methods correspond to the MIDI
+ commands supported by the mixer, defined in MixerMethod. The OSC Containers
+ correspond to the mixer channels supported by the MIDI interface.
+
+ The OSC Containers defined by this class are templates: rather than
+ fully-defined OSC Addresses, this class produces address templates with
+ variable substitution parameters which will be filled in by the
+ SqOscEndpointRegistrar.
+
+ For example: "/sq/input/{chNum}/mute" is an OSC Address template which will be
+ used to define all the possible mute addresses corresponding to mixer input
+ channels: "/sq/input/1/mute", "/sq/input/2/mute", etc.
  */
 class SqMixerEndpointDictionary: ObservableObject {
     let mixerConfig = SqMixerConfig.singletonInstance()
 
-    var entries: [EndpointOperationType: EndpointDictEntry]
+    var entries: [MixerMethod: EndpointDictEntry]
 
     /**
-     Create a dictionary where each key are EndpointOperationType's and the
-     associated value is the EndpointDictEntry for that operation.
+     Create a dictionary where each key are MixerMethod's and the
+     associated value is the EndpointDictEntry for that method.
      */
     init() {
-        entries = EndpointOperationType.allCases.reduce(into: [:]) { $0[$1] = EndpointDictEntry(operation: $1) }
-    }
-
-    /**
-     Resolve a path for the given operation and endpoint, substituting the
-     values in the path values dictionary into the path template.
-     */
-    func resolvePath(operation: EndpointOperationType, endpoint: EndpointType, pathValues: [String: String] = [:]) -> String? {
-        return entries[operation]?.resolvePath(pathType: endpoint, pathValues: pathValues)
-    }
-
-    /**
-     Return a sorted list of EndpointDictEntry items for UI display
-     */
-    func values() -> [EndpointDictEntry] {
-        var result: [EndpointDictEntry] = []
-        let sorted = entries.sorted { $0.0.rawValue < $1.0.rawValue }
-        for entry in sorted {
-            result.append(entry.value)
+        entries = MixerMethod.allCases.reduce(into: [:]) {
+            $0[$1] = EndpointDictEntry(operation: $1)
         }
-        return result
+    }
+
+    /**
+     Resolve an OSC Address for the given method and endpoint, substituting
+     the values in the template values dictionary into the address template.
+     */
+    func resolveOscAddress(method: MixerMethod,
+                           endpoint: MixerEndpoint,
+                           templateValues: [String: String] = [:]) -> String?
+    {
+        return entries[method]?.resolveOscAddress(endpoint: endpoint,
+                                                  templateValues: templateValues)
     }
 }
 
@@ -53,90 +65,78 @@ class SqMixerEndpointDictionary: ObservableObject {
  */
 struct EndpointDictEntry: Hashable, Identifiable {
     let id = UUID()
-    let operation: EndpointOperationType
-    let paths: [EndpointType: String]
+    let operation: MixerMethod
+    let addressTemplates: [MixerEndpoint: String]
 
-    init(operation: EndpointOperationType) {
+    init(operation: MixerMethod) {
         self.operation = operation
-        paths = Self.pathsFor(operation: operation)
+        addressTemplates = Self.addressTemplatesFor(method: operation)
     }
 
     /**
-     Return the huma-readable title for the entry
+     Resolve an OSC Address for the given endpoint substituting the values in
+     the template values dictionary into the address template.
      */
-    public var title: String {
-        return operation.title
-    }
-
-    /**
-     Resolve a path for the given endpoint typem substituting the values in the
-     path values dictionary into the path template.
-     */
-    func resolvePath(pathType: EndpointType, pathValues: [String: String]) -> String? {
-        guard let path = paths[pathType] else { return nil }
+    func resolveOscAddress(endpoint: MixerEndpoint,
+                           templateValues: [String: String]) -> String?
+    {
+        guard let path = addressTemplates[endpoint] else { return nil }
         var resolvedPath = path
-        for (key, value) in pathValues {
+        for (key, value) in templateValues {
             resolvedPath = resolvedPath.replacingOccurrences(of: "{\(key)}", with: value)
         }
         return resolvedPath
     }
 
     /**
-     Return a sorted list of DisplayPath items for display
+     OSC Address templates for each endpoint.
      */
-    func displayPaths() -> [DisplayPath] {
-        var result: [DisplayPath] = []
-        let sorted = paths.sorted { $0.1 < $1.1 }
-
-        for entry in sorted {
-            result.append(DisplayPath(path: entry.value, parameters: operation.parameters()))
-        }
-        return result
-    }
-
-    /**
-     Data to display a path template and the set of parameter arguments it
-     supports.
-     */
-    struct DisplayPath: Identifiable {
-        let id = UUID()
-        let path: String
-        let parameters: String
-    }
-
-    /**
-     Base path templates for each operation.
-     */
-    static let basePaths = [
-        EndpointType.aux: "/sq/aux/{chNum}",
-        EndpointType.dca: "/sq/dca/{chNum}",
-        EndpointType.fxReturn: "/sq/fxReturn/{chNum}",
-        EndpointType.fxSend: "/sq/fxSend/{chNum}",
-        EndpointType.group: "/sq/group/{chNum}",
-        EndpointType.input: "/sq/input/{chNum}",
-        EndpointType.keys: "/sq/softKey/{keyNum}",
-        EndpointType.main: "/sq/main",
-        EndpointType.matrix: "/sq/matrix/{chNum}",
-        EndpointType.muteGroup: "/sq/muteGroup/{chNum}",
-        EndpointType.scene: "/sq/scene"
+    static let oscAddressTemplates = [
+        MixerEndpoint.aux: "/sq/aux/{chNum}",
+        MixerEndpoint.dca: "/sq/dca/{chNum}",
+        MixerEndpoint.fxReturn: "/sq/fxReturn/{chNum}",
+        MixerEndpoint.fxSend: "/sq/fxSend/{chNum}",
+        MixerEndpoint.group: "/sq/group/{chNum}",
+        MixerEndpoint.input: "/sq/input/{chNum}",
+        MixerEndpoint.keys: "/sq/softKey/{keyNum}",
+        MixerEndpoint.main: "/sq/main",
+        MixerEndpoint.matrix: "/sq/matrix/{chNum}",
+        MixerEndpoint.muteGroup: "/sq/muteGroup/{chNum}",
+        MixerEndpoint.scene: "/sq/scene/{sceneNum}"
     ]
 
     /**
-     Return a dictionary of path templates for the given operation. Each
-     endpoint type supported by the operation will be a key in the result
-     dictionary with a value of the path template.
+     OSC Argument templates for each method.
      */
-    static func pathsFor(operation: EndpointOperationType) -> [EndpointType: String] {
+    static let oscArgumentTemplates = [
+        MixerMethod.balance: "{-100..100}",
+        MixerMethod.level: "{-100..10}",
+        MixerMethod.mute: "{ON|OFF|TOGGLE}",
+        MixerMethod.pan: "{-100..100}",
+        MixerMethod.sendLevel: "{-100..10}",
+        MixerMethod.trigger: "{PRESS|RELEASE}"
+    ]
+
+    /**
+     Return a dictionary of OSC Address templates for the given operation. Each
+     endpoint type supported by the operation will be a key in the result
+     dictionary with a value of the address template.
+     */
+    static func addressTemplatesFor(method: MixerMethod) -> [MixerEndpoint: String] {
         let mixerConfig = SqMixerConfig.singletonInstance()
-        if operation == .sendLevel || operation == .pan {
-            // Path templates for operations with targets need a "{dest}" template
-            return mixerConfig.channelsFor(operation).reduce(into: [:]) {
-                $0[$1] = "\(basePaths[$1]!)/\(operation)/{dest}"
-            }
-        } else {
-            return mixerConfig.channelsFor(operation).reduce(into: [:]) {
-                $0[$1] = "\(basePaths[$1]!)/\(operation)"
-            }
+        var methodTemplate = "\(method)"
+        if method.hasDest { methodTemplate = "to/{dest}/\(method)" }
+        return mixerConfig.channelsFor(method).reduce(into: [:]) {
+            $0[$1] = "\(oscAddressTemplates[$1]!)/\(methodTemplate)"
+        }
+    }
+}
+
+extension MixerMethod {
+    var hasDest: Bool {
+        switch self {
+            case .sendLevel, .pan: true
+            default: false
         }
     }
 }

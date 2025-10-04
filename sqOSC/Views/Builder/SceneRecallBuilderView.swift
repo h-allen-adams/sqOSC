@@ -10,27 +10,27 @@ import SwiftUI
 struct SceneRecallBuilderView: View {
     let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType
+    let method: MixerMethod
 
-    @Binding var resolvedPath: String
-    @State private var selectedChannelType: EndpointType
+    @Binding var resolvedMessage: String
+    @State private var selectedChannelType: MixerEndpoint
     @State private var selectedSceneNum: Int = 1
 
-    init(dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+    init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
         let mixerConfig = SqMixerConfig.singletonInstance()
-        let operation = EndpointOperationType.recall
+        let method = MixerMethod.recall
         self.dictionary = dictionary
         self.mixerConfig = mixerConfig
-        self.operation = operation
-        self._resolvedPath = resolvedPath
-        self.selectedChannelType = mixerConfig.channelsFor(operation).first!
+        self.method = method
+        self._resolvedMessage = resolvedMessage
+        self.selectedChannelType = mixerConfig.channelsFor(method).first!
     }
 
     var body: some View {
         VStack {
             HStack {
                 Picker("Scene Num", selection: $selectedSceneNum) {
-                    ForEach(Array(1 ... 300), id: \.self) {
+                    ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                         Text("\($0)")
                     }
                 }
@@ -38,22 +38,26 @@ struct SceneRecallBuilderView: View {
             }
         }
         .onAppear {
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedChannelType) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedSceneNum) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
     }
 
-    func updateResolvedPath() {
-        resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType)! + " \(selectedSceneNum)"
+    func updateResolvedMessage() {
+        resolvedMessage =
+            dictionary.resolveOscAddress(method: method,
+                                         endpoint: selectedChannelType,
+                                         templateValues: ["sceneNum": "\(selectedSceneNum)"])!
     }
 }
 
 #Preview {
-    @Previewable @State var resolvedPath = ""
-    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    @Previewable @State var resolvedMessage = ""
+    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary(),
+                           resolvedMessage: $resolvedMessage)
 }

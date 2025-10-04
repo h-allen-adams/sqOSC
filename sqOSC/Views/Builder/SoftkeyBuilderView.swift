@@ -10,21 +10,21 @@ import SwiftUI
 struct SoftkeyBuilderView: View {
     let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType
+    let method: MixerMethod
 
-    @Binding var resolvedPath: String
-    @State private var selectedChannelType: EndpointType
+    @Binding var resolvedMessage: String
+    @State private var selectedChannelType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
     @State private var selectedToggle: String = "PRESS"
 
-    init(dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+    init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
         let mixerConfig = SqMixerConfig.singletonInstance()
-        let operation = EndpointOperationType.trigger
+        let method = MixerMethod.trigger
         self.dictionary = dictionary
-        self.operation = operation
+        self.method = method
         self.mixerConfig = mixerConfig
-        self._resolvedPath = resolvedPath
-        self.selectedChannelType = mixerConfig.channelsFor(operation).first!
+        self._resolvedMessage = resolvedMessage
+        self.selectedChannelType = mixerConfig.channelsFor(method).first!
     }
 
     var body: some View {
@@ -45,29 +45,32 @@ struct SoftkeyBuilderView: View {
             }
         }
         .onAppear {
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedChannelType) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedChannelNum) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedToggle) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
     }
 
-    func updateResolvedPath() {
-        let pathValues = [
+    func updateResolvedMessage() {
+        let templateValues = [
             "keyNum": "\(selectedChannelNum)"
         ]
-        resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType, pathValues: pathValues)!
+        resolvedMessage = dictionary.resolveOscAddress(method: method,
+                                                       endpoint: selectedChannelType,
+                                                       templateValues: templateValues)!
             + " \(selectedToggle)"
     }
 }
 
 #Preview {
-    @Previewable @State var resolvedPath = ""
-    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    @Previewable @State var resolvedMessage = ""
+    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary(),
+                       resolvedMessage: $resolvedMessage)
 }

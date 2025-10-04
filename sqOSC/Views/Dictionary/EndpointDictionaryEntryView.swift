@@ -23,7 +23,7 @@ struct EndpointDictionaryEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 1) {
-            Section(header: Text(entry.title).font(.title3)) {
+            Section(header: Text(entry.operation.title).font(.title3)) {
                 ForEach(entry.displayPaths()) { displayPath in
                     EndpointDictionaryDisplayPathView(len: len, displayPath: displayPath)
                 }
@@ -32,6 +32,33 @@ struct EndpointDictionaryEntryView: View {
     }
 }
 
+extension EndpointDictEntry {
+    /**
+     Return a sorted list of DisplayPath items for display
+     */
+    func displayPaths() -> [DisplayPath] {
+        var result: [DisplayPath] = []
+        let sorted = addressTemplates.sorted { $0.1 < $1.1 }
+
+        for entry in sorted {
+            let parameters = EndpointDictEntry.oscArgumentTemplates[operation] ?? ""
+            result.append(DisplayPath(path: entry.value,
+                                      parameters: parameters))
+        }
+        return result
+    }
+
+    /**
+     Data to display a path template and the set of parameter arguments it
+     supports.
+     */
+    struct DisplayPath: Identifiable {
+        let id = UUID()
+        let path: String
+        let parameters: String
+    }
+}
+
 #Preview {
-    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary().entries[EndpointOperationType.sendLevel]!)
+    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary().entries[MixerMethod.sendLevel]!)
 }

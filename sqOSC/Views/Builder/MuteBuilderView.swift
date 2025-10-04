@@ -13,27 +13,27 @@ import SwiftUI
 struct MuteBuilderView: View {
     let mixerConfig: SqMixerConfig
     let dictionary: SqMixerEndpointDictionary
-    let operation: EndpointOperationType
+    let method: MixerMethod
 
-    @Binding var resolvedPath: String
-    @State private var selectedChannelType: EndpointType
+    @Binding var resolvedMessage: String
+    @State private var selectedChannelType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
-    @State private var selectedToggle: String = "ON"
+    @State private var selectedToggle: SqMuteAction = .ON
 
-    init(dictionary: SqMixerEndpointDictionary, resolvedPath: Binding<String>) {
+    init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
         let mixerConfig = SqMixerConfig.singletonInstance()
-        let operation = EndpointOperationType.mute
+        let method = MixerMethod.mute
         self.dictionary = dictionary
         self.mixerConfig = mixerConfig
-        self.operation = operation
-        self._resolvedPath = resolvedPath
-        self.selectedChannelType = mixerConfig.channelsFor(operation).first!
+        self.method = method
+        self._resolvedMessage = resolvedMessage
+        self.selectedChannelType = mixerConfig.channelsFor(method).first!
     }
 
     var body: some View {
         VStack {
             Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(mixerConfig.channelsFor(operation)) { endpoint in
+                ForEach(mixerConfig.channelsFor(method)) { endpoint in
                     Text(endpoint.rawValue)
                 }
             }
@@ -46,37 +46,40 @@ struct MuteBuilderView: View {
                 }
                 .pickerStyle(.menu)
                 Picker("Toggle", selection: $selectedToggle) {
-                    ForEach(["ON", "OFF"], id: \.self) {
-                        Text("\($0)")
+                    ForEach(SqMuteAction.allCases, id: \.self) {
+                        Text("\(String(describing: $0))")
                     }
                 }
                 .pickerStyle(.segmented)
             }
         }
         .onAppear {
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedChannelType) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedChannelNum) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
         .onChange(of: selectedToggle) { _, _ in
-            updateResolvedPath()
+            updateResolvedMessage()
         }
     }
 
-    func updateResolvedPath() {
-        let pathValues = [
+    func updateResolvedMessage() {
+        let templateValues = [
             "chNum": "\(selectedChannelNum)"
         ]
-        resolvedPath = dictionary.resolvePath(operation: operation, endpoint: selectedChannelType, pathValues: pathValues)!
+        resolvedMessage = dictionary.resolveOscAddress(method: method,
+                                                       endpoint: selectedChannelType,
+                                                       templateValues: templateValues)!
             + " \(selectedToggle)"
     }
 }
 
 #Preview {
-    @Previewable @State var resolvedPath = ""
-    MuteBuilderView(dictionary: SqMixerEndpointDictionary(), resolvedPath: $resolvedPath)
+    @Previewable @State var resolvedMessage = ""
+    MuteBuilderView(dictionary: SqMixerEndpointDictionary(),
+                    resolvedMessage: $resolvedMessage)
 }
