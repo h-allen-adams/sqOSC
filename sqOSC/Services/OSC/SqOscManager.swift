@@ -58,7 +58,8 @@ class SqOscManager: ObservableObject {
     }
 
     /**
-     OSC Message handler. Dispatch the OSC Message to the configured Address Space.
+     OSC Message handler. Dispatch the OSC Message to the configured Address
+     Space.
      */
     @Sendable public func dispatchOscMessage(message: OSCMessage,
                                              timeTag: OSCTimeTag,
@@ -66,13 +67,17 @@ class SqOscManager: ObservableObject {
                                              port: UInt16)
     {
         // logMessage(label: "MESSAGE", message: "\(message)")
-        // execute closures for matching methods, and returns the matching method IDs
-        let methodIDs = addressSpace.dispatch(message: message, host: host, port: port)
+        // execute closures for matching methods, and returns the matching
+        // method IDs
+        let methodIDs = addressSpace.dispatch(message: message,
+                                              host: host,
+                                              port: port)
 
-        // if no IDs are returned, it means that the OSC message address pattern did not match any
-        // that were registered
+        // if no IDs are returned, it means that the OSC message address pattern
+        // did not match any that were registered
         if methodIDs.isEmpty {
-            logMessage(label: message.addressPattern.stringValue, message: "UNSUPPORTED")
+            logMessage(label: message.addressPattern.stringValue,
+                       message: "UNSUPPORTED")
         }
     }
 
@@ -121,7 +126,8 @@ class OscMessageSender: ObservableObject {
 
         let oscMessage = OSCMessage(OSCAddressPattern(address),
                                     values: oscValues)
-        let methodIDs = addressSpace!.dispatch(message: oscMessage, host: "localhost", port: 0)
+        let methodIDs = addressSpace!.dispatch(message: oscMessage,
+                                               host: "localhost", port: 0)
         if methodIDs.isEmpty {
             print("\(oscMessage.addressPattern.stringValue): UNSUPPORTED")
         }
