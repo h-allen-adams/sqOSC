@@ -23,6 +23,7 @@ enum MixerMethod:
     case mute
     case sendLevel
     case pan
+    case assign
     case level
     case balance
     case trigger
@@ -65,8 +66,7 @@ enum SqButtonState: String {
     case RELEASE
 }
 
-enum SqMuteAction: String, CaseIterable {
+enum SqToggleAction: String, CaseIterable {
     case ON
     case OFF
-    case TOGGLE
 }

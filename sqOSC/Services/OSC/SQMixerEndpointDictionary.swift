@@ -109,9 +109,10 @@ struct EndpointDictEntry: Hashable, Identifiable {
      OSC Argument templates for each method.
      */
     static let oscArgumentTemplates = [
+        MixerMethod.assign: "{ON|OFF}",
         MixerMethod.balance: "{-100..100}",
         MixerMethod.level: "{-100..10}",
-        MixerMethod.mute: "{ON|OFF|TOGGLE}",
+        MixerMethod.mute: "{ON|OFF}",
         MixerMethod.pan: "{-100..100}",
         MixerMethod.sendLevel: "{-100..10}",
         MixerMethod.trigger: "{PRESS|RELEASE}"
@@ -135,8 +136,8 @@ struct EndpointDictEntry: Hashable, Identifiable {
 extension MixerMethod {
     var hasDest: Bool {
         switch self {
-            case .sendLevel, .pan: true
-            default: false
+        case .assign, .sendLevel, .pan: true
+        default: false
         }
     }
 }

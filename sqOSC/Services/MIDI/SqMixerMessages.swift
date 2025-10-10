@@ -36,6 +36,37 @@ class SqMixerMessages
     let mixerConfig = SqMixerConfig.singletonInstance()
 
     /**
+     Generate an Mix Assignment message to assign the audio of the source
+     channel to be directed to the destination channel. The format of these
+     messages is documented in specification section 3.6 "Mix Assignment".
+     */
+    func assignMessage(midiChannel: Int,
+                       sourceType: MixerEndpoint,
+                       sourceChannel: Int,
+                       destType: MixerEndpoint,
+                       destChannel: Int,
+                       action: SqToggleAction) -> MIDIEvent?
+    {
+        guard let numCols = mixerConfig.channelCount(destType) else { return nil }
+        guard let pn0 =
+            mixerConfig.channelToChannelParameter(.assign,
+                                                  source: sourceType,
+                                                  dest: destType) else { return nil }
+        let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
+        switch action
+        {
+        case SqToggleAction.ON:
+            return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
+                                  data: (UInt7(0), UInt7(1)),
+                                  channel: UInt4(midiChannel - 1))
+        case SqToggleAction.OFF:
+            return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
+                                  data: (UInt7(0), UInt7(0)),
+                                  channel: UInt4(midiChannel - 1))
+        }
+    }
+
+    /**
      Generate an Output Level message to set the audio level on the
      outputChannel. The format of these messages is documented in specification
      section 3.4 "Levels". Audio Level values are encoded using the Linear
@@ -92,7 +123,7 @@ class SqMixerMessages
     func muteMessage(midiChannel: Int,
                      type: MixerEndpoint,
                      channel: Int,
-                     action: SqMuteAction) -> MIDIEvent?
+                     action: SqToggleAction) -> MIDIEvent?
     {
         if let pn0 = mixerConfig.channelParameter(.mute, type)
         {
@@ -100,20 +131,13 @@ class SqMixerMessages
 
             switch action
             {
-            case SqMuteAction.ON:
+            case SqToggleAction.ON:
                 return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
                                       data: (UInt7(0), UInt7(1)),
                                       channel: UInt4(midiChannel - 1))
-            case SqMuteAction.OFF:
+            case SqToggleAction.OFF:
                 return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
                                       data: (UInt7(0), UInt7(0)),
-                                      channel: UInt4(midiChannel - 1))
-            case SqMuteAction.TOGGLE:
-                let controller =
-                    MIDIEvent.AssignableController.raw(parameter: toNrpnParam(pn),
-                                                       dataEntryMSB: UInt7("60".hex!.value),
-                                                       dataEntryLSB: nil)
-                return MIDIEvent.nrpn(controller,
                                       channel: UInt4(midiChannel - 1))
             }
         }
@@ -164,9 +188,10 @@ class SqMixerMessages
                         panLevel: Int) -> MIDIEvent?
     {
         guard let numCols = mixerConfig.channelCount(destType) else { return nil }
-        guard let pn0 = mixerConfig.channelToChannelParameter(.pan,
-                                                              source: sourceType,
-                                                              dest: destType) else { return nil }
+        guard let pn0 =
+            mixerConfig.channelToChannelParameter(.pan,
+                                                  source: sourceType,
+                                                  dest: destType) else { return nil }
         let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
         let pv = panValue(panLevel: panLevel)
         return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
@@ -185,8 +210,9 @@ class SqMixerMessages
     {
         let bk = scene / 128
         let pg = (scene % 128) - 1
+        let bank = MIDIEvent.ProgramChange.Bank.bankSelect(UInt14(bk))
         let event = MIDIEvent.programChange(program: UInt7(pg),
-                                            bank: MIDIEvent.ProgramChange.Bank.bankSelect(UInt14(bk)),
+                                            bank: bank,
                                             channel: UInt4(midiChannel) - 1)
         return event
     }
@@ -200,24 +226,22 @@ class SqMixerMessages
                         button: Int,
                         state: SqButtonState) -> MIDIEvent?
     {
-        let sk = Values.hexToDec("30") + button - 1
+        let sk = mixerConfig.softKeyParameters.noteZeroParameter() + button - 1
         switch state
         {
         case SqButtonState.PRESS:
+            let vel = mixerConfig.softKeyParameters.pressVelocityParameter()
+            let velocity = MIDIEvent.NoteVelocity.midi1(UInt7(vel))
             return try? MIDIEvent.noteOn(MIDINote(sk),
-                                         velocity: MIDIEvent.NoteVelocity.midi1(UInt7("7F".hex!.value)),
+                                         velocity: velocity,
                                          channel: UInt4(midiChannel - 1))
         case SqButtonState.RELEASE:
+            let vel = mixerConfig.softKeyParameters.releaseVelocityParameter()
+            let velocity = MIDIEvent.NoteVelocity.midi1(UInt7(vel))
             return try? MIDIEvent.noteOff(MIDINote(sk),
-                                          velocity: MIDIEvent.NoteVelocity.midi1(UInt7("00".hex!.value)),
+                                          velocity: velocity,
                                           channel: UInt4(midiChannel - 1))
         }
-    }
-
-    private func channelByte(_ midiChannel: Int, flag: String = "B") -> String
-    {
-        let hex = String(midiChannel - 1, radix: 16).uppercased()
-        return "\(flag)\(hex)"
     }
 
     /**
@@ -241,7 +265,7 @@ class SqMixerMessages
     // Pan -100: 00 00, 0: 3F 7F, 100: 7F 7F
     func panValue(panLevel: Int) -> Int
     {
-        let zero = Values.toParameterNumber("3F", "7F")
+        let zero = mixerConfig.panZeroValue()
         let factor = Double(zero) / 100.0
         var workingLevel = panLevel
         if workingLevel > 100 { workingLevel = 100 }

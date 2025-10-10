@@ -32,11 +32,11 @@ final class SqMixerMessagesTests: XCTestCase {
     }
 
     func testMuteMessage() throws {
-        XCTAssertEqual(toString(mixerMessages.muteMessage(midiChannel: 1, type: MixerEndpoint.input, channel: 1, action: SqMuteAction.ON)),
+        XCTAssertEqual(toString(mixerMessages.muteMessage(midiChannel: 1, type: MixerEndpoint.input, channel: 1, action: SqToggleAction.ON)),
                        "B0 63 00 B0 62 00 B0 06 00 B0 26 01")
-        XCTAssertEqual(toString(mixerMessages.muteMessage(midiChannel: 1, type: MixerEndpoint.main, channel: 1, action: SqMuteAction.OFF)),
+        XCTAssertEqual(toString(mixerMessages.muteMessage(midiChannel: 1, type: MixerEndpoint.main, channel: 1, action: SqToggleAction.OFF)),
                        "B0 63 00 B0 62 44 B0 06 00 B0 26 00")
-        XCTAssertEqual(toString(mixerMessages.muteMessage(midiChannel: 7, type: MixerEndpoint.muteGroup, channel: 4, action: SqMuteAction.ON)),
+        XCTAssertEqual(toString(mixerMessages.muteMessage(midiChannel: 7, type: MixerEndpoint.muteGroup, channel: 4, action: SqToggleAction.ON)),
                        "B6 63 04 B6 62 03 B6 06 00 B6 26 01")
 //        XCTAssertEqual(toString(mixerMessages.muteMessage(midiChannel: 1, type: EndpointType.input, channel: 1, action: SqMuteAction.TOGGLE)),
 //                       "B0 63 00 B0 62 00 B0 60 00")
@@ -95,6 +95,25 @@ final class SqMixerMessagesTests: XCTestCase {
         XCTAssertEqual(toString(mixerMessages.softKeyMessage(midiChannel: 1, button: 1, state: SqButtonState.RELEASE)), "80 30 00")
         XCTAssertEqual(toString(mixerMessages.softKeyMessage(midiChannel: 5, button: 7, state: SqButtonState.PRESS)), "94 36 7F")
         XCTAssertEqual(toString(mixerMessages.softKeyMessage(midiChannel: 5, button: 7, state: SqButtonState.RELEASE)), "84 36 00")
+    }
+
+    func testMixAssignment() throws {
+        XCTAssertEqual(toString(mixerMessages.assignMessage(midiChannel: 1,
+                                                            sourceType: .input, sourceChannel: 1,
+                                                            destType: .main, destChannel: 1, action: .ON)),
+                       "B0 63 60 B0 62 00 B0 06 00 B0 26 01")
+        XCTAssertEqual(toString(mixerMessages.assignMessage(midiChannel: 1,
+                                                            sourceType: .input, sourceChannel: 1,
+                                                            destType: .main, destChannel: 1, action: .OFF)),
+                       "B0 63 60 B0 62 00 B0 06 00 B0 26 00")
+        XCTAssertEqual(toString(mixerMessages.assignMessage(midiChannel: 1,
+                                                            sourceType: .fxReturn, sourceChannel: 1,
+                                                            destType: .aux, destChannel: 7, action: .ON)),
+                       "B0 63 66 B0 62 1A B0 06 00 B0 26 01")
+        XCTAssertEqual(toString(mixerMessages.assignMessage(midiChannel: 2,
+                                                            sourceType: .group, sourceChannel: 1,
+                                                            destType: .aux, destChannel: 3, action: .OFF)),
+                       "B1 63 65 B1 62 06 B1 06 00 B1 26 00")
     }
 
     private func expectLinearFader(dbLevel: Int, vce: String, vfe: String) {

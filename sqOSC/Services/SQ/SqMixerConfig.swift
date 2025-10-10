@@ -35,6 +35,16 @@ class SqMixerConfig: Codable {
         [MixerMethod: [MixerEndpoint: [MixerEndpoint: String]]]
 
     /**
+     Soft Key Parameters (first note, press velocity, release velocity)
+     */
+    let softKeyParameters: SoftKeyParameters
+
+    /**
+     Parameter value for centered pan/balance
+     */
+    private let panZeroParameter: String
+
+    /**
      Return the number of channels associated with the given channel/endpoint type
      */
     func channelCount(_ channelType: MixerEndpoint) -> Int? {
@@ -53,13 +63,18 @@ class SqMixerConfig: Codable {
         case .trigger:
             return [.keys]
         default:
+            var entries: [MixerEndpoint]
             if let channelParameter = channelParameters[operation] {
-                return Array(channelParameter.keys)
+                entries = Array(channelParameter.keys)
             } else if let channelParameter = channelToChannelParameters[operation] {
-                return Array(channelParameter.keys)
+                entries = Array(channelParameter.keys)
             } else {
-                return []
+                entries = []
             }
+
+            let allCases = MixerEndpoint.allCases
+            let sorted = entries.sorted { allCases.firstIndex(of: $0)! < allCases.firstIndex(of: $1)! }
+            return sorted
         }
     }
 
@@ -131,6 +146,15 @@ class SqMixerConfig: Codable {
     }
 
     /**
+     Return the (integer) parameter value corresponding to zero (centered)
+     pan/balance
+     */
+    func panZeroValue() -> Int {
+        let bytes = panZeroParameter.split(separator: " ")
+        return Values.toParameterNumber(String(bytes[0]), String(bytes[1]))
+    }
+
+    /**
      Return the singleton instance
      */
     static func singletonInstance() -> SqMixerConfig {
@@ -149,5 +173,26 @@ class SqMixerConfig: Codable {
         } catch {
             fatalError("Unable to decode sq.plist")
         }
+    }
+}
+
+/**
+ Parameters for Soft Key Actions
+ */
+public struct SoftKeyParameters: Codable {
+    private let noteZero: String
+    private let pressVelocity: String
+    private let releaseVelocity: String
+
+    func noteZeroParameter() -> Int {
+        return noteZero.hex!.value
+    }
+
+    func pressVelocityParameter() -> Int {
+        return pressVelocity.hex!.value
+    }
+
+    func releaseVelocityParameter() -> Int {
+        return releaseVelocity.hex!.value
     }
 }

@@ -67,35 +67,72 @@ class SqOscEndpointRegistrar {
                 populateOutputLevel(channelType, chNum)
             }
 
-            // If the channel supports send levels, create a set of operations
-            // for each destination channel which can receive audio from the
-            // current channel
-            if mixerConfig.channelSupports(.sendLevel, channelType) {
-                // For each possible destination type which can recieve audio
-                // from the current channel
-                for destType in mixerConfig.channelTargets(.sendLevel,
-                                                           source: channelType)
+            // Register assign, sendLevel, and pan messages as appropriate
+            populateChannelToChannelMessage(.assign, channelType, chNum,
+                                            populator: populateMixAssignment)
+            populateChannelToChannelMessage(.pan, channelType, chNum,
+                                            populator: populateSendPan)
+            populateChannelToChannelMessage(.sendLevel, channelType, chNum,
+                                            populator: populateSendLevel)
+        }
+    }
+
+    private func populateChannelToChannelMessage(_ operation: MixerMethod,
+                                                 _ sourceType: MixerEndpoint,
+                                                 _ sourceNum: Int,
+                                                 populator: (_: MixerEndpoint,
+                                                             _: Int,
+                                                             _: MixerEndpoint,
+                                                             _: Int) -> Void)
+    {
+        if mixerConfig.channelSupports(.sendLevel, sourceType) {
+            // For each possible destination type which can recieve audio
+            // from the current channel
+            for destType in mixerConfig.channelTargets(.sendLevel,
+                                                       source: sourceType)
+            {
+                // Register a sendLevel operation from the current channel
+                // to each possible destination channel
+                let destTypeCount = mixerConfig.channelCount(destType)!
+                for destChannel in 1 ... destTypeCount {
+                    populator(sourceType, sourceNum, destType, destChannel)
+                }
+            }
+        }
+    }
+
+    /**
+     Register the Mix Assignment OSC Method for the source/dest channel pair.
+     The Method argument will be a string with a value of "ON" or "OFF". The
+     message handling closure will decode the argument and use the
+     SqMixerMessages.assignMessage method to publish a MIDI message to the
+     mixer.
+     */
+    private func populateMixAssignment(_ sourceType: MixerEndpoint,
+                                       _ sourceNum: Int,
+                                       _ destType: MixerEndpoint,
+                                       _ destNum: Int)
+    {
+        let templateValues = [
+            "chNum": "\(sourceNum)",
+            "dest": destFor(destType, destNum)
+        ]
+        if let oscAddress =
+            dictionary.resolveOscAddress(method: MixerMethod.assign,
+                                         endpoint: sourceType,
+                                         templateValues: templateValues)
+        {
+            addressSpace?.register(localAddress: oscAddress) { values, _, _ in
+                guard let action = try? SqToggleAction(rawValue: values.masked(String.self)) else { return }
+                if let midiMessage = self.mixerMessages
+                    .assignMessage(midiChannel: self.preferences.midiChannel,
+                                   sourceType: sourceType,
+                                   sourceChannel: sourceNum,
+                                   destType: destType,
+                                   destChannel: destNum,
+                                   action: action)
                 {
-                    // Determine if the method also supports pan for this
-                    // channel pair
-                    let hasPan = mixerConfig
-                        .channelTargets(.pan, source: channelType)
-                        .contains(destType)
-
-                    // Register a sendLevel operation from the current channel
-                    // to each possible destination channel
-                    let destTypeCount = mixerConfig.channelCount(destType)!
-                    for destChannel in 1 ... destTypeCount {
-                        populateSendLevel(channelType, chNum,
-                                          destType, destChannel)
-
-                        // Channels which support sendLevel messages may also
-                        // support pan messages
-                        if hasPan {
-                            populateSendPan(channelType, chNum,
-                                            destType, destChannel)
-                        }
-                    }
+                    await self.publisher("\(oscAddress) \(values)", midiMessage)
                 }
             }
         }
@@ -178,7 +215,7 @@ class SqOscEndpointRegistrar {
                                          templateValues: templateValues)
         {
             addressSpace?.register(localAddress: oscAddress) { values, _, _ in
-                guard let action = try? SqMuteAction(rawValue: values.masked(String.self)) else { return }
+                guard let action = try? SqToggleAction(rawValue: values.masked(String.self)) else { return }
                 if let midiMessage = self.mixerMessages
                     .muteMessage(midiChannel: self.preferences.midiChannel,
                                  type: channelType,

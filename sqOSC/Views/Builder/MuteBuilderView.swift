@@ -18,7 +18,7 @@ struct MuteBuilderView: View {
     @Binding var resolvedMessage: String
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
-    @State private var selectedToggle: SqMuteAction = .ON
+    @State private var selectedToggle: SqToggleAction = .ON
 
     init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
         let mixerConfig = SqMixerConfig.singletonInstance()
@@ -46,7 +46,7 @@ struct MuteBuilderView: View {
                 }
                 .pickerStyle(.menu)
                 Picker("Toggle", selection: $selectedToggle) {
-                    ForEach(SqMuteAction.allCases, id: \.self) {
+                    ForEach(SqToggleAction.allCases, id: \.self) {
                         Text("\(String(describing: $0))")
                     }
                 }

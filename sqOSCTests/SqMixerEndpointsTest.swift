@@ -94,6 +94,17 @@ final class SqMixerEndpointsTest: XCTestCase {
                        "B0 63 52 B0 62 5C B0 06 4C B0 26 65")
     }
 
+    func testRegisterMixAssignment() throws {
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/main/assign ON"),
+                       "B0 63 60 B0 62 00 B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/input/1/to/main/assign OFF"),
+                       "B0 63 60 B0 62 00 B0 06 00 B0 26 00")
+        XCTAssertEqual(callEndpoint("/sq/fxReturn/1/to/aux/7/assign ON"),
+                       "B0 63 66 B0 62 1A B0 06 00 B0 26 01")
+        XCTAssertEqual(callEndpoint("/sq/group/1/to/aux/3/assign OFF"),
+                       "B0 63 65 B0 62 06 B0 06 00 B0 26 00")
+    }
+
     func testRegisterOutputBalance() throws {
         XCTAssertEqual(callEndpoint("/sq/main/balance -100"),
                        "B0 63 5F B0 62 00 B0 06 00 B0 26 00")

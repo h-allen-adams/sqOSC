@@ -153,6 +153,63 @@
 				<string>5E 27</string>
 			</dict>
 		</dict>
+		<key>assign</key>
+		<dict>
+			<key>input</key>
+			<dict>
+				<key>main</key>
+				<string>60 00</string>
+				<key>aux</key>
+				<string>60 44</string>
+				<key>group</key>
+				<string>66 74</string>
+				<key>fxSend</key>
+				<string>6C 14</string>
+			</dict>
+			<key>group</key>
+			<dict>
+				<key>main</key>
+				<string>60 30</string>
+				<key>aux</key>
+				<string>65 04</string>
+				<key>fxSend</key>
+				<string>6D 54</string>
+				<key>matrix</key>
+				<string>6E 4B</string>
+			</dict>
+			<key>fxReturn</key>
+			<dict>
+				<key>main</key>
+				<string>60 3C</string>
+				<key>aux</key>
+				<string>66 14</string>
+				<key>group</key>
+				<string>6B 34</string>
+				<key>fxSend</key>
+				<string>6E 04</string>
+			</dict>
+			<key>main</key>
+			<dict>
+				<key>matrix</key>
+				<string>6E 24</string>
+			</dict>
+			<key>aux</key>
+			<dict>
+				<key>matrix</key>
+				<string>6E 27</string>
+			</dict>
+		</dict>
 	</dict>
+	<key>softKeyParameters</key>
+	<dict>
+		<key>noteZero</key>
+		<string>30</string>
+		<key>pressVelocity</key>
+		<string>7F</string>
+		<key>releaseVelocity</key>
+		<string>00</string>
+	</dict>
+	<key>panZeroParameter</key>
+	<string>3F 7F</string>
 </dict>
 </plist>

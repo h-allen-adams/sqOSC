@@ -30,6 +30,9 @@ struct BuilderView: View {
                 // ...and display the view containing the control options
                 // specific to that operation.
                 switch selectedMethod {
+                case .assign:
+                    MixAssignmentBuilderView(dictionary: dictionary,
+                                             resolvedMessage: $resolvedMessage)
                 case .mute:
                     MuteBuilderView(dictionary: dictionary,
                                     resolvedMessage: $resolvedMessage)

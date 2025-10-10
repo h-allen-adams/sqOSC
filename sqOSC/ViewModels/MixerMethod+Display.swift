@@ -16,6 +16,7 @@ extension MixerMethod {
      */
     var title: String {
         switch self {
+        case .assign: "Mix Assignment"
         case .balance: "Output Balance"
         case .level: "Output Level"
         case .mute: "Channel Mute"
