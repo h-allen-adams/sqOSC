@@ -12,8 +12,8 @@ import MIDIKitIO
 /**
  Store and access MIDI settings in UserDefaults
  */
-final class MidiPreferences {
-    static let midiStandard = MidiPreferences(userDefaults: .standard)
+final class MixerPreferences {
+    static let midiStandard = MixerPreferences(userDefaults: .standard)
     fileprivate let userDefaults: UserDefaults
 
     init(userDefaults: UserDefaults) {
@@ -32,6 +32,9 @@ final class MidiPreferences {
     @UserDefault(PrefKeys.midiChannel, defaultValue: 1)
     var midiChannel: Int
 
+    @UserDefault(PrefKeys.mixerModel, defaultValue: MixerModel.sq)
+    var mixerModel: MixerModel
+
     enum PrefKeys {
         static let midiChannel = "midiChannel"
 
@@ -40,6 +43,8 @@ final class MidiPreferences {
 
         static let midiOutID = "midiOutput"
         static let midiOutName = "midiOutputName"
+
+        static let mixerModel = "mixerModel"
     }
 }
 
@@ -59,9 +64,9 @@ struct UserDefault<Value> {
     }
 
     public static subscript(
-        _enclosingInstance instance: MidiPreferences,
-        wrapped wrappedKeyPath: ReferenceWritableKeyPath<MidiPreferences, Value>,
-        storage storageKeyPath: ReferenceWritableKeyPath<MidiPreferences, Self>
+        _enclosingInstance instance: MixerPreferences,
+        wrapped wrappedKeyPath: ReferenceWritableKeyPath<MixerPreferences, Value>,
+        storage storageKeyPath: ReferenceWritableKeyPath<MixerPreferences, Self>
     ) -> Value {
         get {
             let container = instance.userDefaults

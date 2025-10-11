@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SceneRecallBuilderView: View {
-    let mixerConfig: SqMixerConfig
+    let mixerConfig: MixerConfig
     let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
 
@@ -17,7 +17,7 @@ struct SceneRecallBuilderView: View {
     @State private var selectedSceneNum: Int = 1
 
     init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
-        let mixerConfig = SqMixerConfig.singletonInstance()
+        let mixerConfig = dictionary.mixerConfig
         let method = MixerMethod.recall
         self.dictionary = dictionary
         self.mixerConfig = mixerConfig
@@ -58,6 +58,6 @@ struct SceneRecallBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedMessage = ""
-    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary(),
+    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary(.sq),
                            resolvedMessage: $resolvedMessage)
 }

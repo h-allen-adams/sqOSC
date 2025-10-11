@@ -72,5 +72,5 @@ struct BuilderView: View {
 }
 
 #Preview {
-    BuilderView(dictionary: SqMixerEndpointDictionary())
+    BuilderView(dictionary: SqMixerEndpointDictionary(.sq))
 }

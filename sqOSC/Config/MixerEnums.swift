@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum MixerModel: String, Codable, CaseIterable, CodingKeyRepresentable, Identifiable {
+    var id: Self { self }
+
+    case sq
+}
+
 /**
  Define the basic Mixer Operation types. These values map directly to OSC
  Methods in our OSC Address Space.

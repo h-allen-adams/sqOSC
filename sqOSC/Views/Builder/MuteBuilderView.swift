@@ -11,7 +11,7 @@ import SwiftUI
  This view contains message builder options for mute operations
  */
 struct MuteBuilderView: View {
-    let mixerConfig: SqMixerConfig
+    let mixerConfig: MixerConfig
     let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
 
@@ -21,7 +21,7 @@ struct MuteBuilderView: View {
     @State private var selectedToggle: SqToggleAction = .ON
 
     init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
-        let mixerConfig = SqMixerConfig.singletonInstance()
+        let mixerConfig = dictionary.mixerConfig
         let method = MixerMethod.mute
         self.dictionary = dictionary
         self.mixerConfig = mixerConfig
@@ -80,6 +80,6 @@ struct MuteBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedMessage = ""
-    MuteBuilderView(dictionary: SqMixerEndpointDictionary(),
+    MuteBuilderView(dictionary: SqMixerEndpointDictionary(.sq),
                     resolvedMessage: $resolvedMessage)
 }

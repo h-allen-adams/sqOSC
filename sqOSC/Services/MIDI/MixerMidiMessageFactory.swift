@@ -31,9 +31,14 @@ import SwiftRadix
 
  See https://www.allen-heath.com/media/SQ-MIDI-Protocol-Issue1.pdf
  */
-class SqMixerMessages
+class MixerMidiMessageFactory
 {
-    let mixerConfig = SqMixerConfig.singletonInstance()
+    let mixerConfig: MixerConfig
+
+    init(mixerConfig: MixerConfig)
+    {
+        self.mixerConfig = mixerConfig
+    }
 
     /**
      Generate an Mix Assignment message to assign the audio of the source

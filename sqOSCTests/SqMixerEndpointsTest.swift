@@ -16,7 +16,7 @@ final class SqMixerEndpointsTest: XCTestCase {
     private let flag = DispatchSemaphore(value: 0)
 
     override func setUpWithError() throws {
-        endpointRegistrar = SqOscEndpointRegistrar(dictionary: SqMixerEndpointDictionary(),
+        endpointRegistrar = SqOscEndpointRegistrar(dictionary: SqMixerEndpointDictionary(.sq),
                                                    preferences: .midiStandard)
         { _, message in
             self.message = MidiMessagePublisher.toString(message)

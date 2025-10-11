@@ -16,11 +16,12 @@ import OSCKit
  MIDI Message.
  */
 class SqOscManager: ObservableObject {
-    private let addressSpace = OSCAddressSpace()
+    private let addressSpace: OSCAddressSpace
     private let logger: LogPublisher
     private let oscServer = OSCUDPServer(port: 9903)
 
-    init(logger: @escaping LogPublisher) {
+    init(addressSpace: OSCAddressSpace, logger: @escaping LogPublisher) {
+        self.addressSpace = addressSpace
         self.logger = logger
     }
 
@@ -47,14 +48,6 @@ class SqOscManager: ObservableObject {
         oscServer.stop()
         logger("OSC Server Stopped")
         print("OSC Server Stopped")
-    }
-
-    /**
-     Populate the OSC Address Space using the given registrar
-     */
-    func populateOscAddressSpace(with: SqOscEndpointRegistrar) {
-        logger("Initializing OSC Address Space")
-        with.populate(addressSpace: addressSpace)
     }
 
     /**

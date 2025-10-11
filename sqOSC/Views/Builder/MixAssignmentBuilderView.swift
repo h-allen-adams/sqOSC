@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MixAssignmentBuilderView: View {
-    let mixerConfig: SqMixerConfig
+    let mixerConfig: MixerConfig
     let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
     
@@ -22,7 +22,7 @@ struct MixAssignmentBuilderView: View {
     init(dictionary: SqMixerEndpointDictionary,
          resolvedMessage: Binding<String>)
     {
-        let mixerConfig = SqMixerConfig.singletonInstance()
+        let mixerConfig = dictionary.mixerConfig
         let method = MixerMethod.assign
         self.mixerConfig = mixerConfig
         self.method = method
@@ -145,6 +145,6 @@ struct MixAssignmentBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedMessage = ""
-    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary(),
+    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary(.sq),
                              resolvedMessage: $resolvedMessage)
 }

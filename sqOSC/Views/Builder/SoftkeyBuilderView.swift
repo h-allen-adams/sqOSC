@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SoftkeyBuilderView: View {
-    let mixerConfig: SqMixerConfig
+    let mixerConfig: MixerConfig
     let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
 
@@ -18,7 +18,7 @@ struct SoftkeyBuilderView: View {
     @State private var selectedToggle: String = "PRESS"
 
     init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
-        let mixerConfig = SqMixerConfig.singletonInstance()
+        let mixerConfig = dictionary.mixerConfig
         let method = MixerMethod.trigger
         self.dictionary = dictionary
         self.method = method
@@ -71,6 +71,6 @@ struct SoftkeyBuilderView: View {
 
 #Preview {
     @Previewable @State var resolvedMessage = ""
-    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary(),
+    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary(.sq),
                        resolvedMessage: $resolvedMessage)
 }

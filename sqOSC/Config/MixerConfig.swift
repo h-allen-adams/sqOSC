@@ -11,8 +11,11 @@ import Foundation
  Singleton Mixer Configuration values based on the contents of the sq.plist
  file.
  */
-class SqMixerConfig: Codable {
-    private static let _instance = defaultConfig()
+class MixerConfig: Codable {
+    /**
+     Mixer Model
+     */
+    public let model: MixerModel
 
     /**
      Channel counts: [channel: count]
@@ -154,24 +157,14 @@ class SqMixerConfig: Codable {
         return Values.toParameterNumber(String(bytes[0]), String(bytes[1]))
     }
 
-    /**
-     Return the singleton instance
-     */
-    static func singletonInstance() -> SqMixerConfig {
-        return _instance
-    }
-
-    /**
-     Initialize an instance by readling the sq.plist file
-     */
-    private static func defaultConfig() -> SqMixerConfig {
-        let settingsUrl = Bundle.main.url(forResource: "sq", withExtension: "plist")
+    static func load(_ model: MixerModel) -> MixerConfig {
+        let settingsUrl = Bundle.main.url(forResource: "\(model)", withExtension: "plist")
         let settingsData = try! Data(contentsOf: settingsUrl!)
         do {
             let decoder = PropertyListDecoder()
-            return try decoder.decode(SqMixerConfig.self, from: settingsData)
+            return try decoder.decode(MixerConfig.self, from: settingsData)
         } catch {
-            fatalError("Unable to decode sq.plist")
+            fatalError("Unable to decode \(model).plist")
         }
     }
 }

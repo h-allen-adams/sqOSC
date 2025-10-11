@@ -9,7 +9,7 @@
 import XCTest
 
 final class SqMixerConfigTest: XCTestCase {
-    let mixerConfig = SqMixerConfig.singletonInstance()
+    let mixerConfig = MixerConfig.load(.sq)
 
     func testEndpointCounts() throws {
         XCTAssertEqual(mixerConfig.channelCount(.aux), 12)

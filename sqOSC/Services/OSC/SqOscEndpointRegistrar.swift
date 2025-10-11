@@ -14,27 +14,28 @@ import OSCKit
  to create and publish the corresponding MIDI message.
  */
 class SqOscEndpointRegistrar {
-    let dictionary: SqMixerEndpointDictionary
-    let mixerConfig = SqMixerConfig.singletonInstance()
-    private let preferences: MidiPreferences
-    private let mixerMessages: SqMixerMessages
     private var addressSpace: OSCAddressSpace?
+    private let dictionary: SqMixerEndpointDictionary
+    private let mixerConfig: MixerConfig
+    private let preferences: MixerPreferences
+    private let mixerMessages: MixerMidiMessageFactory
     private let publisher: MessagePublisher
 
     init(dictionary: SqMixerEndpointDictionary,
-         preferences: MidiPreferences,
+         preferences: MixerPreferences,
          publisher: @escaping MessagePublisher)
     {
         self.preferences = preferences
         self.dictionary = dictionary
         self.publisher = publisher
-        self.mixerMessages = SqMixerMessages()
+        self.mixerConfig = dictionary.mixerConfig
+        self.mixerMessages = MixerMidiMessageFactory(mixerConfig: dictionary.mixerConfig)
     }
 
     /**
      Register endpoint dictionary entries with the given OSCAddressSpace.
      */
-    func populate(addressSpace: OSCAddressSpace?) {
+    func populate(addressSpace: OSCAddressSpace) {
         self.addressSpace = addressSpace
 
         // Register Scene and SoftKey operations

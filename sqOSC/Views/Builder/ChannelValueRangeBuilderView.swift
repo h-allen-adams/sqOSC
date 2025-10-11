@@ -12,7 +12,7 @@ import SwiftUI
  operations.
  */
 struct ChannelValueRangeBuilderView: View {
-    let mixerConfig: SqMixerConfig
+    let mixerConfig: MixerConfig
     let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
 
@@ -25,7 +25,7 @@ struct ChannelValueRangeBuilderView: View {
          dictionary: SqMixerEndpointDictionary,
          resolvedMessage: Binding<String>)
     {
-        let mixerConfig = SqMixerConfig.singletonInstance()
+        let mixerConfig = dictionary.mixerConfig
         self.mixerConfig = mixerConfig
         self.method = method
         self.dictionary = dictionary
@@ -85,6 +85,6 @@ struct ChannelValueRangeBuilderView: View {
 #Preview {
     @Previewable @State var resolvedMessage = ""
     ChannelValueRangeBuilderView(method: .balance,
-                                 dictionary: SqMixerEndpointDictionary(),
+                                 dictionary: SqMixerEndpointDictionary(.sq),
                                  resolvedMessage: $resolvedMessage)
 }

@@ -33,7 +33,7 @@ import Foundation
  channels: "/sq/input/1/mute", "/sq/input/2/mute", etc.
  */
 class SqMixerEndpointDictionary: ObservableObject {
-    let mixerConfig = SqMixerConfig.singletonInstance()
+    let mixerConfig: MixerConfig
 
     var entries: [MixerMethod: EndpointDictEntry]
 
@@ -41,9 +41,11 @@ class SqMixerEndpointDictionary: ObservableObject {
      Create a dictionary where each key are MixerMethod's and the
      associated value is the EndpointDictEntry for that method.
      */
-    init() {
+    init(_ model: MixerModel) {
+        let mixerConfig = MixerConfig.load(model)
+        self.mixerConfig = mixerConfig
         entries = MixerMethod.allCases.reduce(into: [:]) {
-            $0[$1] = EndpointDictEntry(operation: $1)
+            $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
         }
     }
 
@@ -68,9 +70,10 @@ struct EndpointDictEntry: Hashable, Identifiable {
     let operation: MixerMethod
     let addressTemplates: [MixerEndpoint: String]
 
-    init(operation: MixerMethod) {
+    init(mixerConfig: MixerConfig, operation: MixerMethod) {
         self.operation = operation
-        addressTemplates = Self.addressTemplatesFor(method: operation)
+        addressTemplates = Self.addressTemplatesFor(mixerConfig: mixerConfig,
+                                                    method: operation)
     }
 
     /**
@@ -92,17 +95,17 @@ struct EndpointDictEntry: Hashable, Identifiable {
      OSC Address templates for each endpoint.
      */
     static let oscAddressTemplates = [
-        MixerEndpoint.aux: "/sq/aux/{chNum}",
-        MixerEndpoint.dca: "/sq/dca/{chNum}",
-        MixerEndpoint.fxReturn: "/sq/fxReturn/{chNum}",
-        MixerEndpoint.fxSend: "/sq/fxSend/{chNum}",
-        MixerEndpoint.group: "/sq/group/{chNum}",
-        MixerEndpoint.input: "/sq/input/{chNum}",
-        MixerEndpoint.keys: "/sq/softKey/{keyNum}",
-        MixerEndpoint.main: "/sq/main",
-        MixerEndpoint.matrix: "/sq/matrix/{chNum}",
-        MixerEndpoint.muteGroup: "/sq/muteGroup/{chNum}",
-        MixerEndpoint.scene: "/sq/scene/{sceneNum}"
+        MixerEndpoint.aux: "aux/{chNum}",
+        MixerEndpoint.dca: "dca/{chNum}",
+        MixerEndpoint.fxReturn: "fxReturn/{chNum}",
+        MixerEndpoint.fxSend: "fxSend/{chNum}",
+        MixerEndpoint.group: "group/{chNum}",
+        MixerEndpoint.input: "input/{chNum}",
+        MixerEndpoint.keys: "softKey/{keyNum}",
+        MixerEndpoint.main: "main",
+        MixerEndpoint.matrix: "matrix/{chNum}",
+        MixerEndpoint.muteGroup: "muteGroup/{chNum}",
+        MixerEndpoint.scene: "scene/{sceneNum}"
     ]
 
     /**
@@ -123,12 +126,11 @@ struct EndpointDictEntry: Hashable, Identifiable {
      endpoint type supported by the operation will be a key in the result
      dictionary with a value of the address template.
      */
-    static func addressTemplatesFor(method: MixerMethod) -> [MixerEndpoint: String] {
-        let mixerConfig = SqMixerConfig.singletonInstance()
+    static func addressTemplatesFor(mixerConfig: MixerConfig, method: MixerMethod) -> [MixerEndpoint: String] {
         var methodTemplate = "\(method)"
         if method.hasDest { methodTemplate = "to/{dest}/\(method)" }
         return mixerConfig.channelsFor(method).reduce(into: [:]) {
-            $0[$1] = "\(oscAddressTemplates[$1]!)/\(methodTemplate)"
+            $0[$1] = "/\(mixerConfig.model)/\(oscAddressTemplates[$1]!)/\(methodTemplate)"
         }
     }
 }

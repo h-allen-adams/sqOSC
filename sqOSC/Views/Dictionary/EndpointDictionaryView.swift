@@ -37,5 +37,5 @@ extension SqMixerEndpointDictionary {
 }
 
 #Preview {
-    EndpointDictionaryView(dictionary: SqMixerEndpointDictionary())
+    EndpointDictionaryView(dictionary: SqMixerEndpointDictionary(.sq))
 }

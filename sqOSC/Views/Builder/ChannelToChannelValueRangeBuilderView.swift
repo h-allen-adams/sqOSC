@@ -12,7 +12,7 @@ import SwiftUI
  operations (sendLevel, pan).
  */
 struct ChannelToChannelValueRangeBuilderView: View {
-    let mixerConfig: SqMixerConfig
+    let mixerConfig: MixerConfig
     let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
 
@@ -27,7 +27,7 @@ struct ChannelToChannelValueRangeBuilderView: View {
          dictionary: SqMixerEndpointDictionary,
          resolvedMessage: Binding<String>)
     {
-        let mixerConfig = SqMixerConfig.singletonInstance()
+        let mixerConfig = dictionary.mixerConfig
         self.mixerConfig = mixerConfig
         self.method = method
         self.dictionary = dictionary
@@ -151,6 +151,6 @@ struct ChannelToChannelValueRangeBuilderView: View {
 #Preview {
     @Previewable @State var resolvedMessage = ""
     ChannelToChannelValueRangeBuilderView(method: .pan,
-                                          dictionary: SqMixerEndpointDictionary(),
+                                          dictionary: SqMixerEndpointDictionary(.sq),
                                           resolvedMessage: $resolvedMessage)
 }

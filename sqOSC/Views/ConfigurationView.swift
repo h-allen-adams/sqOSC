@@ -55,11 +55,11 @@ struct ConfigurationView: View {
 @propertyWrapper
 struct Preference<Value>: DynamicProperty {
     @ObservedObject private var preferencesObserver: PublisherObservableObject
-    private let keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>
-    private let preferences: MidiPreferences
+    private let keyPath: ReferenceWritableKeyPath<MixerPreferences, Value>
+    private let preferences: MixerPreferences
 
-    init(_ keyPath: ReferenceWritableKeyPath<MidiPreferences, Value>,
-         preferences: MidiPreferences = .midiStandard)
+    init(_ keyPath: ReferenceWritableKeyPath<MixerPreferences, Value>,
+         preferences: MixerPreferences = .midiStandard)
     {
         self.keyPath = keyPath
         self.preferences = preferences
@@ -98,6 +98,6 @@ final class PublisherObservableObject: ObservableObject {
 #Preview {
     ConfigurationView()
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
-        .environmentObject(SqMixerEndpointDictionary())
+        .environmentObject(SqMixerEndpointDictionary(.sq))
         .environmentObject(ActivityLog())
 }
