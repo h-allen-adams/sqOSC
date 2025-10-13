@@ -9,9 +9,9 @@ import SwiftUI
 
 struct MixAssignmentBuilderView: View {
     let mixerConfig: MixerConfig
-    let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
     
+    @ObservedObject var dictionary: SqMixerEndpointDictionary
     @Binding var resolvedMessage: String
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedDestType: MixerEndpoint
@@ -136,10 +136,11 @@ struct MixAssignmentBuilderView: View {
             "chNum": "\(selectedChannelNum)",
             "dest": dest
         ]
-        resolvedMessage = dictionary.resolveOscAddress(method: method,
-                                                       endpoint: selectedChannelType,
-                                                       templateValues: pathValues)!
-            + " \(selectedToggle)"
+
+        let address = dictionary.resolveOscAddress(method: method,
+                                                   endpoint: selectedChannelType,
+                                                   templateValues: pathValues) ?? "/none"
+        resolvedMessage = address + " \(selectedToggle)"
     }
 }
 

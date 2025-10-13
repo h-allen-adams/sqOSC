@@ -32,8 +32,8 @@ final class MixerPreferences {
     @UserDefault(PrefKeys.midiChannel, defaultValue: 1)
     var midiChannel: Int
 
-    @UserDefault(PrefKeys.mixerModel, defaultValue: MixerModel.sq)
-    var mixerModel: MixerModel
+    @UserDefault(PrefKeys.mixerModel, defaultValue: "sq")
+    var mixerModel: String
 
     enum PrefKeys {
         static let midiChannel = "midiChannel"

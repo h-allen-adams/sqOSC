@@ -7,10 +7,20 @@
 
 import Foundation
 
-enum MixerModel: String, Codable, CaseIterable, CodingKeyRepresentable, Identifiable {
+/**
+ Define the Mixer Models supported by the application
+ */
+enum MixerModel:
+    String,
+    Codable,
+    CaseIterable,
+    CodingKeyRepresentable,
+    Identifiable
+{
     var id: Self { self }
 
     case sq
+    case none
 }
 
 /**
@@ -34,6 +44,15 @@ enum MixerMethod:
     case balance
     case trigger
     case recall
+
+    var hasDest: Bool
+    {
+        switch self
+        {
+        case .assign, .sendLevel, .pan: true
+        default: false
+        }
+    }
 }
 
 /**
@@ -62,17 +81,20 @@ enum MixerEndpoint:
     case scene
     case keys
 
-    static var audioCases: [MixerEndpoint] {
+    static var audioCases: [MixerEndpoint]
+    {
         return [.input, .group, .fxReturn, .main, .aux, .fxSend, .matrix, .dca, .muteGroup]
     }
 }
 
-enum SqButtonState: String {
+enum SqButtonState: String
+{
     case PRESS
     case RELEASE
 }
 
-enum SqToggleAction: String, CaseIterable {
+enum SqToggleAction: String, CaseIterable
+{
     case ON
     case OFF
 }

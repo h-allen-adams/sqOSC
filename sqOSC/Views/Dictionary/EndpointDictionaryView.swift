@@ -12,29 +12,16 @@ import SwiftUI
  SqMixerEndpointDictioanry
  */
 struct EndpointDictionaryView: View {
-    let dictionary: SqMixerEndpointDictionary
+    @ObservedObject var dictionary: SqMixerEndpointDictionary
 
     var body: some View {
-        List(dictionary.values()) { entry in
+        List(dictionary.values) { entry in
             EndpointDictionaryEntryView(entry: entry)
         }
     }
 }
 
-extension SqMixerEndpointDictionary {
-    /**
-     Return a sorted list of EndpointDictEntry items for UI display
-     */
-    func values() -> [EndpointDictEntry] {
-        var result: [EndpointDictEntry] = []
-        let allCases = MixerMethod.allCases
-        let sorted = entries.sorted { allCases.firstIndex(of: $0.key)! < allCases.firstIndex(of: $1.key)! }
-        for entry in sorted {
-            result.append(entry.value)
-        }
-        return result
-    }
-}
+extension SqMixerEndpointDictionary {}
 
 #Preview {
     EndpointDictionaryView(dictionary: SqMixerEndpointDictionary(.sq))

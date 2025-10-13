@@ -48,6 +48,7 @@
 		9FF181F32E7E552B00008C68 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				none.plist,
 				sq.plist,
 			);
 			target = 9F08065D2C42ED3F00F533F4 /* sqOSCTests */;

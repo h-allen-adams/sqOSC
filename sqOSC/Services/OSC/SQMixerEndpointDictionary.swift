@@ -33,9 +33,22 @@ import Foundation
  channels: "/sq/input/1/mute", "/sq/input/2/mute", etc.
  */
 class SqMixerEndpointDictionary: ObservableObject {
-    let mixerConfig: MixerConfig
+    /**
+     Currently loaded Mixer Configuration
+     */
+    @Published var mixerConfig: MixerConfig
 
-    var entries: [MixerMethod: EndpointDictEntry]
+    /**
+     Dictionary entries for each operation
+     */
+    @Published var entries: [MixerMethod: EndpointDictEntry]
+
+    /**
+     Sorted list of dictionary entries
+     */
+    @Published var values: [EndpointDictEntry]
+
+    private var onChangeHandler: ((_: SqMixerEndpointDictionary) -> Void)?
 
     /**
      Create a dictionary where each key are MixerMethod's and the
@@ -47,6 +60,38 @@ class SqMixerEndpointDictionary: ObservableObject {
         entries = MixerMethod.allCases.reduce(into: [:]) {
             $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
         }
+
+        values = []
+        let allCases = MixerMethod.allCases
+        let sorted = entries.sorted { allCases.firstIndex(of: $0.key)! < allCases.firstIndex(of: $1.key)! }
+        for entry in sorted {
+            values.append(entry.value)
+        }
+    }
+
+    convenience init(modelString: String) {
+        self.init(MixerModel(rawValue: modelString)!)
+    }
+
+    func reset(_ model: MixerModel) {
+        let mixerConfig = MixerConfig.load(model)
+        self.mixerConfig = mixerConfig
+        entries = MixerMethod.allCases.reduce(into: [:]) {
+            $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
+        }
+
+        values = []
+        let allCases = MixerMethod.allCases
+        let sorted = entries.sorted { allCases.firstIndex(of: $0.key)! < allCases.firstIndex(of: $1.key)! }
+        for entry in sorted {
+            values.append(entry.value)
+        }
+
+        onChangeHandler?(self)
+    }
+
+    func onChange(_ handler: @escaping (_: SqMixerEndpointDictionary) -> Void) {
+        onChangeHandler = handler
     }
 
     /**
@@ -131,15 +176,6 @@ struct EndpointDictEntry: Hashable, Identifiable {
         if method.hasDest { methodTemplate = "to/{dest}/\(method)" }
         return mixerConfig.channelsFor(method).reduce(into: [:]) {
             $0[$1] = "/\(mixerConfig.model)/\(oscAddressTemplates[$1]!)/\(methodTemplate)"
-        }
-    }
-}
-
-extension MixerMethod {
-    var hasDest: Bool {
-        switch self {
-        case .assign, .sendLevel, .pan: true
-        default: false
         }
     }
 }

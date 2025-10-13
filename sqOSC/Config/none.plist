@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>model</key>
+	<string>none</string>
+	<key>channelCounts</key>
+	<dict>
+		<key>aux</key>
+		<integer>1</integer>
+		<key>dca</key>
+		<integer>1</integer>
+		<key>fxReturn</key>
+		<integer>1</integer>
+		<key>fxSend</key>
+		<integer>1</integer>
+		<key>group</key>
+		<integer>1</integer>
+		<key>input</key>
+		<integer>1</integer>
+		<key>keys</key>
+		<integer>1</integer>
+		<key>main</key>
+		<integer>1</integer>
+		<key>matrix</key>
+		<integer>1</integer>
+		<key>muteGroup</key>
+		<integer>1</integer>
+		<key>scene</key>
+		<integer>1</integer>
+	</dict>
+	<key>channelParameters</key>
+	<dict/>
+	<key>channelToChannelParameters</key>
+	<dict/>
+	<key>softKeyParameters</key>
+	<dict>
+		<key>noteZero</key>
+		<string></string>
+		<key>pressVelocity</key>
+		<string></string>
+		<key>releaseVelocity</key>
+		<string></string>
+	</dict>
+	<key>panZeroParameter</key>
+	<string></string>
+</dict>
+</plist>

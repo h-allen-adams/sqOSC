@@ -35,7 +35,7 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     public let activityLog: ActivityLog
     public let addressSpace = OSCAddressSpace()
     public let logger: LogPublisher
-    public let oscDictionary = SqMixerEndpointDictionary(MixerPreferences.midiStandard.mixerModel)
+    public let oscDictionary = SqMixerEndpointDictionary(modelString: MixerPreferences.midiStandard.mixerModel)
     public let oscManager: SqOscManager
     public let oscMessageSender: OscMessageSender
     public let midiManager = ObservableMIDIManager(
@@ -100,16 +100,22 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
      templates from the Mixer Dictionary.
      */
     func initializeOscHandler() {
+        oscManager.start()
+        initOscAddresSpace(dictionary: oscDictionary)
+        oscDictionary.onChange(initOscAddresSpace)
+    }
+
+    func initOscAddresSpace(dictionary: SqMixerEndpointDictionary) {
+        addressSpace.unregisterAll()
         let midiMessagePublisher = MidiMessagePublisher(logger: logger,
                                                         midiManager: midiManager)
-        let endpointRegistrar = SqOscEndpointRegistrar(dictionary: oscDictionary,
+        let endpointRegistrar = SqOscEndpointRegistrar(dictionary: dictionary,
                                                        preferences: .midiStandard)
         { label, midiMessage in
             await midiMessagePublisher.publish(label: label, message: midiMessage)
         }
 
-        oscManager.start()
-        logger("Initializing OSC Address Space: \(oscDictionary.mixerConfig.model)")
+        logger("Initializing OSC Address Space: \(dictionary.mixerConfig.model)")
         endpointRegistrar.populate(addressSpace: addressSpace)
     }
 

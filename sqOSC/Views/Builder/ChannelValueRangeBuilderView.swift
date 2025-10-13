@@ -13,9 +13,9 @@ import SwiftUI
  */
 struct ChannelValueRangeBuilderView: View {
     let mixerConfig: MixerConfig
-    let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
 
+    @ObservedObject var dictionary: SqMixerEndpointDictionary
     @Binding var resolvedMessage: String
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
@@ -75,10 +75,11 @@ struct ChannelValueRangeBuilderView: View {
         let templateValues = [
             "chNum": "\(selectedChannelNum)"
         ]
-        resolvedMessage = dictionary.resolveOscAddress(method: method,
-                                                       endpoint: selectedChannelType,
-                                                       templateValues: templateValues)!
-            + " \(Int(selectedValue))"
+
+        let address = dictionary.resolveOscAddress(method: method,
+                                                   endpoint: selectedChannelType,
+                                                   templateValues: templateValues) ?? "/none"
+        resolvedMessage = address + " \(Int(selectedValue))"
     }
 }
 

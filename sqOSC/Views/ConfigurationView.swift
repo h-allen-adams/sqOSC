@@ -18,9 +18,11 @@ struct ConfigurationView: View {
     @Preference(\.midiInput) var midiInput
     @Preference(\.midiInputName) var midiInputName
     @Preference(\.midiChannel) var midiChannel
+    @Preference(\.mixerModel) var mixerModel
 
     @Environment(ObservableMIDIManager.self) private var midiManager
     @EnvironmentObject private var activityLog: ActivityLog
+    @EnvironmentObject private var oscDictionary: SqMixerEndpointDictionary
 
     var body: some View {
         VStack {
@@ -44,7 +46,16 @@ struct ConfigurationView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                Picker("Mixer Model", selection: $mixerModel) {
+                    ForEach(MixerModel.allCases, id: \.self.rawValue) {
+                        Text("\(String(describing: $0))")
+                    }
+                }
+                .pickerStyle(.segmented)
             }.padding(.all)
+                .onChange(of: mixerModel) { _, _ in
+                    oscDictionary.reset(MixerModel(rawValue: mixerModel)!)
+                }
         }
     }
 }

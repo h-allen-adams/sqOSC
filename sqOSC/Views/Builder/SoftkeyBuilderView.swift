@@ -9,9 +9,9 @@ import SwiftUI
 
 struct SoftkeyBuilderView: View {
     let mixerConfig: MixerConfig
-    let dictionary: SqMixerEndpointDictionary
     let method: MixerMethod
 
+    @ObservedObject var dictionary: SqMixerEndpointDictionary
     @Binding var resolvedMessage: String
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
@@ -24,7 +24,7 @@ struct SoftkeyBuilderView: View {
         self.method = method
         self.mixerConfig = mixerConfig
         self._resolvedMessage = resolvedMessage
-        self.selectedChannelType = mixerConfig.channelsFor(method).first!
+        self.selectedChannelType = mixerConfig.channelsFor(method).first ?? .keys
     }
 
     var body: some View {
@@ -62,10 +62,11 @@ struct SoftkeyBuilderView: View {
         let templateValues = [
             "keyNum": "\(selectedChannelNum)"
         ]
-        resolvedMessage = dictionary.resolveOscAddress(method: method,
-                                                       endpoint: selectedChannelType,
-                                                       templateValues: templateValues)!
-            + " \(selectedToggle)"
+
+        let address = dictionary.resolveOscAddress(method: method,
+                                                   endpoint: selectedChannelType,
+                                                   templateValues: templateValues) ?? "/none"
+        resolvedMessage = address + " \(selectedToggle)"
     }
 }
 

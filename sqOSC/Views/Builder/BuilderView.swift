@@ -12,7 +12,7 @@ import SwiftUI
  selecting operation type, channel, and other message values.
  */
 struct BuilderView: View {
-    let dictionary: SqMixerEndpointDictionary
+    @ObservedObject var dictionary: SqMixerEndpointDictionary
 
     @State private var selectedMethod: MixerMethod = .mute
     @State private var selectedTarget: MixerEndpoint = .aux
