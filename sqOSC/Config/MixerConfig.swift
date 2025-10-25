@@ -11,24 +11,29 @@ import Foundation
  Singleton Mixer Configuration values based on the contents of the sq.plist
  file.
  */
-class MixerConfig: Codable {
+class MixerConfig: Codable, Equatable {
     /**
-     Mixer Model
+     Mixer Series
      */
-    public let model: MixerModel
-
+    public let series: MixerSeries
+    
     /**
      Channel counts: [channel: count]
      */
     private let channelCounts: [MixerEndpoint: Int]
-
+    
+    /**
+     Channel offsets: [channel: count]
+     */
+    private let channelOffsets: [MixerEndpoint: Int]
+    
     /**
      Channel Operations (mute, level, balence) affect signal on a single
      channel.
      [ operation: [channel : parameter value (hex) ]]
      */
     private let channelParameters: [MixerMethod: [MixerEndpoint: String]]
-
+    
     /**
      Channel-to-Channel Operations (sendLevel, pan) affect how signal moves
      from a source channel to a destination channel.
@@ -36,24 +41,56 @@ class MixerConfig: Codable {
      */
     private let channelToChannelParameters:
         [MixerMethod: [MixerEndpoint: [MixerEndpoint: String]]]
-
+    
     /**
      Soft Key Parameters (first note, press velocity, release velocity)
      */
     let softKeyParameters: SoftKeyParameters
-
+        
     /**
-     Parameter value for centered pan/balance
+     Pan/Balance Parameters (hex) indexed by pan value (-100 (L) ... 100 (R)).
+     Values are taken from the A&H MIDI specification for a mixer series. These
+     tables are SPARSE in that they do not contain entries for all values in the
+     range, but MUST contain at least entries for the first and last values in
+     the range.
      */
-    private let panZeroParameter: String
-
+    private let panBalanceParameters: [Int: String]
+    
+    /**
+     Fader/Send Level Parameters (hex) indexed by Fader Law and then dbLevel
+     (-100...10). Values are taken from the A&H MIDI specification for a mixer
+     series. These tables are SPARSE in that they do not contain entries for all
+     values in the range, but MUST contain at least entries for the first and
+     last values in the range.
+     */
+    private let levelParameters: [FaderLevelLaw: [Int: String]]
+    
+    /**
+     Return the sorted list of methods active in this configuration
+     */
+    func methods() -> [MixerMethod] {
+        var methods: [MixerMethod] = []
+        methods.append(contentsOf: channelParameters.keys)
+        methods.append(contentsOf: channelToChannelParameters.keys)
+        methods.append(.recall)
+        methods.append(.trigger)
+        return methods.sorted()
+    }
+    
     /**
      Return the number of channels associated with the given channel/endpoint type
      */
     func channelCount(_ channelType: MixerEndpoint) -> Int? {
         return channelCounts[channelType]
     }
-
+    
+    /**
+     Return the parameter number offset for the given channel/endpoint type
+     */
+    func channelOffset(_ channelType: MixerEndpoint) -> Int {
+        return channelOffsets[channelType] ?? 1
+    }
+    
     /**
      Return the list of channels/source channels supported by the given
      operation. For recall and trigger this is a fixed value; for all others the
@@ -74,13 +111,11 @@ class MixerConfig: Codable {
             } else {
                 entries = []
             }
-
-            let allCases = MixerEndpoint.allCases
-            let sorted = entries.sorted { allCases.firstIndex(of: $0)! < allCases.firstIndex(of: $1)! }
-            return sorted
+            
+            return entries.sorted()
         }
     }
-
+    
     /**
      Return true if the given operation supports the given channel, false
      otherwise.
@@ -96,7 +131,7 @@ class MixerConfig: Codable {
             return false
         }
     }
-
+    
     /**
      Return the (integer) parameter value for the given operation and channel.
      If no parameter exists, return nil.  The parameter value returned is the
@@ -114,7 +149,7 @@ class MixerConfig: Codable {
         }
         return nil
     }
-
+    
     /**
      Return the list of destination channels for the given operation and source
      channel.
@@ -123,11 +158,11 @@ class MixerConfig: Codable {
                         source: MixerEndpoint) -> [MixerEndpoint]
     {
         if let dict = channelToChannelParameters[operation]?[source] {
-            return Array(dict.keys)
+            return Array(dict.keys).sorted()
         }
         return []
     }
-
+    
     /**
      Return the (integer) parameter value for the given operation, source, and
      dest channels. If no parameter exists, return nil.  The parameter value
@@ -147,17 +182,42 @@ class MixerConfig: Codable {
         }
         return nil
     }
-
+        
     /**
-     Return the (integer) parameter value corresponding to zero (centered)
-     pan/balance
+     Return a sparse table of Pan/Balance Parameter values (Int). These tables
+     are SPARSE in that they do not contain entries for all values in the input
+     range, but MUST contain at least entries for the first and last values in
+     the range.
      */
-    func panZeroValue() -> Int {
-        let bytes = panZeroParameter.split(separator: " ")
-        return Values.toParameterNumber(String(bytes[0]), String(bytes[1]))
+    func panParameterValues() -> [Int: Int] {
+        return panBalanceParameters.mapValues { value in
+            let bytes = value.split(separator: " ")
+            return Values.toParameterNumber(String(bytes[0]), String(bytes[1]))
+        }
     }
 
-    static func load(_ model: MixerModel) -> MixerConfig {
+    /**
+     Return a sparse table of Level Parameter values (Int) for the given fader
+     law, if that fader loaw is available in the mixer configuraiton. These
+     tables are SPARSE in that they do not contain entries for all values in the input
+     range, but MUST contain at least entries for the first and last values in
+     the range.
+     */
+    func levelParameterValues(_ taperLaw: FaderLevelLaw) -> [Int: Int]? {
+        return levelParameters[taperLaw]?.mapValues { value in
+            let bytes = value.split(separator: " ")
+            return Values.toParameterNumber(String(bytes[0]), String(bytes[1]))
+        }
+    }
+    
+    /**
+     Return the list of fader laws supported by the mixer configuration
+     */
+    func faderLaws() -> [FaderLevelLaw] {
+        return levelParameters.keys.sorted()
+    }
+    
+    static func load(_ model: MixerSeries) -> MixerConfig {
         let settingsUrl = Bundle.main.url(forResource: "\(model)", withExtension: "plist")
         let settingsData = try! Data(contentsOf: settingsUrl!)
         do {
@@ -166,6 +226,10 @@ class MixerConfig: Codable {
         } catch {
             fatalError("Unable to decode \(model).plist")
         }
+    }
+    
+    static func == (lhs: MixerConfig, rhs: MixerConfig) -> Bool {
+        return lhs.series == rhs.series
     }
 }
 

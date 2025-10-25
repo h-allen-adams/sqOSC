@@ -23,7 +23,7 @@ struct BuilderView: View {
             Section(header: Text("Selections").font(.title2)) {
                 // Select an operation...
                 Picker("Method", selection: $selectedMethod) {
-                    ForEach(MixerMethod.allCases) { entry in
+                    ForEach(dictionary.mixerConfig.methods()) { entry in
                         Text("\(entry.title)")
                     }
                 }
@@ -67,7 +67,11 @@ struct BuilderView: View {
                 OSCMessageView(resolvedMessage: $resolvedMessage)
             }
             Spacer()
-        }.padding(.all)
+        }
+        .onDisappear {
+            selectedMethod = .mute
+        }
+        .padding(.all)
     }
 }
 

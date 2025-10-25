@@ -3,42 +3,49 @@
 <plist version="1.0">
 <dict>
 	<key>series</key>
-	<string>sq</string>
+	<string>cq</string>
 	<key>channelCounts</key>
 	<dict>
 		<key>aux</key>
-		<integer>12</integer>
+		<integer>6</integer>
 		<key>dca</key>
-		<integer>8</integer>
+		<integer>4</integer>
 		<key>fxReturn</key>
-		<integer>8</integer>
+		<integer>4</integer>
 		<key>fxSend</key>
 		<integer>4</integer>
-		<key>group</key>
-		<integer>12</integer>
 		<key>input</key>
-		<integer>48</integer>
-		<key>keys</key>
 		<integer>16</integer>
 		<key>main</key>
 		<integer>1</integer>
-		<key>matrix</key>
-		<integer>3</integer>
 		<key>muteGroup</key>
-		<integer>8</integer>
+		<integer>4</integer>
 		<key>scene</key>
-		<integer>300</integer>
+		<integer>100</integer>
+		<key>st</key>
+		<integer>2</integer>
+		<key>usb</key>
+		<integer>1</integer>
+		<key>bt</key>
+		<integer>1</integer>
+		<key>keys</key>
+		<integer>3</integer>
 	</dict>
 	<key>channelOffsets</key>
-	<dict/>
+	<dict>
+		<key>st</key>
+		<integer>2</integer>
+		<key>usb</key>
+		<integer>2</integer>
+		<key>bt</key>
+		<integer>2</integer>
+	</dict>
 	<key>channelParameters</key>
 	<dict>
 		<key>mute</key>
 		<dict>
 			<key>input</key>
 			<string>00 00</string>
-			<key>group</key>
-			<string>00 30</string>
 			<key>fxReturn</key>
 			<string>00 3C</string>
 			<key>main</key>
@@ -47,12 +54,16 @@
 			<string>00 45</string>
 			<key>fxSend</key>
 			<string>00 51</string>
-			<key>matrix</key>
-			<string>00 55</string>
 			<key>dca</key>
 			<string>02 00</string>
 			<key>muteGroup</key>
 			<string>04 00</string>
+			<key>st</key>
+			<string>00 18</string>
+			<key>usb</key>
+			<string>00 1C</string>
+			<key>bt</key>
+			<string>00 1E</string>
 		</dict>
 		<key>level</key>
 		<dict>
@@ -62,19 +73,8 @@
 			<string>4F 01</string>
 			<key>fxSend</key>
 			<string>4F 0D</string>
-			<key>matrix</key>
-			<string>4F 11</string>
 			<key>dca</key>
 			<string>4F 20</string>
-		</dict>
-		<key>balance</key>
-		<dict>
-			<key>main</key>
-			<string>5F 00</string>
-			<key>aux</key>
-			<string>5F 01</string>
-			<key>matrix</key>
-			<string>5F 11</string>
 		</dict>
 	</dict>
 	<key>channelToChannelParameters</key>
@@ -90,16 +90,32 @@
 				<key>fxSend</key>
 				<string>4C 14</string>
 			</dict>
-			<key>group</key>
+			<key>st</key>
 			<dict>
 				<key>main</key>
-				<string>40 30</string>
+				<string>40 18</string>
 				<key>aux</key>
-				<string>45 04</string>
+				<string>42 64</string>
 				<key>fxSend</key>
-				<string>4D 54</string>
-				<key>matrix</key>
-				<string>4E 4B</string>
+				<string>4C 74</string>
+			</dict>
+			<key>usb</key>
+			<dict>
+				<key>main</key>
+				<string>40 1C</string>
+				<key>aux</key>
+				<string>43 14</string>
+				<key>fxSend</key>
+				<string>4D 04</string>
+			</dict>
+			<key>bt</key>
+			<dict>
+				<key>main</key>
+				<string>40 1E</string>
+				<key>aux</key>
+				<string>43 2C</string>
+				<key>fxSend</key>
+				<string>4D 0C</string>
 			</dict>
 			<key>fxReturn</key>
 			<dict>
@@ -109,16 +125,6 @@
 				<string>46 14</string>
 				<key>fxSend</key>
 				<string>4E 04</string>
-			</dict>
-			<key>main</key>
-			<dict>
-				<key>matrix</key>
-				<string>4E 24</string>
-			</dict>
-			<key>aux</key>
-			<dict>
-				<key>matrix</key>
-				<string>4E 27</string>
 			</dict>
 		</dict>
 		<key>pan</key>
@@ -130,14 +136,26 @@
 				<key>aux</key>
 				<string>50 44</string>
 			</dict>
-			<key>group</key>
+			<key>st</key>
 			<dict>
 				<key>main</key>
-				<string>50 30</string>
+				<string>50 18</string>
 				<key>aux</key>
-				<string>55 04</string>
-				<key>matrix</key>
-				<string>5E 4B</string>
+				<string>52 64</string>
+			</dict>
+			<key>usb</key>
+			<dict>
+				<key>main</key>
+				<string>50 1C</string>
+				<key>aux</key>
+				<string>53 14</string>
+			</dict>
+			<key>bt</key>
+			<dict>
+				<key>main</key>
+				<string>50 1E</string>
+				<key>aux</key>
+				<string>53 2C</string>
 			</dict>
 			<key>fxReturn</key>
 			<dict>
@@ -145,62 +163,6 @@
 				<string>50 3C</string>
 				<key>aux</key>
 				<string>56 14</string>
-			</dict>
-			<key>main</key>
-			<dict>
-				<key>matrix</key>
-				<string>5E 24</string>
-			</dict>
-			<key>aux</key>
-			<dict>
-				<key>matrix</key>
-				<string>5E 27</string>
-			</dict>
-		</dict>
-		<key>assign</key>
-		<dict>
-			<key>input</key>
-			<dict>
-				<key>main</key>
-				<string>60 00</string>
-				<key>aux</key>
-				<string>60 44</string>
-				<key>group</key>
-				<string>66 74</string>
-				<key>fxSend</key>
-				<string>6C 14</string>
-			</dict>
-			<key>group</key>
-			<dict>
-				<key>main</key>
-				<string>60 30</string>
-				<key>aux</key>
-				<string>65 04</string>
-				<key>fxSend</key>
-				<string>6D 54</string>
-				<key>matrix</key>
-				<string>6E 4B</string>
-			</dict>
-			<key>fxReturn</key>
-			<dict>
-				<key>main</key>
-				<string>60 3C</string>
-				<key>aux</key>
-				<string>66 14</string>
-				<key>group</key>
-				<string>6B 34</string>
-				<key>fxSend</key>
-				<string>6E 04</string>
-			</dict>
-			<key>main</key>
-			<dict>
-				<key>matrix</key>
-				<string>6E 24</string>
-			</dict>
-			<key>aux</key>
-			<dict>
-				<key>matrix</key>
-				<string>6E 27</string>
 			</dict>
 		</dict>
 	</dict>
@@ -240,7 +202,7 @@
 		<key>-5</key>
 		<string>3C 65</string>
 		<key>0</key>
-		<string>3F 7F</string>
+		<string>40 00</string>
 		<key>5</key>
 		<string>43 18</string>
 		<key>10</key>
@@ -392,131 +354,6 @@
 			<string>7D 00</string>
 			<key>10</key>
 			<string>7F 40</string>
-		</dict>
-		<key>LinearTaper</key>
-		<dict>
-			<key>-100</key>
-			<string>00 00</string>
-			<key>-90</key>
-			<string>00 00</string>
-			<key>-89</key>
-			<string>24 16</string>
-			<key>-85</key>
-			<string>27 71</string>
-			<key>-80</key>
-			<string>2C 42</string>
-			<key>-75</key>
-			<string>31 14</string>
-			<key>-70</key>
-			<string>35 65</string>
-			<key>-65</key>
-			<string>3A 67</string>
-			<key>-60</key>
-			<string>3F 09</string>
-			<key>-55</key>
-			<string>43 5A</string>
-			<key>-50</key>
-			<string>48 2C</string>
-			<key>-45</key>
-			<string>4C 7D</string>
-			<key>-40</key>
-			<string>51 4F</string>
-			<key>-38</key>
-			<string>53 3C</string>
-			<key>-36</key>
-			<string>55 2A</string>
-			<key>-35</key>
-			<string>56 21</string>
-			<key>-34</key>
-			<string>57 17</string>
-			<key>-33</key>
-			<string>58 0E</string>
-			<key>-32</key>
-			<string>59 05</string>
-			<key>-31</key>
-			<string>59 7C</string>
-			<key>-30</key>
-			<string>5A 72</string>
-			<key>-29</key>
-			<string>5B 69</string>
-			<key>-28</key>
-			<string>5C 60</string>
-			<key>-27</key>
-			<string>5D 56</string>
-			<key>-26</key>
-			<string>5E 4D</string>
-			<key>-25</key>
-			<string>5F 44</string>
-			<key>-24</key>
-			<string>60 3B</string>
-			<key>-23</key>
-			<string>61 31</string>
-			<key>-22</key>
-			<string>62 28</string>
-			<key>-21</key>
-			<string>63 1F</string>
-			<key>-20</key>
-			<string>64 16</string>
-			<key>-19</key>
-			<string>65 0C</string>
-			<key>-18</key>
-			<string>66 03</string>
-			<key>-17</key>
-			<string>66 7A</string>
-			<key>-16</key>
-			<string>66 70</string>
-			<key>-15</key>
-			<string>68 67</string>
-			<key>-14</key>
-			<string>69 5E</string>
-			<key>-13</key>
-			<string>6A 55</string>
-			<key>-12</key>
-			<string>6B 4B</string>
-			<key>-11</key>
-			<string>6C 42</string>
-			<key>-10</key>
-			<string>6D 39</string>
-			<key>-9</key>
-			<string>6E 2F</string>
-			<key>-8</key>
-			<string>6F 26</string>
-			<key>-7</key>
-			<string>70 1D</string>
-			<key>-6</key>
-			<string>71 14</string>
-			<key>-5</key>
-			<string>72 0A</string>
-			<key>-4</key>
-			<string>73 01</string>
-			<key>-3</key>
-			<string>73 78</string>
-			<key>-2</key>
-			<string>74 6F</string>
-			<key>-1</key>
-			<string>75 65</string>
-			<key>0</key>
-			<string>76 5C</string>
-			<key>1</key>
-			<string>77 53</string>
-			<key>2</key>
-			<string>78 49</string>
-			<key>3</key>
-			<string>79 40</string>
-			<key>4</key>
-			<string>7A 37</string>
-			<key>5</key>
-			<string>7B 2E</string>
-			<key>6</key>
-			<string>7C 24</string>
-			<key>7</key>
-			<string>7D 1B</string>
-			<key>8</key>
-			<string>7E 12</string>
-			<key>9</key>
-			<string>7F 08</string>
-			<key>10</key>
-			<string>7F 7F</string>
 		</dict>
 	</dict>
 </dict>

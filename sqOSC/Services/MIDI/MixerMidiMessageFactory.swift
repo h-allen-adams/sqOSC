@@ -34,10 +34,14 @@ import SwiftRadix
 class MixerMidiMessageFactory
 {
     let mixerConfig: MixerConfig
+    let levelParameterValues: LookupTable
+    let panParameterValues: LookupTable
 
-    init(mixerConfig: MixerConfig)
+    init(mixerConfig: MixerConfig, faderLaw: FaderLevelLaw)
     {
         self.mixerConfig = mixerConfig
+        self.panParameterValues = LookupTable(mixerConfig.panParameterValues())
+        self.levelParameterValues = LookupTable(mixerConfig.levelParameterValues(faderLaw)!)
     }
 
     /**
@@ -57,7 +61,8 @@ class MixerMidiMessageFactory
             mixerConfig.channelToChannelParameter(.assign,
                                                   source: sourceType,
                                                   dest: destType) else { return nil }
-        let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
+        let offset = mixerConfig.channelOffset(sourceType)
+        let pn = pn0 + (offset * numCols) * (sourceChannel - 1) + (destChannel - 1)
         switch action
         {
         case SqToggleAction.ON:
@@ -91,7 +96,7 @@ class MixerMidiMessageFactory
         if let pn0 = mixerConfig.channelParameter(.level, outputType)
         {
             let pn = pn0 + outputChannel - 1
-            let pv = linearFader(dbLevel: dbLevel)
+            let pv = levelParameterValues.lookup(dbLevel)
             return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
                                   data: (UInt7(pv / 128), UInt7(pv % 128)),
                                   channel: UInt4(midiChannel - 1))
@@ -112,7 +117,7 @@ class MixerMidiMessageFactory
         if let pn0 = mixerConfig.channelParameter(.balance, outputType)
         {
             let pn = pn0 + outputChannel - 1
-            let pv = panValue(panLevel: panLevel)
+            let pv = panParameterValues.lookup(panLevel)
             return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
                                   data: toNrpnData(pv),
                                   channel: UInt4(midiChannel - 1))
@@ -130,9 +135,10 @@ class MixerMidiMessageFactory
                      channel: Int,
                      action: SqToggleAction) -> MIDIEvent?
     {
+        let offset = mixerConfig.channelOffset(type)
         if let pn0 = mixerConfig.channelParameter(.mute, type)
         {
-            let pn = pn0 + channel - 1
+            let pn = pn0 + offset * (channel - 1)
 
             switch action
             {
@@ -173,8 +179,9 @@ class MixerMidiMessageFactory
             mixerConfig.channelToChannelParameter(.sendLevel,
                                                   source: sourceType,
                                                   dest: destType) else { return nil }
-        let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
-        let pv = linearFader(dbLevel: dbLevel)
+        let offset = mixerConfig.channelOffset(sourceType)
+        let pn = pn0 + (offset * numCols) * (sourceChannel - 1) + (destChannel - 1)
+        let pv = levelParameterValues.lookup(dbLevel)
         return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
                               data: toNrpnData(pv),
                               channel: UInt4(midiChannel - 1))
@@ -197,8 +204,9 @@ class MixerMidiMessageFactory
             mixerConfig.channelToChannelParameter(.pan,
                                                   source: sourceType,
                                                   dest: destType) else { return nil }
-        let pn = pn0 + numCols * (sourceChannel - 1) + (destChannel - 1)
-        let pv = panValue(panLevel: panLevel)
+        let offset = mixerConfig.channelOffset(sourceType)
+        let pn = pn0 + (offset * numCols) * (sourceChannel - 1) + (destChannel - 1)
+        let pv = panParameterValues.lookup(panLevel)
         return MIDIEvent.nrpn(parameter: toNrpnParam(pn),
                               data: toNrpnData(pv),
                               channel: UInt4(midiChannel - 1))
@@ -247,36 +255,6 @@ class MixerMidiMessageFactory
                                           velocity: velocity,
                                           channel: UInt4(midiChannel - 1))
         }
-    }
-
-    /**
-     Audio Level values are encoded using the Linear Fader Law (Specification 3.4)
-     which is the default mixer setting and is easier to implement.
-
-     Linear adjustments are based on 16384 possible values, approx 119 values
-     per dB. +10db is value 16384, so scale down from there.
-     */
-    func linearFader(dbLevel: Int) -> Int
-    {
-        var workingDb = dbLevel
-        if workingDb > 10 { workingDb = 10 }
-        if workingDb < -89 { return 0 }
-        let adjustedDB = workingDb - 10
-        let delta = Int(round(Double(adjustedDB) * 118.72))
-        let v = 16383 + delta
-        return v
-    }
-
-    // Pan -100: 00 00, 0: 3F 7F, 100: 7F 7F
-    func panValue(panLevel: Int) -> Int
-    {
-        let zero = mixerConfig.panZeroValue()
-        let factor = Double(zero) / 100.0
-        var workingLevel = panLevel
-        if workingLevel > 100 { workingLevel = 100 }
-        if workingLevel < -100 { workingLevel = -100 }
-        let v = zero + Int(round(Double(workingLevel) * factor))
-        return v
     }
 
     /**

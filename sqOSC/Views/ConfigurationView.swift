@@ -47,14 +47,14 @@ struct ConfigurationView: View {
                 }
                 .pickerStyle(.segmented)
                 Picker("Mixer Model", selection: $mixerModel) {
-                    ForEach(MixerModel.allCases, id: \.self.rawValue) {
+                    ForEach(MixerSeries.allCases, id: \.self.rawValue) {
                         Text("\(String(describing: $0))")
                     }
                 }
                 .pickerStyle(.segmented)
             }.padding(.all)
                 .onChange(of: mixerModel) { _, _ in
-                    oscDictionary.reset(MixerModel(rawValue: mixerModel)!)
+                    oscDictionary.reset(MixerSeries(rawValue: mixerModel)!)
                 }
         }
     }

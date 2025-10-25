@@ -32,7 +32,7 @@ import Foundation
  used to define all the possible mute addresses corresponding to mixer input
  channels: "/sq/input/1/mute", "/sq/input/2/mute", etc.
  */
-class SqMixerEndpointDictionary: ObservableObject {
+class SqMixerEndpointDictionary: ObservableObject, Equatable {
     /**
      Currently loaded Mixer Configuration
      */
@@ -54,35 +54,33 @@ class SqMixerEndpointDictionary: ObservableObject {
      Create a dictionary where each key are MixerMethod's and the
      associated value is the EndpointDictEntry for that method.
      */
-    init(_ model: MixerModel) {
+    init(_ model: MixerSeries) {
         let mixerConfig = MixerConfig.load(model)
         self.mixerConfig = mixerConfig
-        entries = MixerMethod.allCases.reduce(into: [:]) {
+        entries = mixerConfig.methods().reduce(into: [:]) {
             $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
         }
 
         values = []
-        let allCases = MixerMethod.allCases
-        let sorted = entries.sorted { allCases.firstIndex(of: $0.key)! < allCases.firstIndex(of: $1.key)! }
+        let sorted = entries.sorted { $0.key < $1.key }
         for entry in sorted {
             values.append(entry.value)
         }
     }
 
     convenience init(modelString: String) {
-        self.init(MixerModel(rawValue: modelString)!)
+        self.init(MixerSeries(rawValue: modelString)!)
     }
 
-    func reset(_ model: MixerModel) {
+    func reset(_ model: MixerSeries) {
         let mixerConfig = MixerConfig.load(model)
         self.mixerConfig = mixerConfig
-        entries = MixerMethod.allCases.reduce(into: [:]) {
+        entries = mixerConfig.methods().reduce(into: [:]) {
             $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
         }
 
         values = []
-        let allCases = MixerMethod.allCases
-        let sorted = entries.sorted { allCases.firstIndex(of: $0.key)! < allCases.firstIndex(of: $1.key)! }
+        let sorted = entries.sorted { $0.key < $1.key }
         for entry in sorted {
             values.append(entry.value)
         }
@@ -104,6 +102,10 @@ class SqMixerEndpointDictionary: ObservableObject {
     {
         return entries[method]?.resolveOscAddress(endpoint: endpoint,
                                                   templateValues: templateValues)
+    }
+
+    static func == (lhs: SqMixerEndpointDictionary, rhs: SqMixerEndpointDictionary) -> Bool {
+        return lhs.mixerConfig == rhs.mixerConfig
     }
 }
 
@@ -146,6 +148,9 @@ struct EndpointDictEntry: Hashable, Identifiable {
         MixerEndpoint.fxSend: "fxSend/{chNum}",
         MixerEndpoint.group: "group/{chNum}",
         MixerEndpoint.input: "input/{chNum}",
+        MixerEndpoint.st: "input/st{chNum}",
+        MixerEndpoint.usb: "input/usb",
+        MixerEndpoint.bt: "input/bt",
         MixerEndpoint.keys: "softKey/{keyNum}",
         MixerEndpoint.main: "main",
         MixerEndpoint.matrix: "matrix/{chNum}",
@@ -175,7 +180,7 @@ struct EndpointDictEntry: Hashable, Identifiable {
         var methodTemplate = "\(method)"
         if method.hasDest { methodTemplate = "to/{dest}/\(method)" }
         return mixerConfig.channelsFor(method).reduce(into: [:]) {
-            $0[$1] = "/\(mixerConfig.model)/\(oscAddressTemplates[$1]!)/\(methodTemplate)"
+            $0[$1] = "/\(oscAddressTemplates[$1]!)/\(methodTemplate)"
         }
     }
 }

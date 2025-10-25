@@ -8,9 +8,9 @@
 import Foundation
 
 /**
- Define the Mixer Models supported by the application
+ Define the Mixer Series supported by the application
  */
-enum MixerModel:
+enum MixerSeries:
     String,
     Codable,
     CaseIterable,
@@ -20,7 +20,7 @@ enum MixerModel:
     var id: Self { self }
 
     case sq
-    case none
+    case cq
 }
 
 /**
@@ -32,6 +32,7 @@ enum MixerMethod:
     CaseIterable,
     Codable,
     CodingKeyRepresentable,
+    Comparable,
     Identifiable
 {
     var id: Self { self }
@@ -53,6 +54,26 @@ enum MixerMethod:
         default: false
         }
     }
+
+    var sortedOrder: Int
+    {
+        switch self
+        {
+        case .mute: 0
+        case .sendLevel: 1
+        case .pan: 2
+        case .assign: 3
+        case .level: 4
+        case .balance: 5
+        case .trigger: 6
+        case .recall: 7
+        }
+    }
+
+    static func < (lhs: MixerMethod, rhs: MixerMethod) -> Bool
+    {
+        return lhs.sortedOrder < rhs.sortedOrder
+    }
 }
 
 /**
@@ -65,11 +86,15 @@ enum MixerEndpoint:
     CaseIterable,
     Codable,
     CodingKeyRepresentable,
+    Comparable,
     Identifiable
 {
     var id: Self { self }
 
     case input
+    case st
+    case usb
+    case bt
     case group
     case fxReturn
     case main
@@ -81,9 +106,35 @@ enum MixerEndpoint:
     case scene
     case keys
 
+    var sortedOrder: Int
+    {
+        switch self
+        {
+        case .input: 0
+        case .st: 1
+        case .usb: 2
+        case .bt: 3
+        case .group: 4
+        case .fxReturn: 5
+        case .main: 6
+        case .aux: 7
+        case .fxSend: 8
+        case .matrix: 9
+        case .dca: 10
+        case .muteGroup: 11
+        case .scene: 12
+        case .keys: 13
+        }
+    }
+
     static var audioCases: [MixerEndpoint]
     {
-        return [.input, .group, .fxReturn, .main, .aux, .fxSend, .matrix, .dca, .muteGroup]
+        return [.input, .st, .usb, .bt, .group, .fxReturn, .main, .aux, .fxSend, .matrix, .dca, .muteGroup]
+    }
+
+    static func < (lhs: MixerEndpoint, rhs: MixerEndpoint) -> Bool
+    {
+        return lhs.sortedOrder < rhs.sortedOrder
     }
 }
 
@@ -97,4 +148,29 @@ enum SqToggleAction: String, CaseIterable
 {
     case ON
     case OFF
+}
+
+enum FaderLevelLaw:
+    String,
+    CaseIterable,
+    Codable,
+    CodingKeyRepresentable,
+    Comparable
+{
+    case LinearTaper
+    case AudioTaper
+
+    var sortedOrder: Int
+    {
+        switch self
+        {
+        case .LinearTaper: return 0
+        case .AudioTaper: return 1
+        }
+    }
+
+    static func < (lhs: FaderLevelLaw, rhs: FaderLevelLaw) -> Bool
+    {
+        return lhs.sortedOrder < rhs.sortedOrder
+    }
 }

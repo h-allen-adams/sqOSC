@@ -12,6 +12,9 @@
 		9F2648612C37805000C5D357 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F2648602C37805000C5D357 /* Preview Assets.xcassets */; };
 		9F2648862C3782C200C5D357 /* OSCKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F2648852C3782C200C5D357 /* OSCKit */; };
 		9F2648882C3782C200C5D357 /* OSCKitCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9F2648872C3782C200C5D357 /* OSCKitCore */; };
+		9F46E4412EABD0F000E7369E /* CqMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F46E4402EABD0F000E7369E /* CqMixerEndpointsTest.swift */; };
+		9F46E4432EABD5F400E7369E /* CqMixerMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F46E4422EABD5F400E7369E /* CqMixerMessagesTests.swift */; };
+		9F46E44B2EAC0FDD00E7369E /* LookupTableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F46E44A2EAC0FDD00E7369E /* LookupTableTest.swift */; };
 		9F7F6A5F2C398BB1004AE8B9 /* SwiftRadix in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7F6A5E2C398BB1004AE8B9 /* SwiftRadix */; };
 		9F7F6A612C398BCE004AE8B9 /* MIDIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9F7F6A602C398BCE004AE8B9 /* MIDIKit */; };
 		9FAB96612C42EEF200E9D123 /* SqMixerMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */; };
@@ -39,6 +42,9 @@
 		9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerMessagesTests.swift; sourceTree = "<group>"; };
 		9F383CA12C38256C0093DC24 /* sqOSC.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.xctestplan; sourceTree = "<group>"; };
 		9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpointsTest.swift; sourceTree = "<group>"; };
+		9F46E4402EABD0F000E7369E /* CqMixerEndpointsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CqMixerEndpointsTest.swift; sourceTree = "<group>"; };
+		9F46E4422EABD5F400E7369E /* CqMixerMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CqMixerMessagesTests.swift; sourceTree = "<group>"; };
+		9F46E44A2EAC0FDD00E7369E /* LookupTableTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookupTableTest.swift; sourceTree = "<group>"; };
 		9F7F6A532C38FCB4004AE8B9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9FAB96642C430D7E00E9D123 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9FAB96652C430E0C00E9D123 /* sqOSC.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.sdef; sourceTree = "<group>"; };
@@ -48,7 +54,7 @@
 		9FF181F32E7E552B00008C68 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				none.plist,
+				cq.plist,
 				sq.plist,
 			);
 			target = 9F08065D2C42ED3F00F533F4 /* sqOSCTests */;
@@ -92,6 +98,9 @@
 				9F1E373A2E7A6765009E3D8F /* SqMixerConfigTests.swift */,
 				9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */,
 				9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */,
+				9F46E4422EABD5F400E7369E /* CqMixerMessagesTests.swift */,
+				9F46E4402EABD0F000E7369E /* CqMixerEndpointsTest.swift */,
+				9F46E44A2EAC0FDD00E7369E /* LookupTableTest.swift */,
 			);
 			path = sqOSCTests;
 			sourceTree = "<group>";
@@ -273,6 +282,9 @@
 			files = (
 				9FAB96612C42EEF200E9D123 /* SqMixerMessagesTests.swift in Sources */,
 				9F1E373B2E7A6765009E3D8F /* SqMixerConfigTests.swift in Sources */,
+				9F46E44B2EAC0FDD00E7369E /* LookupTableTest.swift in Sources */,
+				9F46E4432EABD5F400E7369E /* CqMixerMessagesTests.swift in Sources */,
+				9F46E4412EABD0F000E7369E /* CqMixerEndpointsTest.swift in Sources */,
 				9FAB96622C42EEF200E9D123 /* SqMixerEndpointsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -465,7 +477,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -482,7 +494,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -500,7 +512,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -517,7 +529,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.1;
+				MARKETING_VERSION = 2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

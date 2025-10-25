@@ -29,7 +29,8 @@ class SqOscEndpointRegistrar {
         self.dictionary = dictionary
         self.publisher = publisher
         self.mixerConfig = dictionary.mixerConfig
-        self.mixerMessages = MixerMidiMessageFactory(mixerConfig: dictionary.mixerConfig)
+        self.mixerMessages = MixerMidiMessageFactory(mixerConfig: dictionary.mixerConfig,
+                                                     faderLaw: mixerConfig.faderLaws().first!)
     }
 
     /**
@@ -52,8 +53,9 @@ class SqOscEndpointRegistrar {
      level, mute, pan, and sendLevel methods.
      */
     private func populateAudioChannels(_ channelType: MixerEndpoint) {
+        guard let channelCount = mixerConfig.channelCount(channelType) else { return }
         // Loop across each possible channel in the channel type, numbered 1 to n
-        for chNum in 1 ... mixerConfig.channelCount(channelType)! {
+        for chNum in 1 ... channelCount {
             // All audio channels support mute, so register a mute operation for
             // this channel
             populateMute(channelType, chNum)
@@ -356,7 +358,7 @@ class SqOscEndpointRegistrar {
      the channel number.
      */
     private func destFor(_ destType: MixerEndpoint, _ destChannel: Int) -> String {
-        let destTypeCount = mixerConfig.channelCount(destType)!
+        let destTypeCount = mixerConfig.channelCount(destType)
         var dest = "\(destType)/\(destChannel)"
         if destTypeCount == 1 {
             dest = "\(destType)"

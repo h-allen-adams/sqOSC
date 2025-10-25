@@ -115,7 +115,7 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             await midiMessagePublisher.publish(label: label, message: midiMessage)
         }
 
-        logger("Initializing OSC Address Space: \(dictionary.mixerConfig.model)")
+        logger("Initializing OSC Address Space: \(dictionary.mixerConfig.series)")
         endpointRegistrar.populate(addressSpace: addressSpace)
     }
 
