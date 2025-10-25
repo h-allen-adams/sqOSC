@@ -35,7 +35,7 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     public let activityLog: ActivityLog
     public let addressSpace = OSCAddressSpace()
     public let logger: LogPublisher
-    public let oscDictionary = SqMixerEndpointDictionary(modelString: MixerPreferences.midiStandard.mixerModel)
+    public let oscDictionary = SqMixerEndpointDictionary()
     public let oscManager: SqOscManager
     public let oscMessageSender: OscMessageSender
     public let midiManager = ObservableMIDIManager(
@@ -101,10 +101,13 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
      */
     func initializeOscHandler() {
         oscManager.start()
-        initOscAddresSpace(dictionary: oscDictionary)
         oscDictionary.onChange(initOscAddresSpace)
+        oscDictionary.reset(MixerSeries(rawValue: MixerPreferences.midiStandard.mixerModel)!)
     }
 
+    /**
+     Initialize the OSC Address Space with the contents of the given dictionary
+     */
     func initOscAddresSpace(dictionary: SqMixerEndpointDictionary) {
         addressSpace.unregisterAll()
         let midiMessagePublisher = MidiMessagePublisher(logger: logger,

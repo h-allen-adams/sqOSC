@@ -14,6 +14,7 @@ import SwiftUI
  */
 struct OSCMessageView: View {
     @Binding var resolvedMessage: String
+    @Binding var resolvedEvent: AttributedString
     @EnvironmentObject private var messageSender: OscMessageSender
 
     var body: some View {
@@ -35,11 +36,18 @@ struct OSCMessageView: View {
                 .monospaced()
                 .textSelection(.enabled)
         }
+        HStack(alignment: .top, spacing: 0.0) {
+            Text("         ").monospaced()
+            Text(resolvedEvent)
+                .monospaced()
+                .textSelection(.enabled)
+        }
     }
 }
 
 #Preview {
+    @Previewable @State var resolvedEvent = AttributedString("01 02 03 04 05 06 07 08 09 10 11 12")
     @Previewable @State var resolvedMessage = "/sq/some/resolvedPath 125"
-    OSCMessageView(resolvedMessage: $resolvedMessage)
+    OSCMessageView(resolvedMessage: $resolvedMessage, resolvedEvent: $resolvedEvent)
         .environmentObject(OscMessageSender(addressSpace: nil))
 }

@@ -13,16 +13,22 @@ struct SceneRecallBuilderView: View {
 
     @ObservedObject var dictionary: SqMixerEndpointDictionary
     @Binding var resolvedMessage: String
+    @Binding var resolvedEvent: AttributedString
+    @Preference(\.midiChannel) var midiChannel
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedSceneNum: Int = 1
 
-    init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
+    init(dictionary: SqMixerEndpointDictionary,
+         resolvedMessage: Binding<String>,
+         resolvedEvent: Binding<AttributedString>)
+    {
         let mixerConfig = dictionary.mixerConfig
         let method = MixerMethod.recall
         self.dictionary = dictionary
         self.mixerConfig = mixerConfig
         self.method = method
         self._resolvedMessage = resolvedMessage
+        self._resolvedEvent = resolvedEvent
         self.selectedChannelType = mixerConfig.channelsFor(method).first ?? .scene
     }
 
@@ -53,11 +59,18 @@ struct SceneRecallBuilderView: View {
             dictionary.resolveOscAddress(method: method,
                                          endpoint: selectedChannelType,
                                          templateValues: ["sceneNum": "\(selectedSceneNum)"]) ?? "/none"
+
+        let mixerMessages = dictionary.mixerMessages!
+        let event = mixerMessages.sceneRecallMessage(midiChannel: midiChannel,
+                                                     scene: selectedSceneNum)
+        resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
     }
 }
 
 #Preview {
+    @Previewable @State var resolvedEvent = AttributedString("")
     @Previewable @State var resolvedMessage = ""
-    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary(.sq),
-                           resolvedMessage: $resolvedMessage)
+    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+                           resolvedMessage: $resolvedMessage,
+                           resolvedEvent: $resolvedEvent)
 }

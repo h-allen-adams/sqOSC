@@ -46,8 +46,8 @@ struct ConfigurationView: View {
                     }
                 }
                 .pickerStyle(.segmented)
-                Picker("Mixer Model", selection: $mixerModel) {
-                    ForEach(MixerSeries.allCases, id: \.self.rawValue) {
+                Picker("Mixer Series", selection: $mixerModel) {
+                    ForEach(MixerSeries.displayCases, id: \.self.rawValue) {
                         Text("\(String(describing: $0))")
                     }
                 }
@@ -109,6 +109,6 @@ final class PublisherObservableObject: ObservableObject {
 #Preview {
     ConfigurationView()
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
-        .environmentObject(SqMixerEndpointDictionary(.sq))
+        .environmentObject(SqMixerEndpointDictionary.forConfiguration(.sq))
         .environmentObject(ActivityLog())
 }

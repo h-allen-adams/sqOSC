@@ -17,6 +17,8 @@ struct ChannelToChannelValueRangeBuilderView: View {
 
     @ObservedObject var dictionary: SqMixerEndpointDictionary
     @Binding var resolvedMessage: String
+    @Binding var resolvedEvent: AttributedString
+    @Preference(\.midiChannel) var midiChannel
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedDestType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
@@ -25,13 +27,15 @@ struct ChannelToChannelValueRangeBuilderView: View {
 
     init(method: MixerMethod,
          dictionary: SqMixerEndpointDictionary,
-         resolvedMessage: Binding<String>)
+         resolvedMessage: Binding<String>,
+         resolvedEvent: Binding<AttributedString>)
     {
         let mixerConfig = dictionary.mixerConfig
         self.mixerConfig = mixerConfig
         self.method = method
         self.dictionary = dictionary
         self._resolvedMessage = resolvedMessage
+        self._resolvedEvent = resolvedEvent
 
         let source = mixerConfig.channelsFor(method).first ?? .input
         self.selectedChannelType = source
@@ -145,12 +149,39 @@ struct ChannelToChannelValueRangeBuilderView: View {
                                                    endpoint: selectedChannelType,
                                                    templateValues: pathValues) ?? "/none"
         resolvedMessage = address + " \(Int(selectedValue))"
+
+        let mixerMessages = dictionary.mixerMessages!
+
+        switch method {
+        case .pan:
+            let event = mixerMessages.sendPanMessage(midiChannel: midiChannel,
+                                                     sourceType: selectedChannelType,
+                                                     sourceChannel: selectedChannelNum,
+                                                     destType: selectedDestType,
+                                                     destChannel: selectedDestNum,
+                                                     panLevel: Int(selectedValue))
+            resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
+        case .sendLevel:
+            let event = mixerMessages.sendLevelMessage(midiChannel: midiChannel,
+                                                       sourceType: selectedChannelType,
+                                                       sourceChannel: selectedChannelNum,
+                                                       destType: selectedDestType,
+                                                       destChannel: selectedDestNum,
+                                                       dbLevel: Int(selectedValue))
+            resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
+        default:
+            break
+        }
+
+        MidiMessageViewUtilities.colorizeNrpn(&resolvedEvent)
     }
 }
 
 #Preview {
     @Previewable @State var resolvedMessage = ""
+    @Previewable @State var resolvedEvent = AttributedString("")
     ChannelToChannelValueRangeBuilderView(method: .pan,
-                                          dictionary: SqMixerEndpointDictionary(.sq),
-                                          resolvedMessage: $resolvedMessage)
+                                          dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+                                          resolvedMessage: $resolvedMessage,
+                                          resolvedEvent: $resolvedEvent)
 }

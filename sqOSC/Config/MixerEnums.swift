@@ -21,6 +21,12 @@ enum MixerSeries:
 
     case sq
     case cq
+    case none
+
+    static var displayCases: [MixerSeries]
+    {
+        return [.sq, .cq]
+    }
 }
 
 /**

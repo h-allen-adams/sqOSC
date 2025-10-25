@@ -48,33 +48,32 @@ class SqMixerEndpointDictionary: ObservableObject, Equatable {
      */
     @Published var values: [EndpointDictEntry]
 
-    private var onChangeHandler: ((_: SqMixerEndpointDictionary) -> Void)?
+    /**
+     MIDI Message Factory
+     */
+    @Published var mixerMessages: MixerMidiMessageFactory?
 
     /**
-     Create a dictionary where each key are MixerMethod's and the
-     associated value is the EndpointDictEntry for that method.
+     Change handler function called whenever the dictionary is reset.
      */
-    init(_ model: MixerSeries) {
-        let mixerConfig = MixerConfig.load(model)
-        self.mixerConfig = mixerConfig
-        entries = mixerConfig.methods().reduce(into: [:]) {
-            $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
-        }
+    private var onChangeHandler: ((_: SqMixerEndpointDictionary) -> Void)?
 
+    init() {
+        mixerConfig = MixerConfig.NONE
+        entries = [:]
         values = []
-        let sorted = entries.sorted { $0.key < $1.key }
-        for entry in sorted {
-            values.append(entry.value)
-        }
+        mixerMessages = nil
     }
 
-    convenience init(modelString: String) {
-        self.init(MixerSeries(rawValue: modelString)!)
-    }
-
+    /**
+     Reset the dictionary by loading the specified mixer configuration
+     */
     func reset(_ model: MixerSeries) {
         let mixerConfig = MixerConfig.load(model)
         self.mixerConfig = mixerConfig
+        mixerMessages = MixerMidiMessageFactory(mixerConfig: mixerConfig,
+                                                faderLaw: mixerConfig.faderLaws().first!)
+
         entries = mixerConfig.methods().reduce(into: [:]) {
             $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
         }
@@ -88,6 +87,9 @@ class SqMixerEndpointDictionary: ObservableObject, Equatable {
         onChangeHandler?(self)
     }
 
+    /**
+     Set the change handler function
+     */
     func onChange(_ handler: @escaping (_: SqMixerEndpointDictionary) -> Void) {
         onChangeHandler = handler
     }
@@ -102,6 +104,15 @@ class SqMixerEndpointDictionary: ObservableObject, Equatable {
     {
         return entries[method]?.resolveOscAddress(endpoint: endpoint,
                                                   templateValues: templateValues)
+    }
+
+    /**
+     Instantiate a dictionary instance for the given mixer model
+     */
+    static func forConfiguration(_ model: MixerSeries) -> SqMixerEndpointDictionary {
+        let result = SqMixerEndpointDictionary()
+        result.reset(model)
+        return result
     }
 
     static func == (lhs: SqMixerEndpointDictionary, rhs: SqMixerEndpointDictionary) -> Bool {

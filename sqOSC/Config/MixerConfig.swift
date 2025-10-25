@@ -8,10 +8,12 @@
 import Foundation
 
 /**
- Singleton Mixer Configuration values based on the contents of the sq.plist
- file.
+ Singleton Mixer Configuration values based on the contents of the associated
+ plist file.
  */
 class MixerConfig: Codable, Equatable {
+    public static let NONE = MixerConfig()
+    
     /**
      Mixer Series
      */
@@ -64,6 +66,17 @@ class MixerConfig: Codable, Equatable {
      last values in the range.
      */
     private let levelParameters: [FaderLevelLaw: [Int: String]]
+    
+    private init() {
+        series = .none
+        channelCounts = [:]
+        channelOffsets = [:]
+        channelParameters = [:]
+        channelToChannelParameters = [:]
+        softKeyParameters = SoftKeyParameters()
+        panBalanceParameters = [:]
+        levelParameters = [:]
+    }
     
     /**
      Return the sorted list of methods active in this configuration
@@ -217,7 +230,14 @@ class MixerConfig: Codable, Equatable {
         return levelParameters.keys.sorted()
     }
     
+    /**
+     Load the configuration for the specified mixer series.
+     */
     static func load(_ model: MixerSeries) -> MixerConfig {
+        if model == .none {
+            return NONE
+        }
+        
         let settingsUrl = Bundle.main.url(forResource: "\(model)", withExtension: "plist")
         let settingsData = try! Data(contentsOf: settingsUrl!)
         do {
@@ -240,6 +260,12 @@ public struct SoftKeyParameters: Codable {
     private let noteZero: String
     private let pressVelocity: String
     private let releaseVelocity: String
+    
+    init() {
+        noteZero = ""
+        pressVelocity = ""
+        releaseVelocity = ""
+    }
 
     func noteZeroParameter() -> Int {
         return noteZero.hex!.value

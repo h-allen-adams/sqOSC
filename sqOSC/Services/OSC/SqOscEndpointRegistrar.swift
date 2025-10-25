@@ -29,8 +29,7 @@ class SqOscEndpointRegistrar {
         self.dictionary = dictionary
         self.publisher = publisher
         self.mixerConfig = dictionary.mixerConfig
-        self.mixerMessages = MixerMidiMessageFactory(mixerConfig: dictionary.mixerConfig,
-                                                     faderLaw: mixerConfig.faderLaws().first!)
+        self.mixerMessages = dictionary.mixerMessages!
     }
 
     /**
@@ -80,6 +79,10 @@ class SqOscEndpointRegistrar {
         }
     }
 
+    /**
+     Populate the Channel-to-Channel OSC message addresses for the given
+     operation, using the populator function to generate the addresses.
+     */
     private func populateChannelToChannelMessage(_ operation: MixerMethod,
                                                  _ sourceType: MixerEndpoint,
                                                  _ sourceNum: Int,

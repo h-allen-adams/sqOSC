@@ -60,5 +60,5 @@ extension EndpointDictEntry {
 }
 
 #Preview {
-    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary(.sq).entries[MixerMethod.sendLevel]!)
+    EndpointDictionaryEntryView(entry: SqMixerEndpointDictionary.forConfiguration(.sq).entries[MixerMethod.sendLevel]!)
 }

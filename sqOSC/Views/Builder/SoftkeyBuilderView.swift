@@ -13,17 +13,23 @@ struct SoftkeyBuilderView: View {
 
     @ObservedObject var dictionary: SqMixerEndpointDictionary
     @Binding var resolvedMessage: String
+    @Binding var resolvedEvent: AttributedString
+    @Preference(\.midiChannel) var midiChannel
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
     @State private var selectedToggle: String = "PRESS"
 
-    init(dictionary: SqMixerEndpointDictionary, resolvedMessage: Binding<String>) {
+    init(dictionary: SqMixerEndpointDictionary,
+         resolvedMessage: Binding<String>,
+         resolvedEvent: Binding<AttributedString>)
+    {
         let mixerConfig = dictionary.mixerConfig
         let method = MixerMethod.trigger
         self.dictionary = dictionary
         self.method = method
         self.mixerConfig = mixerConfig
         self._resolvedMessage = resolvedMessage
+        self._resolvedEvent = resolvedEvent
         self.selectedChannelType = mixerConfig.channelsFor(method).first ?? .keys
     }
 
@@ -67,11 +73,19 @@ struct SoftkeyBuilderView: View {
                                                    endpoint: selectedChannelType,
                                                    templateValues: templateValues) ?? "/none"
         resolvedMessage = address + " \(selectedToggle)"
+
+        let mixerMessages = dictionary.mixerMessages!
+        let event = mixerMessages.softKeyMessage(midiChannel: midiChannel,
+                                                 button: selectedChannelNum,
+                                                 state: SqButtonState(rawValue: selectedToggle)!)
+        resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
     }
 }
 
 #Preview {
+    @Previewable @State var resolvedEvent = AttributedString("")
     @Previewable @State var resolvedMessage = ""
-    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary(.sq),
-                       resolvedMessage: $resolvedMessage)
+    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+                       resolvedMessage: $resolvedMessage,
+                       resolvedEvent: $resolvedEvent)
 }

@@ -13,6 +13,8 @@ struct MixAssignmentBuilderView: View {
     
     @ObservedObject var dictionary: SqMixerEndpointDictionary
     @Binding var resolvedMessage: String
+    @Binding var resolvedEvent: AttributedString
+    @Preference(\.midiChannel) var midiChannel
     @State private var selectedChannelType: MixerEndpoint
     @State private var selectedDestType: MixerEndpoint
     @State private var selectedChannelNum: Int = 1
@@ -20,7 +22,8 @@ struct MixAssignmentBuilderView: View {
     @State private var selectedToggle: SqToggleAction = .ON
 
     init(dictionary: SqMixerEndpointDictionary,
-         resolvedMessage: Binding<String>)
+         resolvedMessage: Binding<String>,
+         resolvedEvent: Binding<AttributedString>)
     {
         let mixerConfig = dictionary.mixerConfig
         let method = MixerMethod.assign
@@ -28,6 +31,7 @@ struct MixAssignmentBuilderView: View {
         self.method = method
         self.dictionary = dictionary
         self._resolvedMessage = resolvedMessage
+        self._resolvedEvent = resolvedEvent
         
         let source = mixerConfig.channelsFor(method).first!
         self.selectedChannelType = source
@@ -141,11 +145,23 @@ struct MixAssignmentBuilderView: View {
                                                    endpoint: selectedChannelType,
                                                    templateValues: pathValues) ?? "/none"
         resolvedMessage = address + " \(selectedToggle)"
+        
+        let mixerMessages = dictionary.mixerMessages!
+        let event = mixerMessages.assignMessage(midiChannel: midiChannel,
+                                                sourceType: selectedChannelType,
+                                                sourceChannel: selectedChannelNum,
+                                                destType: selectedDestType,
+                                                destChannel: selectedDestNum,
+                                                action: selectedToggle)
+        resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
+        MidiMessageViewUtilities.colorizeNrpn(&resolvedEvent)
     }
 }
 
 #Preview {
     @Previewable @State var resolvedMessage = ""
-    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary(.sq),
-                             resolvedMessage: $resolvedMessage)
+    @Previewable @State var resolvedEvent = AttributedString("")
+    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+                             resolvedMessage: $resolvedMessage,
+                             resolvedEvent: $resolvedEvent)
 }
