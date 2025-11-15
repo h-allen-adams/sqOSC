@@ -3,50 +3,63 @@
 <plist version="1.0">
 <dict>
 	<key>series</key>
-	<string>sq</string>
+	<string>qu</string>
 	<key>channelCounts</key>
 	<dict>
-		<key>aux</key>
-		<integer>12</integer>
-		<key>dca</key>
-		<integer>8</integer>
-		<key>fxReturn</key>
-		<integer>8</integer>
-		<key>fxSend</key>
-		<integer>4</integer>
-		<key>group</key>
-		<integer>12</integer>
 		<key>input</key>
-		<integer>48</integer>
-		<key>keys</key>
-		<integer>16</integer>
+		<integer>32</integer>
+		<key>st</key>
+		<integer>2</integer>
+		<key>usb</key>
+		<integer>1</integer>
 		<key>main</key>
 		<integer>1</integer>
+		<key>aux</key>
+		<integer>12</integer>
+		<key>group</key>
+		<integer>12</integer>
+		<key>fxSend</key>
+		<integer>4</integer>
+		<key>fxReturn</key>
+		<integer>6</integer>
 		<key>matrix</key>
 		<integer>3</integer>
+		<key>dca</key>
+		<integer>8</integer>
 		<key>muteGroup</key>
+		<integer>8</integer>
+		<key>keys</key>
 		<integer>8</integer>
 		<key>scene</key>
 		<integer>300</integer>
 	</dict>
 	<key>channelOffsets</key>
-	<dict/>
+	<dict>
+		<key>st</key>
+		<integer>2</integer>
+		<key>usb</key>
+		<integer>2</integer>
+	</dict>
 	<key>channelParameters</key>
 	<dict>
 		<key>mute</key>
 		<dict>
 			<key>input</key>
 			<string>00 00</string>
-			<key>group</key>
-			<string>00 30</string>
-			<key>fxReturn</key>
-			<string>00 3C</string>
+			<key>st</key>
+			<string>00 20</string>
+			<key>usb</key>
+			<string>00 24</string>
 			<key>main</key>
 			<string>00 44</string>
 			<key>aux</key>
 			<string>00 45</string>
+			<key>group</key>
+			<string>00 45</string>
 			<key>fxSend</key>
 			<string>00 51</string>
+			<key>fxReturn</key>
+			<string>00 3C</string>
 			<key>matrix</key>
 			<string>00 55</string>
 			<key>dca</key>
@@ -60,21 +73,14 @@
 			<string>4F 00</string>
 			<key>aux</key>
 			<string>4F 01</string>
+			<key>group</key>
+			<string>4F 01</string>
 			<key>fxSend</key>
 			<string>4F 0D</string>
 			<key>matrix</key>
 			<string>4F 11</string>
 			<key>dca</key>
 			<string>4F 20</string>
-		</dict>
-		<key>balance</key>
-		<dict>
-			<key>main</key>
-			<string>5F 00</string>
-			<key>aux</key>
-			<string>5F 01</string>
-			<key>matrix</key>
-			<string>5F 11</string>
 		</dict>
 	</dict>
 	<key>channelToChannelParameters</key>
@@ -90,25 +96,23 @@
 				<key>fxSend</key>
 				<string>4C 14</string>
 			</dict>
-			<key>group</key>
+			<key>st</key>
 			<dict>
 				<key>main</key>
-				<string>40 30</string>
+				<string>40 20</string>
 				<key>aux</key>
-				<string>45 04</string>
+				<string>43 44</string>
 				<key>fxSend</key>
-				<string>4D 54</string>
-				<key>matrix</key>
-				<string>4E 4B</string>
+				<string>4D 14</string>
 			</dict>
-			<key>fxReturn</key>
+			<key>usb</key>
 			<dict>
 				<key>main</key>
-				<string>40 3C</string>
+				<string>40 24</string>
 				<key>aux</key>
-				<string>46 14</string>
+				<string>43 74</string>
 				<key>fxSend</key>
-				<string>4E 04</string>
+				<string>4D 24</string>
 			</dict>
 			<key>main</key>
 			<dict>
@@ -120,6 +124,26 @@
 				<key>matrix</key>
 				<string>4E 27</string>
 			</dict>
+			<key>group</key>
+			<dict>
+				<key>main</key>
+				<string>40 30</string>
+				<key>aux</key>
+				<string>45 04</string>
+				<key>fxSend</key>
+				<string>4D 54</string>
+				<key>matrix</key>
+				<string>4E 27</string>
+			</dict>
+			<key>fxReturn</key>
+			<dict>
+				<key>main</key>
+				<string>40 3C</string>
+				<key>aux</key>
+				<string>46 14</string>
+				<key>fxSend</key>
+				<string>4E 04</string>
+			</dict>
 		</dict>
 		<key>pan</key>
 		<dict>
@@ -130,6 +154,20 @@
 				<key>aux</key>
 				<string>50 44</string>
 			</dict>
+			<key>st</key>
+			<dict>
+				<key>main</key>
+				<string>50 20</string>
+				<key>aux</key>
+				<string>53 44</string>
+			</dict>
+			<key>usb</key>
+			<dict>
+				<key>main</key>
+				<string>50 24</string>
+				<key>aux</key>
+				<string>53 74</string>
+			</dict>
 			<key>group</key>
 			<dict>
 				<key>main</key>
@@ -137,7 +175,7 @@
 				<key>aux</key>
 				<string>55 04</string>
 				<key>matrix</key>
-				<string>5E 4B</string>
+				<string>5E 27</string>
 			</dict>
 			<key>fxReturn</key>
 			<dict>
@@ -166,9 +204,41 @@
 				<key>aux</key>
 				<string>60 44</string>
 				<key>group</key>
-				<string>66 74</string>
+				<string>60 44</string>
 				<key>fxSend</key>
 				<string>6C 14</string>
+			</dict>
+			<key>st</key>
+			<dict>
+				<key>main</key>
+				<string>60 20</string>
+				<key>aux</key>
+				<string>63 44</string>
+				<key>group</key>
+				<string>63 44</string>
+				<key>fxSend</key>
+				<string>6D 14</string>
+			</dict>
+			<key>usb</key>
+			<dict>
+				<key>main</key>
+				<string>60 24</string>
+				<key>aux</key>
+				<string>63 74</string>
+				<key>group</key>
+				<string>63 74</string>
+				<key>fxSend</key>
+				<string>6D 24</string>
+			</dict>
+			<key>main</key>
+			<dict>
+				<key>matrix</key>
+				<string>6E 24</string>
+			</dict>
+			<key>aux</key>
+			<dict>
+				<key>matrix</key>
+				<string>6E 27</string>
 			</dict>
 			<key>group</key>
 			<dict>
@@ -179,7 +249,7 @@
 				<key>fxSend</key>
 				<string>6D 54</string>
 				<key>matrix</key>
-				<string>6E 4B</string>
+				<string>6E 27</string>
 			</dict>
 			<key>fxReturn</key>
 			<dict>
@@ -191,16 +261,6 @@
 				<string>6B 34</string>
 				<key>fxSend</key>
 				<string>6E 04</string>
-			</dict>
-			<key>main</key>
-			<dict>
-				<key>matrix</key>
-				<string>6E 24</string>
-			</dict>
-			<key>aux</key>
-			<dict>
-				<key>matrix</key>
-				<string>6E 27</string>
 			</dict>
 		</dict>
 	</dict>

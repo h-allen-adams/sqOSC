@@ -18,8 +18,8 @@ struct MuteBuilderView: View {
     @Binding var resolvedMessage: String
     @Binding var resolvedEvent: AttributedString
     @Preference(\.midiChannel) var midiChannel
-    @State private var selectedChannelType: MixerEndpoint
-    @State private var selectedChannelNum: Int = 1
+    @State private var selectedChannelType: MixerConfig.BuilderChannelType
+    @State private var selectedChannel: MixerConfig.BuilderChannel
     @State private var selectedToggle: SqToggleAction = .ON
 
     init(dictionary: SqMixerEndpointDictionary,
@@ -33,29 +33,36 @@ struct MuteBuilderView: View {
         self.method = method
         self._resolvedMessage = resolvedMessage
         self._resolvedEvent = resolvedEvent
-        self.selectedChannelType = mixerConfig.channelsFor(method).first ?? .input
+        let initialChannelType = mixerConfig.builderChannelTypeFor(method).first ?? .input
+        self.selectedChannelType = initialChannelType
+        self.selectedChannel = mixerConfig.builderChannels(initialChannelType).first ?? MixerConfig.BuilderChannel.UNRESOLVED
     }
 
     var body: some View {
         VStack {
-            Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(mixerConfig.channelsFor(method)) { endpoint in
-                    Text(endpoint.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
             HStack {
-                Picker("Channel Num", selection: $selectedChannelNum) {
-                    ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
-                        Text("\($0)")
+                Text("Channel")
+                Picker("", selection: $selectedChannelType) {
+                    ForEach(mixerConfig.builderChannelTypeFor(method)) { channelType in
+                        Text(channelType.title)
                     }
                 }
-                .pickerStyle(.menu)
-                Picker("Toggle", selection: $selectedToggle) {
+                .labelsHidden()
+                Picker("", selection: $selectedChannel) {
+                    ForEach(mixerConfig.builderChannels(selectedChannelType), id: \.self) {
+                        Text("\($0.title)")
+                    }
+                }
+                .labelsHidden()
+            }
+            HStack {
+                Text("Mute")
+                Picker("", selection: $selectedToggle) {
                     ForEach(SqToggleAction.allCases, id: \.self) {
                         Text("\(String(describing: $0))")
                     }
                 }
+                .labelsHidden()
                 .pickerStyle(.segmented)
             }
         }
@@ -63,9 +70,11 @@ struct MuteBuilderView: View {
             updateResolvedMessage()
         }
         .onChange(of: selectedChannelType) { _, _ in
+            selectedChannel = mixerConfig.builderChannels(selectedChannelType).first!
             updateResolvedMessage()
         }
-        .onChange(of: selectedChannelNum) { _, _ in
+        .onChange(of: selectedChannel) { _, _ in
+            selectedToggle = .ON
             updateResolvedMessage()
         }
         .onChange(of: selectedToggle) { _, _ in
@@ -75,18 +84,18 @@ struct MuteBuilderView: View {
 
     func updateResolvedMessage() {
         let templateValues = [
-            "chNum": "\(selectedChannelNum)"
+            "chNum": "\(selectedChannel.chNum)"
         ]
 
         let address = dictionary.resolveOscAddress(method: method,
-                                                   endpoint: selectedChannelType,
+                                                   endpoint: selectedChannel.endpoint,
                                                    templateValues: templateValues) ?? "/none"
         resolvedMessage = address + " \(selectedToggle)"
 
-        let mixerMessages = dictionary.mixerMessages!
+        guard let mixerMessages = dictionary.mixerMessages else { return }
         let event = mixerMessages.muteMessage(midiChannel: midiChannel,
-                                              type: selectedChannelType,
-                                              channel: selectedChannelNum,
+                                              type: selectedChannel.endpoint,
+                                              channel: selectedChannel.chNum,
                                               action: selectedToggle)
         resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
         MidiMessageViewUtilities.colorizeNrpn(&resolvedEvent)
@@ -96,7 +105,7 @@ struct MuteBuilderView: View {
 #Preview {
     @Previewable @State var resolvedEvent = AttributedString("")
     @Previewable @State var resolvedMessage = ""
-    MuteBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+    MuteBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.qu),
                     resolvedMessage: $resolvedMessage,
                     resolvedEvent: $resolvedEvent)
 }

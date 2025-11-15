@@ -35,12 +35,14 @@ struct SceneRecallBuilderView: View {
     var body: some View {
         VStack {
             HStack {
-                Picker("Scene Num", selection: $selectedSceneNum) {
+                Text("Scene Num")
+                Picker("", selection: $selectedSceneNum) {
                     ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                         Text("\($0)")
                     }
                 }
                 .pickerStyle(.menu)
+                .labelsHidden()
             }
         }
         .onAppear {
@@ -60,7 +62,7 @@ struct SceneRecallBuilderView: View {
                                          endpoint: selectedChannelType,
                                          templateValues: ["sceneNum": "\(selectedSceneNum)"]) ?? "/none"
 
-        let mixerMessages = dictionary.mixerMessages!
+        guard let mixerMessages = dictionary.mixerMessages else { return }
         let event = mixerMessages.sceneRecallMessage(midiChannel: midiChannel,
                                                      scene: selectedSceneNum)
         resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))

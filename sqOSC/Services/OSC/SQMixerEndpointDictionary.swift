@@ -28,9 +28,9 @@ import Foundation
  variable substitution parameters which will be filled in by the
  SqOscEndpointRegistrar.
 
- For example: "/sq/input/{chNum}/mute" is an OSC Address template which will be
+ For example: "/input/{chNum}/mute" is an OSC Address template which will be
  used to define all the possible mute addresses corresponding to mixer input
- channels: "/sq/input/1/mute", "/sq/input/2/mute", etc.
+ channels: "/input/1/mute", "/input/2/mute", etc.
  */
 class SqMixerEndpointDictionary: ObservableObject, Equatable {
     /**

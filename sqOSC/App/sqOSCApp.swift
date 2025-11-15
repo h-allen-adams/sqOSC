@@ -88,7 +88,7 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         do {
             midiManager.preferredAPI = CoreMIDIAPIVersion.legacyCoreMIDI
             try midiManager.start()
-            try midiManager.addOutputConnection(to: MIDIOutputConnectionMode.none, tag: "toSQ")
+            try midiManager.addOutputConnection(to: .none, tag: "toSQ")
             logger("MIDI Manager Started")
         } catch {
             logger("ERROR: Error while starting MIDI manager: \(error)")

@@ -20,12 +20,13 @@ enum MixerSeries:
     var id: Self { self }
 
     case sq
+    case qu
     case cq
     case none
 
     static var displayCases: [MixerSeries]
     {
-        return [.sq, .cq]
+        return [.sq, .qu, .cq]
     }
 }
 
@@ -101,11 +102,11 @@ enum MixerEndpoint:
     case st
     case usb
     case bt
-    case group
-    case fxReturn
     case main
     case aux
+    case group
     case fxSend
+    case fxReturn
     case matrix
     case dca
     case muteGroup
@@ -120,11 +121,11 @@ enum MixerEndpoint:
         case .st: 1
         case .usb: 2
         case .bt: 3
-        case .group: 4
-        case .fxReturn: 5
-        case .main: 6
-        case .aux: 7
-        case .fxSend: 8
+        case .main: 4
+        case .aux: 5
+        case .group: 6
+        case .fxSend: 7
+        case .fxReturn: 8
         case .matrix: 9
         case .dca: 10
         case .muteGroup: 11
@@ -135,7 +136,7 @@ enum MixerEndpoint:
 
     static var audioCases: [MixerEndpoint]
     {
-        return [.input, .st, .usb, .bt, .group, .fxReturn, .main, .aux, .fxSend, .matrix, .dca, .muteGroup]
+        return [.input, .st, .usb, .bt, .main, .aux, .group, .fxSend, .fxReturn, .matrix, .dca, .muteGroup]
     }
 
     static func < (lhs: MixerEndpoint, rhs: MixerEndpoint) -> Bool

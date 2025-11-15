@@ -91,10 +91,10 @@ class SqOscEndpointRegistrar {
                                                              _: MixerEndpoint,
                                                              _: Int) -> Void)
     {
-        if mixerConfig.channelSupports(.sendLevel, sourceType) {
+        if mixerConfig.channelSupports(operation, sourceType) {
             // For each possible destination type which can recieve audio
             // from the current channel
-            for destType in mixerConfig.channelTargets(.sendLevel,
+            for destType in mixerConfig.channelTargets(operation,
                                                        source: sourceType)
             {
                 // Register a sendLevel operation from the current channel

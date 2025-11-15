@@ -20,6 +20,7 @@
 		9FAB96612C42EEF200E9D123 /* SqMixerMessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */; };
 		9FAB96622C42EEF200E9D123 /* SqMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */; };
 		9FAB96662C430E0C00E9D123 /* sqOSC.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 9FAB96652C430E0C00E9D123 /* sqOSC.sdef */; };
+		9FE5349E2EC91C28002133CE /* QuMixerEndpointsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FE5349D2EC91C28002133CE /* QuMixerEndpointsTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		9F26485D2C37805000C5D357 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9F2648602C37805000C5D357 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9F2648622C37805000C5D357 /* sqOSC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = sqOSC.entitlements; sourceTree = "<group>"; };
+		9F37D5852EAEBA6D006BBD8B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerMessagesTests.swift; sourceTree = "<group>"; };
 		9F383CA12C38256C0093DC24 /* sqOSC.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.xctestplan; sourceTree = "<group>"; };
 		9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqMixerEndpointsTest.swift; sourceTree = "<group>"; };
@@ -48,6 +50,8 @@
 		9F7F6A532C38FCB4004AE8B9 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		9FAB96642C430D7E00E9D123 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9FAB96652C430E0C00E9D123 /* sqOSC.sdef */ = {isa = PBXFileReference; lastKnownFileType = text; path = sqOSC.sdef; sourceTree = "<group>"; };
+		9FE5349D2EC91C28002133CE /* QuMixerEndpointsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuMixerEndpointsTest.swift; sourceTree = "<group>"; };
+		9FE5349F2EC91E80002133CE /* README.qu.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.qu.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -55,6 +59,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				cq.plist,
+				qu.plist,
 				sq.plist,
 			);
 			target = 9F08065D2C42ED3F00F533F4 /* sqOSCTests */;
@@ -95,6 +100,7 @@
 		9F08065F2C42ED3F00F533F4 /* sqOSCTests */ = {
 			isa = PBXGroup;
 			children = (
+				9FE5349D2EC91C28002133CE /* QuMixerEndpointsTest.swift */,
 				9F1E373A2E7A6765009E3D8F /* SqMixerConfigTests.swift */,
 				9F383C972C381BD50093DC24 /* SqMixerMessagesTests.swift */,
 				9F383CA82C3832920093DC24 /* SqMixerEndpointsTest.swift */,
@@ -108,6 +114,8 @@
 		9F26484B2C37805000C5D357 = {
 			isa = PBXGroup;
 			children = (
+				9FE5349F2EC91E80002133CE /* README.qu.md */,
+				9F37D5852EAEBA6D006BBD8B /* README.md */,
 				9F7F6A502C38FC9F004AE8B9 /* Frameworks */,
 				9F2648552C37805000C5D357 /* Products */,
 				9F2648562C37805000C5D357 /* sqOSC */,
@@ -281,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FAB96612C42EEF200E9D123 /* SqMixerMessagesTests.swift in Sources */,
+				9FE5349E2EC91C28002133CE /* QuMixerEndpointsTest.swift in Sources */,
 				9F1E373B2E7A6765009E3D8F /* SqMixerConfigTests.swift in Sources */,
 				9F46E44B2EAC0FDD00E7369E /* LookupTableTest.swift in Sources */,
 				9F46E4432EABD5F400E7369E /* CqMixerMessagesTests.swift in Sources */,
@@ -477,7 +486,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -494,7 +503,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -512,7 +521,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"sqOSC/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -529,7 +538,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
-				MARKETING_VERSION = 2.2;
+				MARKETING_VERSION = 2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.adamaschool.sqOSC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

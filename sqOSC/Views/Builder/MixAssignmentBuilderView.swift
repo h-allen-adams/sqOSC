@@ -15,10 +15,10 @@ struct MixAssignmentBuilderView: View {
     @Binding var resolvedMessage: String
     @Binding var resolvedEvent: AttributedString
     @Preference(\.midiChannel) var midiChannel
-    @State private var selectedChannelType: MixerEndpoint
-    @State private var selectedDestType: MixerEndpoint
-    @State private var selectedChannelNum: Int = 1
-    @State private var selectedDestNum: Int = 1
+    @State private var selectedChannelType: MixerConfig.BuilderChannelType
+    @State private var selectedChannel: MixerConfig.BuilderChannel
+    @State private var selectedDestType: MixerConfig.BuilderChannelType
+    @State private var selectedDest: MixerConfig.BuilderChannel
     @State private var selectedToggle: SqToggleAction = .ON
 
     init(dictionary: SqMixerEndpointDictionary,
@@ -33,33 +33,36 @@ struct MixAssignmentBuilderView: View {
         self._resolvedMessage = resolvedMessage
         self._resolvedEvent = resolvedEvent
         
-        let source = mixerConfig.channelsFor(method).first!
+        let source = mixerConfig.builderChannelTypeFor(method).first ?? .input
         self.selectedChannelType = source
-        self.selectedDestType = mixerConfig.channelTargets(method, source: source).first!
+        self.selectedChannel = mixerConfig.builderChannels(source).first ?? MixerConfig.BuilderChannel.UNRESOLVED
+
+        let dest = mixerConfig.builderChannelTargets(method, source: source).first!
+        self.selectedDestType = dest
+        self.selectedDest = mixerConfig.builderChannels(dest).first ?? MixerConfig.BuilderChannel.UNRESOLVED
     }
     
     var body: some View {
         VStack {
-            channelTypePicker()
-            channelNumPicker()
-            destTypePicker()
-            destNumPicker()
+            sourcePicker()
+            destPicker()
             valueToggle()
         }
         .onAppear {
             updateResolvedMessage()
         }
         .onChange(of: selectedChannelType) { _, _ in
-            selectedChannelNum = 1
-            selectedDestType = mixerConfig.channelTargets(method, source: selectedChannelType).first!
+            selectedChannel = mixerConfig.builderChannels(selectedChannelType).first!
+            selectedDestType = mixerConfig.builderChannelTargets(method, source: selectedChannelType).first!
+            selectedDest = mixerConfig.builderChannels(selectedDestType).first!
             updateResolvedMessage()
-        }.onChange(of: selectedChannelNum) { _, _ in
+        }.onChange(of: selectedChannel) { _, _ in
             updateResolvedMessage()
         }.onChange(of: selectedDestType) { _, _ in
-            selectedDestNum = 1
+            selectedDest = mixerConfig.builderChannels(selectedDestType).first!
             updateResolvedMessage()
         }
-        .onChange(of: selectedDestNum) { _, _ in
+        .onChange(of: selectedDest) { _, _ in
             selectedToggle = .ON
             updateResolvedMessage()
         }
@@ -71,87 +74,85 @@ struct MixAssignmentBuilderView: View {
     /**
      Source Channel Type Picker
      */
-    func channelTypePicker() -> some View {
-        Picker("Source Type", selection: $selectedChannelType) {
-            ForEach(mixerConfig.channelsFor(method)) { endpoint in
-                Text(endpoint.rawValue)
+    func sourcePicker() -> some View {
+        HStack {
+            Text("Source")
+            Picker("", selection: $selectedChannelType) {
+                ForEach(mixerConfig.builderChannelTypeFor(method)) { channelType in
+                    Text(channelType.title)
+                }
             }
-        }
-        .pickerStyle(.segmented)
-    }
-    
-    /**
-     Source Channel Number Picker
-     */
-    func channelNumPicker() -> some View {
-        Picker("Source Num", selection: $selectedChannelNum) {
-            ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
-                Text("\($0)")
+            .labelsHidden()
+            Picker("", selection: $selectedChannel) {
+                ForEach(mixerConfig.builderChannels(selectedChannelType), id: \.self) {
+                    Text("\($0.title)")
+                }
             }
+            .labelsHidden()
         }
-        .pickerStyle(.menu)
     }
-    
+        
     /**
      Destination Channel Type Picker
      */
-    func destTypePicker() -> some View {
-        Picker("Dest Type", selection: $selectedDestType) {
-            ForEach(mixerConfig.channelTargets(method, source: selectedChannelType)) {
-                Text(verbatim: "\($0)")
+    func destPicker() -> some View {
+        HStack {
+            Text("Dest")
+            Picker("Dest", selection: $selectedDestType) {
+                ForEach(mixerConfig.builderChannelTargets(method, source: selectedChannelType)) { channelType in
+                    Text(channelType.title)
+                }
             }
-        }
-        .pickerStyle(.segmented)
-    }
-    
-    /**
-     Destinateion Channel Number Picker
-     */
-    func destNumPicker() -> some View {
-        Picker("Dest Num", selection: $selectedDestNum) {
-            ForEach(Array(1 ... mixerConfig.channelCount(selectedDestType)!), id: \.self) {
-                Text("\($0)")
+            .labelsHidden()
+            Picker("", selection: $selectedDest) {
+                ForEach(mixerConfig.builderChannels(selectedDestType), id: \.self) {
+                    Text("\($0.title)")
+                }
             }
+            .labelsHidden()
         }
-        .pickerStyle(.menu)
     }
-    
+        
     /**
      Value Picker
      */
     func valueToggle() -> some View {
-        Picker("Toggle", selection: $selectedToggle) {
-            ForEach(SqToggleAction.allCases, id: \.self) {
-                Text("\(String(describing: $0))")
+        HStack {
+            Text("Assign")
+            Picker("", selection: $selectedToggle) {
+                ForEach(SqToggleAction.allCases, id: \.self) {
+                    Text("\(String(describing: $0))")
+                }
             }
+            .pickerStyle(.segmented)
+            .labelsHidden()
         }
-        .pickerStyle(.segmented)
     }
     
     /**
      Update the resolvedPath when any of the picker values changes
      */
     func updateResolvedMessage() {
-        var dest = "\(selectedDestType)/\(selectedDestNum)"
-        if mixerConfig.channelCount(selectedDestType)! == 1 {
-            dest = "\(selectedDestType)"
+        var dest = "\(selectedDest.endpoint)/\(selectedDest.chNum)"
+        if mixerConfig.channelCount(selectedDest.endpoint)! == 1 {
+            dest = "\(selectedDest.endpoint)"
         }
         let pathValues = [
-            "chNum": "\(selectedChannelNum)",
+            "chNum": "\(selectedChannel.chNum)",
             "dest": dest
         ]
 
         let address = dictionary.resolveOscAddress(method: method,
-                                                   endpoint: selectedChannelType,
+                                                   endpoint: selectedChannel.endpoint,
                                                    templateValues: pathValues) ?? "/none"
         resolvedMessage = address + " \(selectedToggle)"
         
-        let mixerMessages = dictionary.mixerMessages!
+        guard let mixerMessages = dictionary.mixerMessages else { return }
         let event = mixerMessages.assignMessage(midiChannel: midiChannel,
-                                                sourceType: selectedChannelType,
-                                                sourceChannel: selectedChannelNum,
-                                                destType: selectedDestType,
-                                                destChannel: selectedDestNum,
+                                                sourceType: selectedChannel.endpoint,
+                                                sourceChannel: selectedChannel.chNum,
+                                                destType: selectedDest.endpoint,
+                                                destChannel: selectedDest.chNum,
                                                 action: selectedToggle)
         resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
         MidiMessageViewUtilities.colorizeNrpn(&resolvedEvent)
@@ -161,7 +162,7 @@ struct MixAssignmentBuilderView: View {
 #Preview {
     @Previewable @State var resolvedMessage = ""
     @Previewable @State var resolvedEvent = AttributedString("")
-    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.qu),
                              resolvedMessage: $resolvedMessage,
                              resolvedEvent: $resolvedEvent)
 }

@@ -36,18 +36,24 @@ struct SoftkeyBuilderView: View {
     var body: some View {
         VStack {
             HStack {
-                Picker("SoftKey Num", selection: $selectedChannelNum) {
+                Text("Key")
+                Picker("", selection: $selectedChannelNum) {
                     ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
                         Text("\($0)")
                     }
                 }
                 .pickerStyle(.menu)
-                Picker("Toggle", selection: $selectedToggle) {
+                .labelsHidden()
+            }
+            HStack {
+                Text("Toggle")
+                Picker("", selection: $selectedToggle) {
                     ForEach(["PRESS", "RELEASE"], id: \.self) {
                         Text("\($0)")
                     }
                 }
                 .pickerStyle(.segmented)
+                .labelsHidden()
             }
         }
         .onAppear {
@@ -74,7 +80,7 @@ struct SoftkeyBuilderView: View {
                                                    templateValues: templateValues) ?? "/none"
         resolvedMessage = address + " \(selectedToggle)"
 
-        let mixerMessages = dictionary.mixerMessages!
+        guard let mixerMessages = dictionary.mixerMessages else { return }
         let event = mixerMessages.softKeyMessage(midiChannel: midiChannel,
                                                  button: selectedChannelNum,
                                                  state: SqButtonState(rawValue: selectedToggle)!)

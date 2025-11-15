@@ -19,8 +19,8 @@ struct ChannelValueRangeBuilderView: View {
     @Binding var resolvedMessage: String
     @Binding var resolvedEvent: AttributedString
     @Preference(\.midiChannel) var midiChannel
-    @State private var selectedChannelType: MixerEndpoint
-    @State private var selectedChannelNum: Int = 1
+    @State private var selectedChannelType: MixerConfig.BuilderChannelType
+    @State private var selectedChannel: MixerConfig.BuilderChannel
     @State private var selectedValue = 0.0
 
     init(method: MixerMethod,
@@ -35,40 +35,46 @@ struct ChannelValueRangeBuilderView: View {
         self._resolvedMessage = resolvedMessage
         self._resolvedEvent = resolvedEvent
 
-        let source = mixerConfig.channelsFor(method).first!
-        self.selectedChannelType = source
+        let initialChannelType = mixerConfig.builderChannelTypeFor(method).first ?? .input
+        self.selectedChannelType = initialChannelType
+        self.selectedChannel = mixerConfig.builderChannels(initialChannelType).first ?? MixerConfig.BuilderChannel.UNRESOLVED
     }
 
     var body: some View {
         VStack {
-            Picker("Channel Type", selection: $selectedChannelType) {
-                ForEach(mixerConfig.channelsFor(method)) { endpoint in
-                    Text(endpoint.rawValue)
+            HStack {
+                Text("Channel")
+                Picker("", selection: $selectedChannelType) {
+                    ForEach(mixerConfig.builderChannelTypeFor(method)) { channelType in
+                        Text(channelType.title)
+                    }
                 }
+                .labelsHidden()
+                Picker("", selection: $selectedChannel) {
+                    ForEach(mixerConfig.builderChannels(selectedChannelType), id: \.self) {
+                        Text("\($0.title)")
+                    }
+                }
+                .labelsHidden()
             }
-            .pickerStyle(.segmented)
 
-            Picker("Channel Num", selection: $selectedChannelNum) {
-                ForEach(Array(1 ... mixerConfig.channelCount(selectedChannelType)!), id: \.self) {
-                    Text("\($0)")
-                }
-            }
-            .pickerStyle(.menu)
-            Slider(value: $selectedValue, in: method.valueRange) {
+            HStack {
                 Text("Value")
-            } minimumValueLabel: {
-                Text("\(Int(method.valueRange.lowerBound))\(method.units)")
-            } maximumValueLabel: {
-                Text("\(Int(method.valueRange.upperBound))\(method.units)")
+                Slider(value: $selectedValue, in: method.valueRange) {} minimumValueLabel: {
+                    Text("\(Int(method.valueRange.lowerBound))\(method.units)")
+                } maximumValueLabel: {
+                    Text("\(Int(method.valueRange.upperBound))\(method.units)")
+                }
+                .labelsHidden()
             }
         }
         .onAppear {
             updateResolvedMessage()
         }
         .onChange(of: selectedChannelType) { _, _ in
-            selectedChannelNum = 1
+            selectedChannel = mixerConfig.builderChannels(selectedChannelType).first!
             updateResolvedMessage()
-        }.onChange(of: selectedChannelNum) { _, _ in
+        }.onChange(of: selectedChannel) { _, _ in
             updateResolvedMessage()
         }.onChange(of: selectedValue) { _, _ in
             updateResolvedMessage()
@@ -77,27 +83,27 @@ struct ChannelValueRangeBuilderView: View {
 
     func updateResolvedMessage() {
         let templateValues = [
-            "chNum": "\(selectedChannelNum)"
+            "chNum": "\(selectedChannel.chNum)"
         ]
 
         let address = dictionary.resolveOscAddress(method: method,
-                                                   endpoint: selectedChannelType,
+                                                   endpoint: selectedChannel.endpoint,
                                                    templateValues: templateValues) ?? "/none"
         resolvedMessage = address + " \(Int(selectedValue))"
 
-        let mixerMessages = dictionary.mixerMessages!
+        guard let mixerMessages = dictionary.mixerMessages else { return }
 
         switch method {
         case .balance:
             let event = mixerMessages.outputBalanceMessage(midiChannel: midiChannel,
-                                                           outputType: selectedChannelType,
-                                                           outputChannel: selectedChannelNum,
+                                                           outputType: selectedChannel.endpoint,
+                                                           outputChannel: selectedChannel.chNum,
                                                            panLevel: Int(selectedValue))
             resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
         case .level:
             let event = mixerMessages.outputLevelMessage(midiChannel: midiChannel,
-                                                         outputType: selectedChannelType,
-                                                         outputChannel: selectedChannelNum,
+                                                         outputType: selectedChannel.endpoint,
+                                                         outputChannel: selectedChannel.chNum,
                                                          dbLevel: Int(selectedValue))
             resolvedEvent = AttributedString(MidiMessagePublisher.toString(event))
         default:

@@ -20,9 +20,8 @@ struct ContentView: View {
     var body: some View {
         TabView(
             content: {
-                ConfigurationView().tabItem { Text("Status") }.tag(1)
-                EndpointDictionaryView(dictionary: dictionary).tabItem { Text("Dictionary") }.tag(2)
-                BuilderView(dictionary: dictionary).tabItem { Text("OSC Builder") }.tag(3)
+                BuilderView(dictionary: dictionary).tabItem { Text("OSC Builder") }.tag(1)
+                ConfigurationView().tabItem { Text("Status") }.tag(2)
             }).frame(minWidth: 600, maxWidth: 600, minHeight: 400, maxHeight: 400)
     }
 }

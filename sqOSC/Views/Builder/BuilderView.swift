@@ -30,13 +30,17 @@ struct BuilderView: View {
                                    resolvedEvent: $resolvedEvent)
                 }
             }
-            VStack(alignment: .leading) {
-                Section(header: Text("Selections").font(.title)) {
-                    // Select an operation...
-                    Picker("Method", selection: $selectedMethod) {
-                        ForEach(dictionary.mixerConfig.methods()) { entry in
-                            Text("\(entry.title)")
+            Section(header: Text("Selections").font(.title)) {
+                VStack {
+                    HStack {
+                        Text("Method")
+                        // Select an operation...
+                        Picker("", selection: $selectedMethod) {
+                            ForEach(dictionary.mixerConfig.methods()) { entry in
+                                Text("\(entry.title)")
+                            }
                         }
+                        .labelsHidden()
                     }
                     // ...and display the view containing the control options
                     // specific to that operation.
@@ -79,6 +83,7 @@ struct BuilderView: View {
                                                resolvedEvent: $resolvedEvent)
                     }
                 }
+                .padding(.trailing)
             }
             Spacer()
         }
