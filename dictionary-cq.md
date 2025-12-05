@@ -51,9 +51,6 @@ Mutes apply to input channels, output channels, DCAs and Mute Groups:
 Audio level messages apply both to single channel levels and to
 channel-to-channel send levels.
 
-> [!Important]
-> Currenty only the Linear Taper fader law is 
-
 | Channel Level Target                          | Args        | Notes          |
 | --------------------------------------------- | ----------- | -------------- |
 | /main/level                                   | {-100...10} |                |

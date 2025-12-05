@@ -42,7 +42,7 @@ are human-readable and can easily be edited on the fly.
 
 ## Mixer OSC Address Space
 
-> [!Information]
+> [!Important]
 > Not all supported mixer series support all of the operations and addresses
 > described in this guide. Use the OSC Builder and Dictionary tabs of the 
 > application to view the OSC methods supported for a specific mixer series.
