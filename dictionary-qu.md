@@ -1,5 +1,12 @@
 #  Qu 5/6/7
 
+[Qu567_MIDI_Protocol_Iss2](https://www.allen-heath.com/content/uploads/2025/06/Qu567_MIDI_Protocol_Iss2.pdf)
+
+> [!Important]
+> Currently only Linear Taper level values are supported for Qu mixers. In order
+> ensure your mixer is set to Linear Taper, Navigate to  UTILITY > General > MIDI
+> to view and adjust all MIDI settings, including the NRPN Fader Law.
+
 ## Mixer OSC Address Space
 
 ### Scene Change
@@ -20,7 +27,7 @@ the mixer before they can be targeted. The general form of these addresses is
 
 | Target                                    | Args            | Notes          |
 | ----------------------------------------- | --------------- | ---------------|
-| /softKey/{1...8}/trigger                  | {PRESS|RELEASE} |                |
+| /softKey/{1...8}/trigger                  | {PRESS,RELEASE} |                |
 
 **Example Messages**
 
@@ -33,17 +40,17 @@ Mutes apply to input channels, output channels, DCAs and Mute Groups:
 
 | Target                                        | Args        | Notes          |
 | --------------------------------------------- | ----------- | -------------- |
-| /input/{1...32}/mute                          | {ON|OFF}    |                |
-| /input/st{1...2}/mute                         | {ON|OFF}    |                |
-| /input/usb/mute                               | {ON|OFF}    |                |
-| /main/mute                                    | {ON|OFF}    |                |
-| /aux/{1...12}/mute                            | {ON|OFF}    | NOTE 1         |
-| /group/{1...12}/mute                          | {ON|OFF}    | NOTE 1         |
-| /fxSend/{1...4}/mute                          | {ON|OFF}    |                |
-| /fxReturn/{1...6}/mute                        | {ON|OFF}    |                |
-| /matrix/{1...3}/mute                          | {ON|OFF}    | NOTE 2         |
-| /dca/{1...8}/mute                             | {ON|OFF}    |                |
-| /muteGroup/{1...8}/mute                       | {ON|OFF}    |                |
+| /input/{1...32}/mute                          | {ON,OFF}    |                |
+| /input/st{1...2}/mute                         | {ON,OFF}    |                |
+| /input/usb/mute                               | {ON,OFF}    |                |
+| /main/mute                                    | {ON,OFF}    |                |
+| /aux/{1...12}/mute                            | {ON,OFF}    | NOTE 1         |
+| /group/{1...12}/mute                          | {ON,OFF}    | NOTE 1         |
+| /fxSend/{1...4}/mute                          | {ON,OFF}    |                |
+| /fxReturn/{1...6}/mute                        | {ON,OFF}    |                |
+| /matrix/{1...3}/mute                          | {ON,OFF}    | NOTE 2         |
+| /dca/{1...8}/mute                             | {ON,OFF}    |                |
+| /muteGroup/{1...8}/mute                       | {ON,OFF}    |                |
 
 **Notes**
 
@@ -120,30 +127,30 @@ channel-to-channel send levels.
 
 ### Mix Assignments
 
-| Channel-to-Channel Send Pan/Balance          | Args         | Notes          |
+| Channel-to-Channel Mix Assignments           | Args         | Notes          |
 | -------------------------------------------- | ------------ | -------------- |
-| /input/{1...32}/to/main/assign               | {ON|OFF}     |                |
-| /input/{1...32}/to/aux/{1...12}/assign       | {ON|OFF}     | NOTE 1         |
-| /input/{1...32}/to/group/{1...12}/assign     | {ON|OFF}     | NOTE 1         |
-| /input/{1...32}/to/fxSend/{1...4}/assign     | {ON|OFF}     |                |
-| /input/st{1...2}/to/main/assign              | {ON|OFF}     |                |
-| /input/st{1...2}/to/aux/{1...12}/assign      | {ON|OFF}     | NOTE 1         |
-| /input/st{1...2}/to/group/{1...12}/assign    | {ON|OFF}     | NOTE 1         |
-| /input/st{1...2}/to/fxSend/{1...4}/assign    | {ON|OFF}     |                |
-| /input/usb/to/main/assign                    | {ON|OFF}     |                |
-| /input/usb/to/aux/{1...12}/assign            | {ON|OFF}     | NOTE 1         |
-| /input/usb/to/group/{1...12}/assign          | {ON|OFF}     | NOTE 1         |
-| /input/usb/to/fxSend/{1...4}/assign          | {ON|OFF}     |                |
-| /main/to/matrix/assign                       | {ON|OFF}     | NOTE 2         |
-| /aux/{1...12}/to/matrix/assign               | {ON|OFF}     | NOTE 2         |
-| /group/{1...12}/to/main/assign               | {ON|OFF}     |                |
-| /group/{1...12}/to/aux/{1...12}/assign       | {ON|OFF}     |                |
-| /group/{1...12}/to/fxSend/{1...4}/assign     | {ON|OFF}     |                |
-| /group/{1...12}/to/matrix/{1...3}/assign     | {ON|OFF}     | NOTE 2         |
-| /fxReturn/{1...6}/to/main/assign             | {ON|OFF}     |                |
-| /fxReturn/{1...6}/to/aux/{1...12}/assign     | {ON|OFF}     | NOTE 1         |
-| /fxReturn/{1...6}/to/group/{1...12}/assign   | {ON|OFF}     | NOTE 1         |
-| /fxReturn/{1...6}/to/fxSend/{1...4}/assign   | {ON|OFF}     |                |
+| /input/{1...32}/to/main/assign               | {ON,OFF}     |                |
+| /input/{1...32}/to/aux/{1...12}/assign       | {ON,OFF}     | NOTE 1         |
+| /input/{1...32}/to/group/{1...12}/assign     | {ON,OFF}     | NOTE 1         |
+| /input/{1...32}/to/fxSend/{1...4}/assign     | {ON,OFF}     |                |
+| /input/st{1...2}/to/main/assign              | {ON,OFF}     |                |
+| /input/st{1...2}/to/aux/{1...12}/assign      | {ON,OFF}     | NOTE 1         |
+| /input/st{1...2}/to/group/{1...12}/assign    | {ON,OFF}     | NOTE 1         |
+| /input/st{1...2}/to/fxSend/{1...4}/assign    | {ON,OFF}     |                |
+| /input/usb/to/main/assign                    | {ON,OFF}     |                |
+| /input/usb/to/aux/{1...12}/assign            | {ON,OFF}     | NOTE 1         |
+| /input/usb/to/group/{1...12}/assign          | {ON,OFF}     | NOTE 1         |
+| /input/usb/to/fxSend/{1...4}/assign          | {ON,OFF}     |                |
+| /main/to/matrix/assign                       | {ON,OFF}     | NOTE 2         |
+| /aux/{1...12}/to/matrix/assign               | {ON,OFF}     | NOTE 2         |
+| /group/{1...12}/to/main/assign               | {ON,OFF}     |                |
+| /group/{1...12}/to/aux/{1...12}/assign       | {ON,OFF}     |                |
+| /group/{1...12}/to/fxSend/{1...4}/assign     | {ON,OFF}     |                |
+| /group/{1...12}/to/matrix/{1...3}/assign     | {ON,OFF}     | NOTE 2         |
+| /fxReturn/{1...6}/to/main/assign             | {ON,OFF}     |                |
+| /fxReturn/{1...6}/to/aux/{1...12}/assign     | {ON,OFF}     | NOTE 1         |
+| /fxReturn/{1...6}/to/group/{1...12}/assign   | {ON,OFF}     | NOTE 1         |
+| /fxReturn/{1...6}/to/fxSend/{1...4}/assign   | {ON,OFF}     |                |
 
 **Notes**
 

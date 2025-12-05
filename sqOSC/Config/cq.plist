@@ -6,28 +6,28 @@
 	<string>cq</string>
 	<key>channelCounts</key>
 	<dict>
-		<key>aux</key>
-		<integer>6</integer>
-		<key>dca</key>
-		<integer>4</integer>
-		<key>fxReturn</key>
-		<integer>4</integer>
-		<key>fxSend</key>
-		<integer>4</integer>
 		<key>input</key>
 		<integer>16</integer>
-		<key>main</key>
-		<integer>1</integer>
-		<key>muteGroup</key>
-		<integer>4</integer>
-		<key>scene</key>
-		<integer>100</integer>
 		<key>st</key>
 		<integer>2</integer>
 		<key>usb</key>
 		<integer>1</integer>
 		<key>bt</key>
 		<integer>1</integer>
+		<key>main</key>
+		<integer>1</integer>
+		<key>aux</key>
+		<integer>6</integer>
+		<key>fxSend</key>
+		<integer>4</integer>
+		<key>fxReturn</key>
+		<integer>4</integer>
+		<key>dca</key>
+		<integer>4</integer>
+		<key>muteGroup</key>
+		<integer>4</integer>
+		<key>scene</key>
+		<integer>100</integer>
 		<key>keys</key>
 		<integer>3</integer>
 	</dict>
@@ -46,24 +46,24 @@
 		<dict>
 			<key>input</key>
 			<string>00 00</string>
-			<key>fxReturn</key>
-			<string>00 3C</string>
-			<key>main</key>
-			<string>00 44</string>
-			<key>aux</key>
-			<string>00 45</string>
-			<key>fxSend</key>
-			<string>00 51</string>
-			<key>dca</key>
-			<string>02 00</string>
-			<key>muteGroup</key>
-			<string>04 00</string>
 			<key>st</key>
 			<string>00 18</string>
 			<key>usb</key>
 			<string>00 1C</string>
 			<key>bt</key>
 			<string>00 1E</string>
+			<key>main</key>
+			<string>00 44</string>
+			<key>aux</key>
+			<string>00 45</string>
+			<key>fxSend</key>
+			<string>00 51</string>
+			<key>fxReturn</key>
+			<string>00 3C</string>
+			<key>dca</key>
+			<string>02 00</string>
+			<key>muteGroup</key>
+			<string>04 00</string>
 		</dict>
 		<key>level</key>
 		<dict>

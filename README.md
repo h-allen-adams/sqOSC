@@ -10,7 +10,7 @@ one mixer can be targeted at one time.
 
 ## Disclaimers
 
-> [!Information]
+> [!Important]
 > This project is not affiliated with or supported by Allen & Heath in any way.
 
 > [!Warning]
@@ -36,9 +36,9 @@ are human-readable and can easily be edited on the fly.
 
 ## Supported Mixer Series
 
-* [SQ](https://www.allen-heath.com/content/uploads/2023/11/SQ-MIDI-Protocol-Issue5.pdf)
-* [Qu 5/6/7](https://www.allen-heath.com/content/uploads/2025/06/Qu567_MIDI_Protocol_Iss2.pdf)
-* [CQ](https://www.allen-heath.com/content/uploads/2024/10/CQ_MIDI_Protocol_V1_2_0_iss4.pdf)
+* [SQ](dictionary-sq.md)
+* [Qu 5/6/7](dictionary-qu.md)
+* [CQ](dictionary-cq.md)
 
 ## Mixer OSC Address Space
 
@@ -91,25 +91,12 @@ general form of these addresses is "/{chType}/{chNum}" where:
 | /fxSend/{cNum}    | FX Send channel                              |
 | /fxReturn/{chNum} | FX Return channel                            |
 
-**Example Messages**
-
-* /input/1/mute ON
-* /input/st1/mute OFF
-* /main/level -5
-* /aux/2/balance -50
-
 ### DCA and Mute Group Targets
 
 | Target             | Description                                  |
 | ------------------ | -------------------------------------------- |
 | /dca/{chNum}       | DCAs                                         |
 | /muteGroup/{chNum} | Mute Group Control                           |
-
-**Example Messages**
-
-* /dca/1/mute OFF
-* /dca/5/level 5
-* /muteGroup/3/mute ON
 
 ### Channel-to-Channel Targets
 
@@ -121,30 +108,17 @@ of these addresses is "/{sourceType}/{sourceNum}/to/{destType}/{destNum}" where
 * sourceNum, destNum - Channel number. For channel types with only one channel
   (such as main), the channel number is omitted.
 
-**Example Messages**
-
-* /input/1/to/aux/2/sendLevel 0
-* /input/usb/to/main/sendPan -100
-* /input/st2/to/group/1/assign ON
-* /main/to/matrix/3/assign OFF
-
 ### Soft Key Targets
 
 Soft Key addresses trigger soft keys actions. Soft Keys must be configured on
 the mixer before they can be targeted. The general form of these addresses is
 "/softKey/{keyNum}" where "keyNum" is the soft key number.
 
-**Example Messages**
-
-* /softKey/{keyNum}/trigger PRESS
-* /softKey/{keyNum}/trigger RELEASE
-
 ### Scene Change
 
 ```
 /scene/{sceneNum}/recall 
 ```
-
 
 ## Acknowledgements
 

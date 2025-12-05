@@ -17,6 +17,15 @@
     }
   ],
   "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:sqOSC.xcodeproj",
+          "identifier" : "9F2648532C37805000C5D357",
+          "name" : "sqOSC"
+        }
+      ]
+    },
     "mainThreadCheckerEnabled" : false,
     "uiTestingScreenshotsLifetime" : "keepNever"
   },
