@@ -180,7 +180,7 @@ struct ChannelToChannelValueRangeBuilderView: View {
     @Previewable @State var resolvedMessage = ""
     @Previewable @State var resolvedEvent = AttributedString("")
     ChannelToChannelValueRangeBuilderView(method: .pan,
-                                          dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+                                          dictionary: SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper),
                                           resolvedMessage: $resolvedMessage,
                                           resolvedEvent: $resolvedEvent)
 }

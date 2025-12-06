@@ -118,7 +118,7 @@ struct ChannelValueRangeBuilderView: View {
     @Previewable @State var resolvedEvent = AttributedString("")
     @Previewable @State var resolvedMessage = ""
     ChannelValueRangeBuilderView(method: .balance,
-                                 dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+                                 dictionary: SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper),
                                  resolvedMessage: $resolvedMessage,
                                  resolvedEvent: $resolvedEvent)
 }

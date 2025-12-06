@@ -30,7 +30,7 @@ struct ContentView: View {
     @Previewable var activityLog = ActivityLog()
     ContentView()
         .environmentObject(activityLog)
-        .environmentObject(SqMixerEndpointDictionary.forConfiguration(.sq))
+        .environmentObject(SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper))
         .environmentObject(OscMessageSender(addressSpace: nil))
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
 }

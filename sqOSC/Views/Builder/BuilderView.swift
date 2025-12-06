@@ -95,5 +95,5 @@ struct BuilderView: View {
 }
 
 #Preview {
-    BuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq))
+    BuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper))
 }

@@ -27,6 +27,7 @@ extension MixerMethod {
         }
     }
 
+    /** Value Ranges for numeric parameters. */
     var valueRange: ClosedRange<Double> {
         switch self {
         case .balance, .pan: -100 ... 100
@@ -35,6 +36,7 @@ extension MixerMethod {
         }
     }
 
+    /** Human-readable unit strings for UI display */
     var units: String {
         switch self {
         case .balance, .pan: "%"

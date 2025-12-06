@@ -72,7 +72,7 @@ struct SceneRecallBuilderView: View {
 #Preview {
     @Previewable @State var resolvedEvent = AttributedString("")
     @Previewable @State var resolvedMessage = ""
-    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+    SceneRecallBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper),
                            resolvedMessage: $resolvedMessage,
                            resolvedEvent: $resolvedEvent)
 }
