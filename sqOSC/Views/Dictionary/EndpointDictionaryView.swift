@@ -24,5 +24,5 @@ struct EndpointDictionaryView: View {
 extension SqMixerEndpointDictionary {}
 
 #Preview {
-    EndpointDictionaryView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq))
+    EndpointDictionaryView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper))
 }

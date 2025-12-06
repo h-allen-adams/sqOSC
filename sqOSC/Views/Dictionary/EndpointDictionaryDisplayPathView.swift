@@ -36,5 +36,7 @@ struct EndpointDictionaryDisplayPathView: View {
 }
 
 #Preview {
-    EndpointDictionaryDisplayPathView(len: 35, displayPath: SqMixerEndpointDictionary.forConfiguration(.sq).entries[MixerMethod.sendLevel]!.displayPaths().first!)
+    EndpointDictionaryDisplayPathView(len: 35,
+                                      displayPath: SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper)
+                                          .entries[MixerMethod.sendLevel]!.displayPaths().first!)
 }

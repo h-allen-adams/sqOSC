@@ -162,7 +162,7 @@ struct MixAssignmentBuilderView: View {
 #Preview {
     @Previewable @State var resolvedMessage = ""
     @Previewable @State var resolvedEvent = AttributedString("")
-    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.qu),
+    MixAssignmentBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.qu, faderLaw: .LinearTaper),
                              resolvedMessage: $resolvedMessage,
                              resolvedEvent: $resolvedEvent)
 }

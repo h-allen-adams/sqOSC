@@ -2,11 +2,6 @@
 
 [SQ-MIDI-Protocol-Issue5](https://www.allen-heath.com/content/uploads/2023/11/SQ-MIDI-Protocol-Issue5.pdf)
 
-> [!Important]
-> Currently only Linear Taper level values are supported for SQ mixers. In order
-> ensure your mixer is set to Linear Taper, Navigate to  UTILITY > General > MIDI
-> to view and adjust all MIDI settings, including the NRPN Fader Law.
-
 ## Mixer OSC Address Space
 
 ### Scene Change

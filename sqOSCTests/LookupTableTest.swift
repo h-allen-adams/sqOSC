@@ -37,7 +37,7 @@ final class LookupTableTest: XCTestCase {
         XCTAssertEqual(toString(levelLookup.lookup(-80)), "2C 42")
         XCTAssertEqual(toString(levelLookup.lookup(-60)), "3F 09")
         XCTAssertEqual(toString(levelLookup.lookup(-40)), "51 4F")
-        XCTAssertEqual(toString(levelLookup.lookup(-20)), "64 16")
+        XCTAssertEqual(toString(levelLookup.lookup(-20)), "64 15")
         XCTAssertEqual(toString(levelLookup.lookup(-10)), "6D 39")
         XCTAssertEqual(toString(levelLookup.lookup(0)), "76 5C")
         XCTAssertEqual(toString(levelLookup.lookup(10)), "7F 7F")

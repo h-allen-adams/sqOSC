@@ -488,7 +488,7 @@
 			<key>-21</key>
 			<string>63 1F</string>
 			<key>-20</key>
-			<string>64 16</string>
+			<string>64 15</string>
 			<key>-19</key>
 			<string>65 0C</string>
 			<key>-18</key>
@@ -496,13 +496,13 @@
 			<key>-17</key>
 			<string>66 7A</string>
 			<key>-16</key>
-			<string>66 70</string>
+			<string>67 70</string>
 			<key>-15</key>
 			<string>68 67</string>
 			<key>-14</key>
 			<string>69 5E</string>
 			<key>-13</key>
-			<string>6A 55</string>
+			<string>6A 54</string>
 			<key>-12</key>
 			<string>6B 4B</string>
 			<key>-11</key>
@@ -516,7 +516,7 @@
 			<key>-7</key>
 			<string>70 1D</string>
 			<key>-6</key>
-			<string>71 14</string>
+			<string>71 13</string>
 			<key>-5</key>
 			<string>72 0A</string>
 			<key>-4</key>
@@ -524,7 +524,7 @@
 			<key>-3</key>
 			<string>73 78</string>
 			<key>-2</key>
-			<string>74 6F</string>
+			<string>74 6E</string>
 			<key>-1</key>
 			<string>75 65</string>
 			<key>0</key>
@@ -532,7 +532,7 @@
 			<key>1</key>
 			<string>77 53</string>
 			<key>2</key>
-			<string>78 49</string>
+			<string>78 50</string>
 			<key>3</key>
 			<string>79 40</string>
 			<key>4</key>
@@ -540,13 +540,13 @@
 			<key>5</key>
 			<string>7B 2E</string>
 			<key>6</key>
-			<string>7C 24</string>
+			<string>7C 25</string>
 			<key>7</key>
 			<string>7D 1B</string>
 			<key>8</key>
 			<string>7E 12</string>
 			<key>9</key>
-			<string>7F 08</string>
+			<string>7F 09</string>
 			<key>10</key>
 			<string>7F 7F</string>
 		</dict>

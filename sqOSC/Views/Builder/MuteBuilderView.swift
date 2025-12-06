@@ -105,7 +105,7 @@ struct MuteBuilderView: View {
 #Preview {
     @Previewable @State var resolvedEvent = AttributedString("")
     @Previewable @State var resolvedMessage = ""
-    MuteBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.qu),
+    MuteBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.qu, faderLaw: .LinearTaper),
                     resolvedMessage: $resolvedMessage,
                     resolvedEvent: $resolvedEvent)
 }

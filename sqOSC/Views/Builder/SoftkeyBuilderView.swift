@@ -91,7 +91,7 @@ struct SoftkeyBuilderView: View {
 #Preview {
     @Previewable @State var resolvedEvent = AttributedString("")
     @Previewable @State var resolvedMessage = ""
-    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq),
+    SoftkeyBuilderView(dictionary: SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper),
                        resolvedMessage: $resolvedMessage,
                        resolvedEvent: $resolvedEvent)
 }

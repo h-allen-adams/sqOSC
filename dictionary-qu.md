@@ -2,11 +2,6 @@
 
 [Qu567_MIDI_Protocol_Iss2](https://www.allen-heath.com/content/uploads/2025/06/Qu567_MIDI_Protocol_Iss2.pdf)
 
-> [!Important]
-> Currently only Linear Taper level values are supported for Qu mixers. In order
-> ensure your mixer is set to Linear Taper, Navigate to  UTILITY > General > MIDI
-> to view and adjust all MIDI settings, including the NRPN Fader Law.
-
 ## Mixer OSC Address Space
 
 ### Scene Change
