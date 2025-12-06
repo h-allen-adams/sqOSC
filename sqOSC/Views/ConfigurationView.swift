@@ -19,6 +19,7 @@ struct ConfigurationView: View {
     @Preference(\.midiInputName) var midiInputName
     @Preference(\.midiChannel) var midiChannel
     @Preference(\.mixerModel) var mixerModel
+    @Preference(\.faderLaw) var faderLaw
 
     @Environment(ObservableMIDIManager.self) private var midiManager
     @EnvironmentObject private var activityLog: ActivityLog
@@ -48,14 +49,27 @@ struct ConfigurationView: View {
                 .pickerStyle(.segmented)
                 Picker("Mixer Series", selection: $mixerModel) {
                     ForEach(MixerSeries.displayCases, id: \.self.rawValue) {
+                        Text("\($0.title)")
+                    }
+                }
+                .pickerStyle(.segmented)
+                Picker("Fader Law", selection: $faderLaw) {
+                    ForEach(oscDictionary.mixerConfig.faderLaws(), id: \.self.rawValue) {
                         Text("\(String(describing: $0))")
                     }
                 }
                 .pickerStyle(.segmented)
-            }.padding(.all)
-                .onChange(of: mixerModel) { _, _ in
-                    oscDictionary.reset(MixerSeries(rawValue: mixerModel)!)
-                }
+            }
+            .padding(.all)
+            .onChange(of: mixerModel) { _, _ in
+                oscDictionary.reset(mixerModel: MixerSeries(rawValue: mixerModel)!,
+                                    faderLaw: FaderLevelLaw(rawValue: faderLaw)!)
+                faderLaw = oscDictionary.faderLaw!.rawValue
+            }
+            .onChange(of: faderLaw) { _, _ in
+                oscDictionary.reset(mixerModel: MixerSeries(rawValue: mixerModel)!,
+                                    faderLaw: FaderLevelLaw(rawValue: faderLaw)!)
+            }
         }
     }
 }
@@ -109,6 +123,6 @@ final class PublisherObservableObject: ObservableObject {
 #Preview {
     ConfigurationView()
         .environment(ObservableMIDIManager(clientName: "Test", model: "Test", manufacturer: "Test"))
-        .environmentObject(SqMixerEndpointDictionary.forConfiguration(.sq))
+        .environmentObject(SqMixerEndpointDictionary.forConfiguration(.sq, faderLaw: .LinearTaper))
         .environmentObject(ActivityLog())
 }

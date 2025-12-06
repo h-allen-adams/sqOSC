@@ -8,7 +8,13 @@
 import OSCKitCore
 import SwiftUI
 
+/**
+ Utitlity class providing methods for formatting MIDI messages for display.
+ */
 struct MidiMessageViewUtilities {
+    /**
+     Colorize an NRPN MIDI string for display
+     */
     static func colorizeNrpn(_ midiMessageString: inout AttributedString) {
         let msbStartIndex = midiMessageString.index(midiMessageString.startIndex, offsetByCharacters: 6)
         let msbEndIndex = midiMessageString.index(msbStartIndex, offsetByCharacters: 2)

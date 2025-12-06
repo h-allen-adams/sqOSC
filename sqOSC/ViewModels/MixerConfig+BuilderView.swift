@@ -11,6 +11,15 @@ import Foundation
  MixerConfig extension to power the Builder Views
  */
 extension MixerConfig {
+    /**
+     Enum to group Mixer Endpoints for UI Display. MixerEndpoints are defined
+     by their underlying mixer parameter numbers, but this is not always the
+     best organization for dispaly. For example, Qu and CQ mixers define special
+     ST, USB, and Bluetooth Inputs. If the UI is built on raw endpoint types,
+     these would appear in separate lists than the regular inputs.
+     BuilderChannelType allows organization of channels together in logical
+     groups easier for users to use.
+     */
     enum BuilderChannelType:
         String,
         CaseIterable,
@@ -30,6 +39,7 @@ extension MixerConfig {
         case scene
         case keys
 
+        /** Human-Readable Title for UI Display */
         var title: String {
             switch self {
             case .input: return "Input"
@@ -45,6 +55,7 @@ extension MixerConfig {
             }
         }
         
+        /** Groups of MixerEndpoints for UI Display */
         var mixerEndpoints: [MixerEndpoint] {
             switch self {
             case .input: return [.input, .st, .usb, .bt]
@@ -60,6 +71,7 @@ extension MixerConfig {
             }
         }
 
+        /** Sort Order */
         var sortedOrder: Int {
             switch self {
             case .input: 0
@@ -75,10 +87,12 @@ extension MixerConfig {
             }
         }
 
+        /** Sort Function */
         static func < (lhs: BuilderChannelType, rhs: BuilderChannelType) -> Bool {
             return lhs.sortedOrder < rhs.sortedOrder
         }
         
+        /** Return the BuilderCHannelType for a MixerEndpoint */
         static func forEndpoint(_ endpoint: MixerEndpoint) -> BuilderChannelType {
             switch endpoint {
             case .input: .input
@@ -99,14 +113,11 @@ extension MixerConfig {
         }
     }
     
-    struct BuilderChannel: Hashable {
-        let endpoint: MixerEndpoint
-        let chNum: Int
-        let title: String
-        
-        static let UNRESOLVED: BuilderChannel = .init(endpoint: .input, chNum: 1, title: "UNRESOLVED")
-    }
-    
+    /**
+     Build a BuilderChannelType array for a MixerMethod. Iterate over the
+     MixerEndpoints supported by the method and create a BuilderCHannelType for
+     each.
+     */
     func builderChannelTypeFor(_ method: MixerMethod) -> [BuilderChannelType] {
         var builderChannels: Set<BuilderChannelType> = []
         
@@ -117,6 +128,23 @@ extension MixerConfig {
         return builderChannels.sorted()
     }
     
+    /**
+     Builder Channels are used to pupulate the UI dropdowns. Each associates a
+     MixerEndpoint, channel number, and human-readbale title for display in UI
+     dropdowns.
+     */
+    struct BuilderChannel: Hashable {
+        let endpoint: MixerEndpoint
+        let chNum: Int
+        let title: String
+        
+        static let UNRESOLVED: BuilderChannel = .init(endpoint: .input, chNum: 1, title: "UNRESOLVED")
+    }
+        
+    /**
+     Build an array of BuilderCHannels by grouping all the related mixer
+     endpoints and their human-readbale titles.
+     */
     func builderChannels(_ channelType: BuilderChannelType) -> [BuilderChannel] {
         var builderChannels: [BuilderChannel] = []
         
@@ -151,6 +179,7 @@ extension MixerConfig {
 }
 
 extension MixerEndpoint {
+    /** Human-Readable Title for UI Display */
     var sourceTitle: String {
         switch self {
         case .input: "Ip"

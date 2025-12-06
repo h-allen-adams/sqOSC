@@ -33,6 +33,13 @@ import Foundation
  channels: "/input/1/mute", "/input/2/mute", etc.
  */
 class SqMixerEndpointDictionary: ObservableObject, Equatable {
+    
+    /** Currently configured Mixer Series*/
+    var mixerSeries: MixerSeries?
+    
+    /** Currently configured Fader Law*/
+    var faderLaw: FaderLevelLaw?
+
     /**
      Currently loaded Mixer Configuration
      */
@@ -60,6 +67,8 @@ class SqMixerEndpointDictionary: ObservableObject, Equatable {
 
     init() {
         mixerConfig = MixerConfig.NONE
+        mixerSeries = MixerSeries.none
+        faderLaw = nil
         entries = [:]
         values = []
         mixerMessages = nil
@@ -68,11 +77,30 @@ class SqMixerEndpointDictionary: ObservableObject, Equatable {
     /**
      Reset the dictionary by loading the specified mixer configuration
      */
-    func reset(_ model: MixerSeries) {
-        let mixerConfig = MixerConfig.load(model)
-        self.mixerConfig = mixerConfig
+    func reset(mixerModel: MixerSeries, faderLaw: FaderLevelLaw) {
+        var changed = false
+        if mixerSeries != mixerModel {
+            mixerConfig = MixerConfig.load(mixerModel)
+            mixerSeries = mixerModel
+            changed = true
+        }
+
+        var faderLawToSet = faderLaw
+        if !mixerConfig.faderLaws().contains(faderLaw) {
+            faderLawToSet = mixerConfig.faderLaws().first!
+        }
+
+        if self.faderLaw != faderLawToSet {
+            self.faderLaw = faderLawToSet
+            changed = true
+        }
+
+        if !changed {
+            return
+        }
+
         mixerMessages = MixerMidiMessageFactory(mixerConfig: mixerConfig,
-                                                faderLaw: mixerConfig.faderLaws().first!)
+                                                faderLaw: faderLawToSet)
 
         entries = mixerConfig.methods().reduce(into: [:]) {
             $0[$1] = EndpointDictEntry(mixerConfig: mixerConfig, operation: $1)
@@ -109,9 +137,9 @@ class SqMixerEndpointDictionary: ObservableObject, Equatable {
     /**
      Instantiate a dictionary instance for the given mixer model
      */
-    static func forConfiguration(_ model: MixerSeries) -> SqMixerEndpointDictionary {
+    static func forConfiguration(_ model: MixerSeries, faderLaw: FaderLevelLaw) -> SqMixerEndpointDictionary {
         let result = SqMixerEndpointDictionary()
-        result.reset(model)
+        result.reset(mixerModel: model, faderLaw: faderLaw)
         return result
     }
 

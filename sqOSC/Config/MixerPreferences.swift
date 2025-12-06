@@ -35,6 +35,9 @@ final class MixerPreferences {
     @UserDefault(PrefKeys.mixerModel, defaultValue: "sq")
     var mixerModel: String
 
+    @UserDefault(PrefKeys.faderLaw, defaultValue: "AudioTaper")
+    var faderLaw: String
+
     enum PrefKeys {
         static let midiChannel = "midiChannel"
 
@@ -45,6 +48,8 @@ final class MixerPreferences {
         static let midiOutName = "midiOutputName"
 
         static let mixerModel = "mixerModel"
+
+        static let faderLaw = "faderLaw"
     }
 }
 

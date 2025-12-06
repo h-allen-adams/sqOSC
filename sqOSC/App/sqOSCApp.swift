@@ -88,7 +88,23 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         do {
             midiManager.preferredAPI = CoreMIDIAPIVersion.legacyCoreMIDI
             try midiManager.start()
-            try midiManager.addOutputConnection(to: .none, tag: "toSQ")
+
+            // Default connection will be none
+            var to: MIDIOutputConnectionMode = .none
+
+            // If MIDI preferences have been saved, use them to initialize the
+            // MIDI connection to the Mixer. Otherwise, stick with "none" until
+            // the user changes something on the Status tab
+            if let midiInput = MixerPreferences.midiStandard.midiInput {
+                let selectedDisplayName = MixerPreferences.midiStandard.midiInputName ?? "Unknown"
+                let criterium: MIDIEndpointIdentity = .uniqueIDWithFallback(
+                    id: midiInput,
+                    fallbackDisplayName: selectedDisplayName
+                )
+                to = .inputs(matching: Set([criterium]))
+            }
+
+            try midiManager.addOutputConnection(to: to, tag: "toSQ")
             logger("MIDI Manager Started")
         } catch {
             logger("ERROR: Error while starting MIDI manager: \(error)")
@@ -102,7 +118,8 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     func initializeOscHandler() {
         oscManager.start()
         oscDictionary.onChange(initOscAddresSpace)
-        oscDictionary.reset(MixerSeries(rawValue: MixerPreferences.midiStandard.mixerModel)!)
+        oscDictionary.reset(mixerModel: MixerSeries(rawValue: MixerPreferences.midiStandard.mixerModel)!,
+                            faderLaw: FaderLevelLaw(rawValue: MixerPreferences.midiStandard.faderLaw)!)
     }
 
     /**
@@ -118,7 +135,7 @@ class SqOscAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             await midiMessagePublisher.publish(label: label, message: midiMessage)
         }
 
-        logger("Initializing OSC Address Space: \(dictionary.mixerConfig.series)")
+        logger("Initializing OSC Address Space: \(dictionary.mixerConfig.series), \(dictionary.faderLaw!.rawValue)")
         endpointRegistrar.populate(addressSpace: addressSpace)
     }
 

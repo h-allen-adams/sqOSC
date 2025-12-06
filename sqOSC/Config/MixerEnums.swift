@@ -24,6 +24,19 @@ enum MixerSeries:
     case cq
     case none
 
+    /** Human-Readable Title for Display on UI elements */
+    var title: String
+    {
+        switch self
+        {
+        case .sq: return "SQ"
+        case .qu: return "Qu (5/6/7)"
+        case .cq: return "CQ"
+        case .none: return "None"
+        }
+    }
+
+    /** Set of values for UI display (.none is for internal use only) */
     static var displayCases: [MixerSeries]
     {
         return [.sq, .qu, .cq]
