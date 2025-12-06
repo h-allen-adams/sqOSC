@@ -37,13 +37,13 @@ final class SqMixerMessagesTests: XCTestCase {
                        "B0 63 40 B0 62 00 B0 06 76 B0 26 5C")
         XCTAssertEqual(toString(mixerMessages.sendLevelMessage(midiChannel: 1, sourceType: .input, sourceChannel: 1,
                                                                destType: .main, destChannel: 1, dbLevel: -20)),
-                       "B0 63 40 B0 62 00 B0 06 64 B0 26 16")
+                       "B0 63 40 B0 62 00 B0 06 64 B0 26 15")
         XCTAssertEqual(toString(mixerMessages.sendLevelMessage(midiChannel: 1, sourceType: .input, sourceChannel: 40,
                                                                destType: .main, destChannel: 1, dbLevel: -20)),
-                       "B0 63 40 B0 62 27 B0 06 64 B0 26 16")
+                       "B0 63 40 B0 62 27 B0 06 64 B0 26 15")
         XCTAssertEqual(toString(mixerMessages.sendLevelMessage(midiChannel: 1, sourceType: .input, sourceChannel: 40,
                                                                destType: .aux, destChannel: 5, dbLevel: -20)),
-                       "B0 63 44 B0 62 1C B0 06 64 B0 26 16")
+                       "B0 63 44 B0 62 1C B0 06 64 B0 26 15")
         XCTAssertEqual(toString(mixerMessages.sendLevelMessage(midiChannel: 4, sourceType: .input, sourceChannel: 40,
                                                                destType: .aux, destChannel: 5, dbLevel: -12)),
                        "B3 63 44 B3 62 1C B3 06 6B B3 26 4B")
