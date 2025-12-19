@@ -29,8 +29,8 @@ value to be changed and a Parameter Value which encodes the new value. Both the
 Parameter Number and Parameter Value are split into a high and low byte in order
 to fit in the NPRN message format.
 
-Automation tools like QLab can send MIDI messages, but NPRN messages are not
-really human-readable. Writing and editing NPRM show cues on the fly (for
+Automation tools like QLab can send MIDI messages, but NRPN messages are not
+really human-readable. Writing and editing NRPN show cues on the fly (for
 instance, during a tech rehearsal) is difficult. In contrast, OSC messages
 are human-readable and can easily be edited on the fly.
 
@@ -59,6 +59,13 @@ and the NPRN Fader law configured on the mixer. Once configured, the application
 will remember the settings for when it is next started.
 
 ![Status Tab](images/status.png)
+
+### Performance Considerations
+
+This application has been used at my church in shows involving dozens of mixer
+changes for each scene with no issues. It has NOT been tested with shows
+requiring 100s or 1000s of cues per second. As with any tool, test in your
+environment before operational use. 
 
 ## Mixer OSC Address Space
 
