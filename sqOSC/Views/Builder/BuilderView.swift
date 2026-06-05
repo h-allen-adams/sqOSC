@@ -20,77 +20,81 @@ struct BuilderView: View {
     @State private var resolvedEvent: AttributedString = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // Each view populates the resolvedPath, which is displayed by its
-            // own view which provides controls for copying or sending the
-            // message
-            VStack(alignment: .leading) {
-                Section(header: Text("OSC Message").font(.title)) {
-                    OSCMessageView(resolvedMessage: $resolvedMessage,
-                                   resolvedEvent: $resolvedEvent)
-                }
-            }
-            Section(header: Text("Selections").font(.title)) {
-                VStack {
-                    HStack {
-                        Text("Method")
-                        // Select an operation...
-                        Picker("", selection: $selectedMethod) {
-                            ForEach(dictionary.mixerConfig.methods()) { entry in
-                                Text("\(entry.title)")
-                            }
-                        }
-                        .labelsHidden()
+        HStack {
+            VStack(alignment: .leading, spacing: 20) {
+                // Each view populates the resolvedPath, which is displayed by its
+                // own view which provides controls for copying or sending the
+                // message
+                VStack(alignment: .leading) {
+                    Section(header: Text("OSC Message").font(.title)) {
+                        OSCMessageView(resolvedMessage: $resolvedMessage,
+                                       resolvedEvent: $resolvedEvent)
                     }
-                    // ...and display the view containing the control options
-                    // specific to that operation.
-                    switch selectedMethod {
-                    case .assign:
-                        MixAssignmentBuilderView(dictionary: dictionary,
-                                                 resolvedMessage: $resolvedMessage,
-                                                 resolvedEvent: $resolvedEvent)
-                    case .mute:
-                        MuteBuilderView(dictionary: dictionary,
-                                        resolvedMessage: $resolvedMessage,
-                                        resolvedEvent: $resolvedEvent)
-                    case .sendLevel:
-                        ChannelToChannelValueRangeBuilderView(method: .sendLevel,
-                                                              dictionary: dictionary,
-                                                              resolvedMessage: $resolvedMessage,
-                                                              resolvedEvent: $resolvedEvent)
-                    case .pan:
-                        ChannelToChannelValueRangeBuilderView(method: .pan,
-                                                              dictionary: dictionary,
-                                                              resolvedMessage: $resolvedMessage,
-                                                              resolvedEvent: $resolvedEvent)
-                    case .level:
-                        ChannelValueRangeBuilderView(method: .level,
-                                                     dictionary: dictionary,
+                }
+                Section(header: Text("Selections").font(.title)) {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("Method")
+                            // Select an operation...
+                            Picker("", selection: $selectedMethod) {
+                                ForEach(dictionary.mixerConfig.methods()) { entry in
+                                    Text("\(entry.title)")
+                                }
+                            }
+                            .labelsHidden()
+                        }
+                        .flexibleButtonSizing()
+                        // ...and display the view containing the control options
+                        // specific to that operation.
+                        switch selectedMethod {
+                        case .assign:
+                            MixAssignmentBuilderView(dictionary: dictionary,
                                                      resolvedMessage: $resolvedMessage,
                                                      resolvedEvent: $resolvedEvent)
-                    case .balance:
-                        ChannelValueRangeBuilderView(method: .balance,
-                                                     dictionary: dictionary,
-                                                     resolvedMessage: $resolvedMessage,
-                                                     resolvedEvent: $resolvedEvent)
-                    case .trigger:
-                        SoftkeyBuilderView(dictionary: dictionary,
-                                           resolvedMessage: $resolvedMessage,
-                                           resolvedEvent: $resolvedEvent)
-                    case .recall:
-                        SceneRecallBuilderView(dictionary: dictionary,
+                        case .mute:
+                            MuteBuilderView(dictionary: dictionary,
+                                            resolvedMessage: $resolvedMessage,
+                                            resolvedEvent: $resolvedEvent)
+                        case .sendLevel:
+                            ChannelToChannelValueRangeBuilderView(method: .sendLevel,
+                                                                  dictionary: dictionary,
+                                                                  resolvedMessage: $resolvedMessage,
+                                                                  resolvedEvent: $resolvedEvent)
+                        case .pan:
+                            ChannelToChannelValueRangeBuilderView(method: .pan,
+                                                                  dictionary: dictionary,
+                                                                  resolvedMessage: $resolvedMessage,
+                                                                  resolvedEvent: $resolvedEvent)
+                        case .level:
+                            ChannelValueRangeBuilderView(method: .level,
+                                                         dictionary: dictionary,
+                                                         resolvedMessage: $resolvedMessage,
+                                                         resolvedEvent: $resolvedEvent)
+                        case .balance:
+                            ChannelValueRangeBuilderView(method: .balance,
+                                                         dictionary: dictionary,
+                                                         resolvedMessage: $resolvedMessage,
+                                                         resolvedEvent: $resolvedEvent)
+                        case .trigger:
+                            SoftkeyBuilderView(dictionary: dictionary,
                                                resolvedMessage: $resolvedMessage,
                                                resolvedEvent: $resolvedEvent)
+                        case .recall:
+                            SceneRecallBuilderView(dictionary: dictionary,
+                                                   resolvedMessage: $resolvedMessage,
+                                                   resolvedEvent: $resolvedEvent)
+                        }
                     }
+                    .padding(.trailing)
                 }
-                .padding(.trailing)
+                Spacer()
             }
+            .onDisappear {
+                selectedMethod = .mute
+            }
+            .padding(.all)
             Spacer()
         }
-        .onDisappear {
-            selectedMethod = .mute
-        }
-        .padding(.all)
     }
 }
 

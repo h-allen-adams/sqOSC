@@ -47,7 +47,7 @@ struct ChannelToChannelValueRangeBuilderView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             sourcePicker()
             destPicker()
             sendValueSlider()
@@ -94,6 +94,7 @@ struct ChannelToChannelValueRangeBuilderView: View {
             }
             .labelsHidden()
         }
+        .flexibleButtonSizing()
     }
 
     /**
@@ -115,6 +116,7 @@ struct ChannelToChannelValueRangeBuilderView: View {
             }
             .labelsHidden()
         }
+        .flexibleButtonSizing()
     }
 
     /**

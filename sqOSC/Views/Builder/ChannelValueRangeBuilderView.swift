@@ -41,7 +41,7 @@ struct ChannelValueRangeBuilderView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 Text("Channel")
                 Picker("", selection: $selectedChannelType) {
@@ -57,6 +57,7 @@ struct ChannelValueRangeBuilderView: View {
                 }
                 .labelsHidden()
             }
+            .flexibleButtonSizing()
 
             HStack {
                 Text("Value")

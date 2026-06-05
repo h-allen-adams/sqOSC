@@ -39,7 +39,7 @@ struct MuteBuilderView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 Text("Channel")
                 Picker("", selection: $selectedChannelType) {
@@ -80,6 +80,7 @@ struct MuteBuilderView: View {
         .onChange(of: selectedToggle) { _, _ in
             updateResolvedMessage()
         }
+        .flexibleButtonSizing()
     }
 
     func updateResolvedMessage() {

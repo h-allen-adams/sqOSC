@@ -31,7 +31,8 @@ struct ConfigurationView: View {
             TextEditor(text: $activityLog.logText)
 
             // MIDI Option Pickers
-            VStack {
+
+            VStack(alignment: .leading) {
                 MIDIInputsPicker(
                     title: "MIDI Destination",
                     selectionID: $midiInput,
@@ -41,6 +42,7 @@ struct ConfigurationView: View {
                 )
                 .updatingOutputConnection(withTag: "toSQ")
                 .environment(midiManager)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Picker("MIDI Channel", selection: $midiChannel) {
                     ForEach(Array(1 ... 16), id: \.self) {
                         Text("\($0)")
@@ -53,13 +55,16 @@ struct ConfigurationView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Picker("Fader Law", selection: $faderLaw) {
                     ForEach(oscDictionary.mixerConfig.faderLaws(), id: \.self.rawValue) {
                         Text("\(String(describing: $0))")
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .pickerStyle(.segmented)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.all)
             .onChange(of: mixerModel) { _, _ in
                 oscDictionary.reset(mixerModel: MixerSeries(rawValue: mixerModel)!,
@@ -70,6 +75,7 @@ struct ConfigurationView: View {
                 oscDictionary.reset(mixerModel: MixerSeries(rawValue: mixerModel)!,
                                     faderLaw: FaderLevelLaw(rawValue: faderLaw)!)
             }
+            .flexibleButtonSizing()
         }
     }
 }

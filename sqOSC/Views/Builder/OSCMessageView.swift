@@ -18,29 +18,34 @@ struct OSCMessageView: View {
     @EnvironmentObject private var messageSender: OscMessageSender
 
     var body: some View {
-        HStack(alignment: .top, spacing: 0.0) {
-            Button(action: {
-                let pasteboard = NSPasteboard.general
-                pasteboard.clearContents()
-                pasteboard.setString(resolvedMessage, forType: .string)
-            }) {
-                Image(systemName: "doc.on.doc")
-            }.help("Copy to Clipboard")
-            Button(action: {
-                messageSender.callEndpoint(resolvedMessage)
-            }) {
-                Image(systemName: "paperplane")
-            }.help("Send Message")
-            Text(" ")
-            Text(resolvedMessage)
-                .monospaced()
-                .textSelection(.enabled)
-        }
-        HStack(alignment: .top, spacing: 0.0) {
-            Text("         ").monospaced()
-            Text(resolvedEvent)
-                .monospaced()
-                .textSelection(.enabled)
+        VStack(alignment: .leading) {
+            HStack(alignment: .center, spacing: 0.0) {
+                Button(action: {
+                    let pasteboard = NSPasteboard.general
+                    pasteboard.clearContents()
+                    pasteboard.setString(resolvedMessage, forType: .string)
+                }) {
+                    Image(systemName: "doc.on.doc")
+                        .frame(height: 20)
+                }.help("Copy to Clipboard")
+                Button(action: {
+                    messageSender.callEndpoint(resolvedMessage)
+                }) {
+                    Image(systemName: "paperplane")
+                        .frame(height: 20)
+                }
+                .help("Send Message")
+                Text(" ")
+                Text(resolvedMessage)
+                    .monospaced()
+                    .textSelection(.enabled)
+            }
+            HStack(alignment: .top, spacing: 0.0) {
+                Text("           ").monospaced()
+                Text(resolvedEvent)
+                    .monospaced()
+                    .textSelection(.enabled)
+            }
         }
     }
 }
