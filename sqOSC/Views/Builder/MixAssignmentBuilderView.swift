@@ -43,7 +43,7 @@ struct MixAssignmentBuilderView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             sourcePicker()
             destPicker()
             valueToggle()
@@ -69,6 +69,7 @@ struct MixAssignmentBuilderView: View {
         .onChange(of: selectedToggle) { _, _ in
             updateResolvedMessage()
         }
+        .flexibleButtonSizing()
     }
     
     /**

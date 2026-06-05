@@ -33,7 +33,7 @@ struct SceneRecallBuilderView: View {
     }
 
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 Text("Scene Num")
                 Picker("", selection: $selectedSceneNum) {
@@ -54,6 +54,7 @@ struct SceneRecallBuilderView: View {
         .onChange(of: selectedSceneNum) { _, _ in
             updateResolvedMessage()
         }
+        .flexibleButtonSizing()
     }
 
     func updateResolvedMessage() {

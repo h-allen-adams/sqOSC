@@ -29,8 +29,8 @@ value to be changed and a Parameter Value which encodes the new value. Both the
 Parameter Number and Parameter Value are split into a high and low byte in order
 to fit in the NPRN message format.
 
-Automation tools like QLab can send MIDI messages, but NPRN messages are not
-really human-readable. Writing and editing NPRM show cues on the fly (for
+Automation tools like QLab can send MIDI messages, but NRPN messages are not
+really human-readable. Writing and editing NRPN show cues on the fly (for
 instance, during a tech rehearsal) is difficult. In contrast, OSC messages
 are human-readable and can easily be edited on the fly.
 
@@ -39,6 +39,33 @@ are human-readable and can easily be edited on the fly.
 * [SQ](dictionary-sq.md)
 * [Qu 5/6/7](dictionary-qu.md)
 * [CQ](dictionary-cq.md)
+
+## Usage
+
+The application has two primary views: the Builder Tab and the Status Tab.
+
+The Builder tab allows the user to build OSC messages for the supported functions
+and view the associated MIDI message which will be sent to the mixer. The "paper
+airplane" button can be used to test a message by sending it to the mixer. The
+copy button is used to copy the OSC message to the clipboard so it can be used in
+QLab or other OSC automation software.
+
+![Builder Tab](images/builder.png)
+
+The Status Tab is used to configure the application and display incoming OSC 
+messages and the corresponding MIDI messages going to the mixer. To configure
+the application, users select the MIDI device and channel, the mixer series,
+and the NPRN Fader law configured on the mixer. Once configured, the application
+will remember the settings for when it is next started.
+
+![Status Tab](images/status.png)
+
+### Performance Considerations
+
+This application has been used at my church in shows involving dozens of mixer
+changes for each scene with no issues. It has NOT been tested with shows
+requiring 100s or 1000s of cues per second. As with any tool, test in your
+environment before operational use. 
 
 ## Mixer OSC Address Space
 
@@ -72,31 +99,27 @@ general form of these addresses is "/{chType}/{chNum}" where:
 * chNum - Channel number. For channel types with only one channel (such as main),
   the channel number is omitted.
 
-| Input Channel     | Description                                  |
-| ----------------- | -------------------------------------------- |
-| /input/{chNum}    | Mono or assignable mono/stereo input channel |
-| /input/st{chNum}  | Fixed stereo input channel                   |
-| /input/usb        | Fixed stereo USB input                       |
-| /input/bt         | Fixed stereo Bluetooth input                 |
-
-| Output Channel    | Description                                  |
-| ----------------- | -------------------------------------------- |
-| /main             | Main LR Output                               |
-| /aux/{chNum}      | Aux Output                                   |
-| /matrix/{chNum}   | Matrix Output                                |
-
-| Internal Channel  | Description                                  |
-| ----------------- | -------------------------------------------- |
-| /group/{chNum}    | Audio Group                                  |
-| /fxSend/{cNum}    | FX Send channel                              |
-| /fxReturn/{chNum} | FX Return channel                            |
+| Input Channel        | Description                                  |
+| -------------------- | -------------------------------------------- |
+| /input/{chNum}       | Mono or assignable mono/stereo input channel |
+| /input/st{chNum}     | Fixed stereo input channel                   |
+| /input/usb           | Fixed stereo USB input                       |
+| /input/bt            | Fixed stereo Bluetooth input                 |
+| **Output Channel**   | **Description**                              |
+| /main                | Main LR Output                               |
+| /aux/{chNum}         | Aux Output                                   |
+| /matrix/{chNum}      | Matrix Output                                |
+| **Internal Channel** | **Description**                              |
+| /group/{chNum}       | Audio Group                                  |
+| /fxSend/{cNum}       | FX Send channel                              |
+| /fxReturn/{chNum}    | FX Return channel                            |
 
 ### DCA and Mute Group Targets
 
-| Target             | Description                                  |
-| ------------------ | -------------------------------------------- |
-| /dca/{chNum}       | DCAs                                         |
-| /muteGroup/{chNum} | Mute Group Control                           |
+| Target               | Description                                  |
+| -------------------- | -------------------------------------------- |
+| /dca/{chNum}         | DCAs                                         |
+| /muteGroup/{chNum}   | Mute Group Control                           |
 
 ### Channel-to-Channel Targets
 
@@ -124,4 +147,5 @@ the mixer before they can be targeted. The general form of these addresses is
 
 * [OSCKit](https://github.com/orchetect/OSCKit)
 * [MIDIKit](https://github.com/orchetect/MIDIKit)
-* Application Icon has been designed using resources from [Flaticon.com](https://www.flaticon.com/free-icon/mixer_1741701?related_id=1741701)
+* Application Icon has been designed using resources from 
+  [Flaticon.com](https://www.flaticon.com/free-icon/mixer_1741701?related_id=1741701)
